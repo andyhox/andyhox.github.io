@@ -8,9 +8,10 @@ tags:
   - Materials Project
 categories:
   - Learn VASP from pymatgen
-sticky: 3
+sticky: 98
 copyright: 欢迎个人转载、使用、转贴等，但请保留原作者信息！
 comment: true
+# cover: "图片链接"
 ---
 
 ***¡Hola a todos!***

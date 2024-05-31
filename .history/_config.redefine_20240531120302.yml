@@ -328,7 +328,7 @@ comment:
   # Whether to enable comment
   enable: true
   # Comment system
-  system: waline # waline, gitalk, twikoo, giscus
+  system: gitalk # waline, gitalk, twikoo, giscus
   # System configuration
   config:
     # Waline comment system. See https://waline.js.org/
@@ -342,11 +342,10 @@ comment:
     gitalk:
       clientID: Ov23liI1vnrcQD8r0lTl # GitHub Application Client ID
       clientSecret: 9e6a13f6640e3ff2511eb4becc1c19f70c1616fe # GitHub Application Client Secret
-      repo: andyGiTalk # GitHub repository
+      repo: GiTalk # GitHub repository
       owner: andyhox # GitHub repository owner
       admin: ['andyhox'] # GitHub repository admin
-      id: md5(location.pathname)
-      proxy: https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token # GitHub repository proxy
+      proxy: # GitHub repository proxy
     # Twikoo comment system. See https://twikoo.js.org/
     twikoo:
       version: 1.6.10 # Twikoo version, do not modify if you dont know what it is

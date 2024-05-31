@@ -328,7 +328,7 @@ comment:
   # Whether to enable comment
   enable: true
   # Comment system
-  system: waline # waline, gitalk, twikoo, giscus
+  system: gitalk # waline, gitalk, twikoo, giscus
   # System configuration
   config:
     # Waline comment system. See https://waline.js.org/
@@ -346,6 +346,7 @@ comment:
       owner: andyhox # GitHub repository owner
       admin: ['andyhox'] # GitHub repository admin
       id: md5(location.pathname)
+      lable: ['Test']
       proxy: https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token # GitHub repository proxy
     # Twikoo comment system. See https://twikoo.js.org/
     twikoo:
