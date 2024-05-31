@@ -131,9 +131,7 @@ with MPRester(api_key) as mpr:
 
 ***Note***：无论是Jupyter Notebook还是VSCode，输出结果都是一样的。
 
-### 实例1：根据MP编号获取材料信息
-
-有人会说了，好像只打印出了一些简单的结构信息，并没有网页端的数据完整。别急，让我们丰富一下输出内容。MP-API提供了查询结构信息的方法`MPRester.materials.summary.search()`，通过这个函数方法，我们可以批量准确的查询到所需的材料信息，完整代码如下：
+有人会说了，好像只打印出了一些简单的结构信息，并没有网页端的数据完整。别急，让我们丰富一下输出内容。MP-API提供了查询结构信息的方法`MPRester.materials.summary.search`，通过这个函数方法，我们可以批量准确的查询到所需的材料信息，完整代码如下：
 
 ```python
 import pandas as pd
@@ -165,7 +163,7 @@ print(df)
 
 初次看到这个代码，可能会有点晕，不过不要着急，慢慢看，我们一步一步来。这个代码的逻辑主要分为两步：
 
-- 1、调用api接口采用`MPRester.materials.summary.search()`查询编号为`mp-149`的材料具体信息，这里指定的字段有`band_gap`、`density`、`formula_pretty`、`symmetry`，分别表示带隙、密度、分子式、空间群信息：
+- 1、调用api接口采用`MPRester.materials.summary.search`查询编号为`mp-149`的材料具体信息，这里指定的字段有`band_gap`、`density`、`formula_pretty`、`symmetry`，分别表示带隙、密度、分子式、空间群信息：
 
 ```python
 with MPRester(api_key) as mpr:
@@ -175,123 +173,21 @@ with MPRester(api_key) as mpr:
     )
 ```
 
-这里fields参数可以指定需要查询的参数，也可以不指定，默认会返回所有参数。`MPRester.materials.summary.search()`可以查询的参数详情可参考[官方文档](https://materialsproject.github.io/api/_modules/mp_api/client/routes/materials/summary.html)
+这里fields参数可以指定需要查询的字段，也可以不指定，默认会返回所有字段，`MPRester.materials.summary.search`可以查询的字典字段详情可参考[官方文档](https://materialsproject.github.io/api/_modules/mp_api/client/routes/materials/summary.html)
 
-![MP_API_search_fields](/images/Learn_VASP_from_pymatgen/chap3/11_search_details.png)
 
-上述即为部分参数，每个参数表示的意义基本就是英文直译，另有不懂的也可以在文档中找到具体的说明。
 
-回到代码，`docs`是一个列表，存储了我们制定的`fields`参数的信息，但是此时直接`print(docs)`输出的结果不利于查看，如果我们直接`print(docs)`，会看到：
 
-![MP_print_docs](/images/Learn_VASP_from_pymatgen/chap3/12_prindocs.png)
 
-可以看到除了指定的参数，为写入`fields`的参数也会列出来，这样得到的结果老司机看到就头大，所以我们需要对其进行处理。
 
-- 2、使用pandas库将查询结果转换为DataFrame格式并输出，也就是第二段代码：    
 
-```python
-data = []               # 空列表用于储存结果
-for doc in docs:
-    symmetry_info = doc.symmetry
-    data.append({
-        "band_gap": doc.band_gap,
-        "density": doc.density,
-        "formula_pretty": doc.formula_pretty,
-        "symbol": getattr(symmetry_info, "symbol", "NONE"),
-        "crystal_system": getattr(symmetry_info, "crystal_system", "NONE"),
-        "space_group_num": getattr(symmetry_info, "number", "NONE")
-    })
-df = pd.DataFrame(data)  # 转换为DataFrame格式
-```
 
-上述代码第2-11行用for循环遍历`docs`列表，将对应的属性储存在`data`列表中，具体提取的信息包括：
-- band_gap: 材料的带隙
-- density: 材料的密度
-- formula_pretty: 材料的化学式
-- symbol: 材料的空间群信息。使用getattr函数获取属性值，如果属性不存在，则使用默认值"NONE"。
-- crystal_system: 材料的晶系（crystal system）。使用getattr函数获取属性值，如果属性不存在，则使用默认值"NONE"。
-- space_group_num: 材料的空间群编号（space group number）。使用getattr函数获取属性值，如果属性不存在，则使用默认值"NONE"。
 
-这里采用了getattr函数来提取`doc.symmetry`中的属性值，原因是因为`doc.symmetry`是一个字典，里面包含了多个属性，上述的`symbol`、`crystal_system`、`space_group_num`都是字典的键值。
 
-第12行将`data`列表转换为DataFrame格式，运行print(df)后，可以得到如下结果：
 
-![MP_API_Si_structure_df](/images/Learn_VASP_from_pymatgen/chap3/13_Si.png)
 
-此次，我们通过MP-API根据MP编号获取了结构信息，并将其转换为DataFrame格式，方便后续分析，下面我们再试一下更有意思的玩法。
 
-### 实例2：根据元素获取材料信息
 
-在上述代码的基础上，修改检索的条件，将通过MP编号获取改成通过元素获取材料信息，代码如下：
-
-```python
-......
-......
-with MPRester(api_key) as mpr:
-    docs = mpr.materials.summary.search(
-        elements=['Si','O'],
-        fields=["material_id","band_gap", "density","formula_pretty", "symmetry"]
-    )
-......
-......
-```
-其余代码保持不变，运行代码后，可以得到如下结果：
-
-![contain_SiO](/images/Learn_VASP_from_pymatgen/chap3/14_contain_SiO.png)
-
-可以看到，这一次直接返回了所有含有`Si`和`O`元素的材料信息，一共有7637个结构。但是，如果我们并不想看到所有材料信息，而是只想看到其中只包含`Si`和`O`元素的材料信息，这时候我们需要继续添加筛选条件：
-
-```python
-......
-......
-with MPRester(api_key) as mpr:
-    docs = mpr.materials.summary.search(
-        elements=['Si','O'],
-        fields=["material_id","band_gap", "density","formula_pretty", "symmetry"],
-        num_elements=2
-    )
-......
-......
-```
-`num_elements`参数限制了返回结果中的元素只有两种，即只包含Si和O的材料。运行代码后，可以得到如下结果：
-
-![contain_SiO_num2](/images/Learn_VASP_from_pymatgen/chap3/15_contain_SiO_num2.png)
-
-可以看到此时筛选得到的结构只有343个结构了。至此，大家应该明白了，MP-API的强大之处在于可以根据各种条件筛选材料信息，并进一步分析。根据不同的需求，只需要调节对应的限制参数，就可以得到所需的材料信息。如上述筛选条件还可以修改成：
-- 2 ≤ 元素种类 ≤ 4
-- 至少含有`Si`和`O`元素
-- 带隙大于1.5的材料
-
-代码如下：
-
-```python
-......
-......
-with MPRester(api_key) as mpr:
-    docs = mpr.materials.summary.search(
-        elements=['Si','O'],
-        fields=["material_id","band_gap", "density","formula_pretty", "symmetry"],
-        num_elements=(2,4),
-        band_gap=(1.5,None)
-    )
-......
-......
-```
-
-运行代码后，可以得到如下结果：
-
-![contain_SiO_3](/images/Learn_VASP_from_pymatgen/chap3/16_contain_SiO_3.png)
-
-相信如果全程跟着老司机一起操作的话，应该对如何筛选有了一定了解，可以自行尝试一下下面的筛选条件：
-- 元素种类 ≥ 3
-- 含有`O`元素
-- 不含有：Fe、Co、Ni元素
-- 0.5 ≤ 带隙值 ≤ 1
-- 输出晶格常数abc
-- 输出空间群信息
-
-结果如下，可以自行对照检验：
-![ex1_result](/images/Learn_VASP_from_pymatgen/chap3/17_ex1_results.png)
 
 
 

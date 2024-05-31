@@ -290,8 +290,8 @@ with MPRester(api_key) as mpr:
 - 输出晶格常数abc
 - 输出空间群信息
 
-结果如下，可以自行对照检验：
-![ex1_result](/images/Learn_VASP_from_pymatgen/chap3/17_ex1_results.png)
+结果如下，可以对照下：
+![ex1_result](/images/Learn_VASP_from_pymatgen/chap3/17_ex1_result.png)
 
 
 

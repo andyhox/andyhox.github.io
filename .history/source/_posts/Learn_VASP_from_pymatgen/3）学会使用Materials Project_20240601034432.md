@@ -280,7 +280,7 @@ with MPRester(api_key) as mpr:
 
 运行代码后，可以得到如下结果：
 
-![contain_SiO_3](/images/Learn_VASP_from_pymatgen/chap3/16_contain_SiO_3.png)
+![contain_SiO_3](/images/Learn_VASP_from_pymatgen/chap3/17_contain_SiO_3.png)
 
 相信如果全程跟着老司机一起操作的话，应该对如何筛选有了一定了解，可以自行尝试一下下面的筛选条件：
 - 元素种类 ≥ 3
@@ -290,8 +290,8 @@ with MPRester(api_key) as mpr:
 - 输出晶格常数abc
 - 输出空间群信息
 
-结果如下，可以自行对照检验：
-![ex1_result](/images/Learn_VASP_from_pymatgen/chap3/17_ex1_results.png)
+结果如下，可以对照下：
+![ex1_result](/images/Learn_VASP_from_pymatgen/chap3/17_ex1_result.png)
 
 
 
