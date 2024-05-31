@@ -149,8 +149,7 @@ data = []               # 空列表用于储存结果
 for doc in docs:
     symmetry_info = doc.symmetry
     data.append({
-        "band_gap": doc.band_gap,
-        "density": doc.density,
+        "material_id": doc.material_id,
         "formula_pretty": doc.formula_pretty,
         "symbol": getattr(symmetry_info, "symbol", "NONE"),
         "crystal_system": getattr(symmetry_info, "crystal_system", "NONE"),

@@ -141,23 +141,23 @@ api_key = "aaaaabbbbb"  # 请替换成你的API key
 
 with MPRester(api_key) as mpr:
     docs = mpr.materials.summary.search(
-        material_ids='mp-149',
-        fields=["band_gap", "density","formula_pretty", "symmetry"]
+        elements=["Li", "La", "Ti"],
+        num_elements=(2, 10),
+        fields=["material_id", "formula_pretty", "symmetry"]
     )
 
-data = []               # 空列表用于储存结果
+data = []
 for doc in docs:
     symmetry_info = doc.symmetry
     data.append({
-        "band_gap": doc.band_gap,
-        "density": doc.density,
+        "material_id": doc.material_id,
         "formula_pretty": doc.formula_pretty,
         "symbol": getattr(symmetry_info, "symbol", "NONE"),
         "crystal_system": getattr(symmetry_info, "crystal_system", "NONE"),
         "space_group_num": getattr(symmetry_info, "number", "NONE")
     })
 
-df = pd.DataFrame(data)  # 转换为DataFrame格式
+df = pd.DataFrame(data)
 print(df)
 ```
 
