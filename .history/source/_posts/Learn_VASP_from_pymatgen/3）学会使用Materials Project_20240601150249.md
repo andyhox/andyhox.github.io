@@ -55,9 +55,7 @@ MP上面材料的检索方式有三种:
 
 `Summary`一栏基本提供了晶体结构的常见基本信息：MP编号(mp-149)、空间群信息、能带信息、磁性信息、实验上是否得到等。
 
-{% note info %}
-MP编号相当于材料的身份证，是Materials Project网站上每一个材料的唯一标识符，在后续会用到。
-{% endnote %}
+***Note***：MP编号相当于材料的身份证，是Materials Project网站上每一个材料的唯一标识符，在后续会用到。
 
 ![MP_Si_info1](/images/Learn_VASP_from_pymatgen/chap3/5_MP_Si_info1.png)
 
@@ -131,11 +129,9 @@ with MPRester(api_key) as mpr:
 
 ![MP_API_Si_structure](/images/Learn_VASP_from_pymatgen/chap3/10_case1.png)
 
-{% note info %}
-无论是Jupyter Notebook还是VSCode，输出结果都是一样的。
-{% endnote %}
+***Note***：无论是Jupyter Notebook还是VSCode，输出结果都是一样的。
 
-### 检索材料信息
+### 实例学习
 
 #### 实例1：根据MP编号获取材料信息
 
@@ -288,8 +284,6 @@ with MPRester(api_key) as mpr:
 
 ![contain_SiO_3](/images/Learn_VASP_from_pymatgen/chap3/16_contain_SiO_3.png)
 
-#### 实例3：小练习
-
 相信如果全程跟着老司机一起操作的话，应该对如何筛选有了一定了解，可以自行尝试一下下面的筛选条件：
 - 元素种类 ≥ 3
 - 含有`O`元素
@@ -338,85 +332,11 @@ print(df)
 
 {% endfolding %}
 
-### 导出检索结果
 
-DateFrame格式的材料信息，可以方便的进行分析和处理，但是如果需要将结果导出为其他格式，比如csv文件，这时候就需要用到pandas的to_csv()方法，上述代码最后加入如下一行代码即可：
 
-```python
-......
-......
-df = pd.DataFrame(data)
-df.to_csv("result.csv", index=False)
-print("Export result to result.csv")
-```
 
-运行代码后，会在当前目录下生成`result.csv`文件，打开csv文件后就可以看到检索结果了。
 
-![export_csv](/images/Learn_VASP_from_pymatgen/chap3/18_csv_result.png)
 
-### 下载结构cif文件
 
-如果下载上述csv文件的所有结构的cif文件，可以运行如下代码：
-{% folding yellow::该代码会下载4000+个cif结构，请谨慎运行！！ %}
-```python
-import pandas as pd
-from mp_api.client import MPRester
-
-api_key = "aaaaaabbbbbb"  # 请替换成你的API key
-
-with MPRester(api_key) as mpr:
-    docs = mpr.materials.summary.search(
-        elements=['O'],
-        exclude_elements=['Fe','Co','Ni'],
-        fields=["material_id","band_gap", "structure","formula_pretty", "symmetry"],
-        num_elements=(3,None),
-        band_gap=(0.5,1)
-    )
-
-data = []               # 空列表用于储存结果
-for doc in docs:
-    symmetry_info = doc.symmetry
-    structure_info = doc.structure
-    data.append({
-        "mp-id": doc.material_id,
-        "band_gap": doc.band_gap,
-        "formula_pretty": doc.formula_pretty,
-        "symbol": getattr(symmetry_info, "symbol", "NONE"),
-        "a": structure_info.lattice.a,
-        "b": structure_info.lattice.b,
-        "c": structure_info.lattice.c,
-    })
-
-df = pd.DataFrame(data)  # 转换为DataFrame格式
-df.to_csv("result.csv", index=False)
-print("Export result to result.csv")
-
-# 遍历所有材料并下载其 CIF 文件
-    for doc in docs:
-        material_id = doc.material_id
-        structure = mpr.get_structure_by_material_id(material_id, final=True)
-        structure.to(f"{material_id}.cif")
-```
-{% endfolding %}
-
-如果只需要下载指定MP编号的cif文件，可以调用`get_structure_by_material_id`方法储存结构信息并写入到本地，这里我们下载`mp-149`的cif文件，代码如下：
-
-```python
-from mp_api.client import MPRester
-
-api_key = "aaaaaabbbbbb"  # 请替换成你的API key
-
-mpid = "mp-149"  
-
-with MPRester(api_key) as mpr:
-    structure = mpr.get_structure_by_material_id(mpid, final=True)
-    
-    structure.to(f"{mpid}.cif")
-```
-
-### 总结
-
-MP-API的介绍就到此为止啦~~~~    
-目前为止，介绍了如何调用API接口；如果根据需求检索材料并汇总成csv文件；以及最后根据需求下载cif文件。当然，MP-API还有很多功能，比如获取结构的电子结构、能量等信息，这里就不一一介绍了。更多功能详解有需求后面再单独补充介绍。
-
-***¡Muchas gracias!***
+---------------------------------------
+To be continued...

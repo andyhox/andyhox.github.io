@@ -406,17 +406,17 @@ from mp_api.client import MPRester
 
 api_key = "aaaaaabbbbbb"  # 请替换成你的API key
 
-mpid = "mp-149"  
-
 with MPRester(api_key) as mpr:
-    structure = mpr.get_structure_by_material_id(mpid, final=True)
+    cif_data = mpr.get_structure_by_material_id("mp-149", final=True)
     
-    structure.to(f"{mpid}.cif")
+    # 将 CIF 数据写入文件
+    cif_file_path = "mp-149.cif"
+    with open(cif_file_path, "w") as f:
+        f.write(cif_data)
 ```
 
-### 总结
 
-MP-API的介绍就到此为止啦~~~~    
-目前为止，介绍了如何调用API接口；如果根据需求检索材料并汇总成csv文件；以及最后根据需求下载cif文件。当然，MP-API还有很多功能，比如获取结构的电子结构、能量等信息，这里就不一一介绍了。更多功能详解有需求后面再单独补充介绍。
 
-***¡Muchas gracias!***
+
+---------------------------------------
+To be continued...

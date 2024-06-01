@@ -288,8 +288,6 @@ with MPRester(api_key) as mpr:
 
 ![contain_SiO_3](/images/Learn_VASP_from_pymatgen/chap3/16_contain_SiO_3.png)
 
-#### 实例3：小练习
-
 相信如果全程跟着老司机一起操作的话，应该对如何筛选有了一定了解，可以自行尝试一下下面的筛选条件：
 - 元素种类 ≥ 3
 - 含有`O`元素
@@ -350,73 +348,9 @@ df.to_csv("result.csv", index=False)
 print("Export result to result.csv")
 ```
 
-运行代码后，会在当前目录下生成`result.csv`文件，打开csv文件后就可以看到检索结果了。
 
-![export_csv](/images/Learn_VASP_from_pymatgen/chap3/18_csv_result.png)
 
-### 下载结构cif文件
 
-如果下载上述csv文件的所有结构的cif文件，可以运行如下代码：
-{% folding yellow::该代码会下载4000+个cif结构，请谨慎运行！！ %}
-```python
-import pandas as pd
-from mp_api.client import MPRester
 
-api_key = "aaaaaabbbbbb"  # 请替换成你的API key
-
-with MPRester(api_key) as mpr:
-    docs = mpr.materials.summary.search(
-        elements=['O'],
-        exclude_elements=['Fe','Co','Ni'],
-        fields=["material_id","band_gap", "structure","formula_pretty", "symmetry"],
-        num_elements=(3,None),
-        band_gap=(0.5,1)
-    )
-
-data = []               # 空列表用于储存结果
-for doc in docs:
-    symmetry_info = doc.symmetry
-    structure_info = doc.structure
-    data.append({
-        "mp-id": doc.material_id,
-        "band_gap": doc.band_gap,
-        "formula_pretty": doc.formula_pretty,
-        "symbol": getattr(symmetry_info, "symbol", "NONE"),
-        "a": structure_info.lattice.a,
-        "b": structure_info.lattice.b,
-        "c": structure_info.lattice.c,
-    })
-
-df = pd.DataFrame(data)  # 转换为DataFrame格式
-df.to_csv("result.csv", index=False)
-print("Export result to result.csv")
-
-# 遍历所有材料并下载其 CIF 文件
-    for doc in docs:
-        material_id = doc.material_id
-        structure = mpr.get_structure_by_material_id(material_id, final=True)
-        structure.to(f"{material_id}.cif")
-```
-{% endfolding %}
-
-如果只需要下载指定MP编号的cif文件，可以调用`get_structure_by_material_id`方法储存结构信息并写入到本地，这里我们下载`mp-149`的cif文件，代码如下：
-
-```python
-from mp_api.client import MPRester
-
-api_key = "aaaaaabbbbbb"  # 请替换成你的API key
-
-mpid = "mp-149"  
-
-with MPRester(api_key) as mpr:
-    structure = mpr.get_structure_by_material_id(mpid, final=True)
-    
-    structure.to(f"{mpid}.cif")
-```
-
-### 总结
-
-MP-API的介绍就到此为止啦~~~~    
-目前为止，介绍了如何调用API接口；如果根据需求检索材料并汇总成csv文件；以及最后根据需求下载cif文件。当然，MP-API还有很多功能，比如获取结构的电子结构、能量等信息，这里就不一一介绍了。更多功能详解有需求后面再单独补充介绍。
-
-***¡Muchas gracias!***
+---------------------------------------
+To be continued...
