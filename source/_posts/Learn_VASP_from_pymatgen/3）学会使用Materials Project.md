@@ -11,6 +11,7 @@ categories:
 sticky: 3
 copyright: 欢迎个人转载、使用、转贴等，但请保留原作者信息！
 comment: true
+cover: /images/Learn_VASP_from_pymatgen/wallhaven-gpkd77_3840x2160.png
 ---
 
 ***¡Hola a todos!***
