@@ -25,7 +25,7 @@ defaults:
   # Favicon
   favicon: /images/redefine-favicon.svg
   # Site logo
-  logo: 
+  logo: images/redefine-logo.webp
   # Site avatar
   avatar: /images/avatar.jpg
 # IMAGE CONFIGURATION <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< end
@@ -113,10 +113,10 @@ home_banner:
   style: fixed # static or fixed
   # Home banner image
   image: 
-    light: /images/wallhaven-4lky22_1920x1080.png # light mode
-    dark: /images/wallhaven-1pprk1_1920x1080.png # dark mode
+    light: /images/wallhaven-7pkrev_3840x2160.png # light mode
+    dark: /images/wallhaven-xlg3po_3840x2160.png # dark mode
   # Home banner title
-  title: [" "]
+  title: .
   # Home banner subtitle
   subtitle:
     text:  # subtitle text, array
