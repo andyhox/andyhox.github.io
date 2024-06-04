@@ -8,7 +8,7 @@ subtitle: ''
 description: ''
 keywords:
 author: andyhoo
-language: en
+language: zh-CN
 timezone: 'Asia/Shanghai'
 
 sitemap:
@@ -44,6 +44,9 @@ external_link:
 filename_case: 0
 render_drafts: false
 post_asset_folder: true
+marked:
+  prependRoot: true
+  postAsset: true
 relative_link: false
 future: true
 syntax_highlighter: highlight.js
