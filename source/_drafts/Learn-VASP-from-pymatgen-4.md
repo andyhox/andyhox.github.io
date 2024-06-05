@@ -15,7 +15,7 @@ cover: /images/wallhaven-gpkd77_3840x2160.png
 
 ***¡Hola a todos!***
 
-本章进入VASP计算实操，首先介绍VASP的计算运行流程是怎样的，`pymatgen`的使用在流程中相当于什么呢：
+本章进入VASP计算实操，首先介绍VASP的计算运行流程是怎样的，`pymatgen`的使用在流程中相当于什么。
 
 下图是简单的计算流程介绍：
 
