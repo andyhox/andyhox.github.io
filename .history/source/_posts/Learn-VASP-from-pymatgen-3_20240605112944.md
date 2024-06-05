@@ -29,11 +29,11 @@ typora-copy-images-to: Learn-VASP-from-pymatgen-3
 
 你只需要邮箱登录后就可以尽情使用
 
-![Materials Project_login](Learn-VASP-from-pymatgen-3/0_MP_login.png)
+![Materials Project_login](0_MP_login.png)
 
 登录后进入主页，开始今天的MP学习之旅。
 
-![MP_home](Learn-VASP-from-pymatgen-3/1_MP_homepage.png)
+![MP_home](1_MP_homepage.png)
 
 ## Materials Project网页端
 
@@ -41,7 +41,7 @@ typora-copy-images-to: Learn-VASP-from-pymatgen-3
 
 MP上面材料的检索方式有三种:
 
-![MP_search_type](Learn-VASP-from-pymatgen-3/3_MP_search_type.png)
+![MP_search_type](3_MP_search_type.png)
 
 - `Only Elements`: 仅包含选定元素，如输入`Si`检索出来的结构只是单质硅；
 - `At least Elements`: 至少包含选定元素，如输入`Si`检索出来的结构既有单质硅，也有含`Si`的化合物：`SiO`、`SiO2`等；
@@ -49,7 +49,7 @@ MP上面材料的检索方式有三种:
 
 这里我们用`Only Elements`检索`Si`，可以得到一系列的`Si`单质结构。
 
-![MP_search_Si](Learn-VASP-from-pymatgen-3/4_MP_Si.png)
+![MP_search_Si](4_MP_Si.png)
 
 这么多`Si`单质结构，到底哪个是我们想要的呢？我们可以根据`Crystal System`、`Spacegroup`等信息筛选，这里我们以第一个`Si`结构为例，了解一下MP上面提供了哪些信息。
 
@@ -61,21 +61,21 @@ MP上面材料的检索方式有三种:
 MP编号相当于材料的身份证，是Materials Project网站上每一个材料的唯一标识符，在后续会用到。
 {% endnote %}
 
-![MP_Si_info1](Learn-VASP-from-pymatgen-3/5_MP_Si_info1.png)
+![MP_Si_info1](5_MP_Si_info1.png)
 
 继续往下拉还可以看到具体的晶格常数信息，能带态密度图、模拟光谱信息等。
 
 - 晶格常数信息
 
-![MP_Si_info2](Learn-VASP-from-pymatgen-3/6_MP_Si_info2.png)
+![MP_Si_info2](6_MP_Si_info2.png)
 
 - 能带态密度图
 
-![MP_Si_info3](Learn-VASP-from-pymatgen-3/7_MP_Si_info3.png)
+![MP_Si_info3](7_MP_Si_info3.png)
 
 - 模拟光谱
 
-![MP_Si_info4](Learn-VASP-from-pymatgen-3/8_MP_Si_info4.png)
+![MP_Si_info4](8_MP_Si_info4.png)
 
 MP上面还有很多其他信息，大家可以自行探索，这里就不一一介绍了。
 
@@ -90,7 +90,7 @@ MP网页端的优势在于可以直观地看到材料的结构，但是从获取
 - 获取API key
 在MP网页端注册账号，登录后，点击右上角的`API`，选择`API Key`，生成API Key即可，该字符串可复制保存，可长期使用。
 
-![MP_API_key](Learn-VASP-from-pymatgen-3/2_MP_api_key.png)
+![MP_API_key](2_MP_api_key.png)
 
 - 安装mp_api包
 
@@ -102,7 +102,7 @@ pip show mp_api
 ```
 出现下面类似信息说明安装成功：
 
-![mp_api_install](Learn-VASP-from-pymatgen-3/9_mp_api_install.png)
+![mp_api_install](9_mp_api_install.png)
 
 - 实例1：获取`Si`单质结构信息
 python脚本的编写推荐使用IDE工具，如VSCode、PyCharm等，或者Jupyter Notebook。下面的操作均以Jupyter Notebook为例，如果您不熟悉Jupyter Notebook，可以参考[Jupyter Notebook官方文档](https://jupyter.org/documentation)。
@@ -131,7 +131,7 @@ with MPRester(api_key) as mpr:
 
 在Jupyter Notebook中运行代码命令为`Shift+Enter`，运行后会出现输出结果：
 
-![MP_API_Si_structure](Learn-VASP-from-pymatgen-3/10_case1.png)
+![MP_API_Si_structure](10_case1.png)
 
 {% note info %}
 无论是Jupyter Notebook还是VSCode，输出结果都是一样的。
@@ -185,13 +185,13 @@ with MPRester(api_key) as mpr:
 
 这里fields参数可以指定需要查询的参数，也可以不指定，默认会返回所有参数。`MPRester.materials.summary.search()`可以查询的参数详情可参考[官方文档](https://materialsproject.github.io/api/_modules/mp_api/client/routes/materials/summary.html)
 
-![MP_API_search_fields](Learn-VASP-from-pymatgen-3/11_search_details.png)
+![MP_API_search_fields](11_search_details.png)
 
 上述即为部分参数，每个参数表示的意义基本就是英文直译，另有不懂的也可以在文档中找到具体的说明。
 
 回到代码，`docs`是一个列表，存储了我们制定的`fields`参数的信息，但是此时直接`print(docs)`输出的结果不利于查看，如果我们直接`print(docs)`，会看到：
 
-![MP_print_docs](Learn-VASP-from-pymatgen-3/12_prindocs.png)
+![MP_print_docs](12_prindocs.png)
 
 可以看到除了指定的参数，为写入`fields`的参数也会列出来，这样得到的结果老司机看到就头大，所以我们需要对其进行处理。
 
@@ -224,7 +224,7 @@ df = pd.DataFrame(data)  # 转换为DataFrame格式
 
 第12行将`data`列表转换为DataFrame格式，运行print(df)后，可以得到如下结果：
 
-![MP_API_Si_structure_df](Learn-VASP-from-pymatgen-3/13_Si.png)
+![MP_API_Si_structure_df](13_Si.png)
 
 此次，我们通过MP-API根据MP编号获取了结构信息，并将其转换为DataFrame格式，方便后续分析，下面我们再试一下更有意思的玩法。
 
@@ -245,7 +245,7 @@ with MPRester(api_key) as mpr:
 ```
 其余代码保持不变，运行代码后，可以得到如下结果：
 
-![contain_SiO](Learn-VASP-from-pymatgen-3/14_contain_SiO.png)
+![contain_SiO](14_contain_SiO.png)
 
 可以看到，这一次直接返回了所有含有`Si`和`O`元素的材料信息，一共有7637个结构。但是，如果我们并不想看到所有材料信息，而是只想看到其中只包含`Si`和`O`元素的材料信息，这时候我们需要继续添加筛选条件：
 
@@ -263,7 +263,7 @@ with MPRester(api_key) as mpr:
 ```
 `num_elements`参数限制了返回结果中的元素只有两种，即只包含Si和O的材料。运行代码后，可以得到如下结果：
 
-![contain_SiO_num2](Learn-VASP-from-pymatgen-3/15_contain_SiO_num2.png)
+![contain_SiO_num2](15_contain_SiO_num2.png)
 
 可以看到此时筛选得到的结构只有343个结构了。至此，大家应该明白了，MP-API的强大之处在于可以根据各种条件筛选材料信息，并进一步分析。根据不同的需求，只需要调节对应的限制参数，就可以得到所需的材料信息。如上述筛选条件还可以修改成：
 - 2 ≤ 元素种类 ≤ 4
@@ -288,7 +288,7 @@ with MPRester(api_key) as mpr:
 
 运行代码后，可以得到如下结果：
 
-![contain_SiO_3](Learn-VASP-from-pymatgen-3/16_contain_SiO_3.png)
+![contain_SiO_3](16_contain_SiO_3.png)
 
 #### 实例3：小练习
 
@@ -301,7 +301,7 @@ with MPRester(api_key) as mpr:
 - 输出空间群信息
 
 结果如下，可以自行对照检验：
-![ex1_result](Learn-VASP-from-pymatgen-3/17_ex1_results.png)
+![ex1_result](17_ex1_results.png)
 
 {% folding yellow::参考代码 %}
 
@@ -354,7 +354,7 @@ print("Export result to result.csv")
 
 运行代码后，会在当前目录下生成`result.csv`文件，打开csv文件后就可以看到检索结果了。
 
-![export_csv](Learn-VASP-from-pymatgen-3/18_csv_result.png)
+![export_csv](18_csv_result.png)
 
 ### 下载结构cif文件
 

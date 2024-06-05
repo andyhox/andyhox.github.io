@@ -29,11 +29,11 @@ typora-copy-images-to: Learn-VASP-from-pymatgen-3
 
 你只需要邮箱登录后就可以尽情使用
 
-![Materials Project_login](Learn-VASP-from-pymatgen-3/0_MP_login.png)
+![Materials Project_login](0_MP_login.png)
 
 登录后进入主页，开始今天的MP学习之旅。
 
-![MP_home](Learn-VASP-from-pymatgen-3/1_MP_homepage.png)
+![MP_home](1_MP_homepage.png)
 
 ## Materials Project网页端
 
