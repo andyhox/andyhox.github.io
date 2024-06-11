@@ -1,5 +1,5 @@
 ---
-title: Chap.4  计算小白硬学VASP —— MPRelaxSet
+title: Chap.4  计算小白硬学VASP —— MPRelaxSet用法
 tags:
   - VASP
   - pymatgen
@@ -14,7 +14,7 @@ copyright: 欢迎个人转载、使用、转贴等，但请获得作者同意且
 comment: true
 cover: /images/wallhaven-gpkd77_3840x2160.png
 date: 2024-06-04 00:00:00
-excerpt: Learn VASP from pymatgen
+excerpt: "Learn VASP from pymatgen"
 ---
 
 
@@ -281,7 +281,7 @@ with MPRester(api_key) as mpr:
 
 本实例也可以说是进阶内容，主要是利于针对每个人自己对应的研究体系，能够设置相对合理的参数，需要对基本的`INCAR`词条有一定了解。
 
-但是，老司机会在最后给出针对不同体系普适性比较搞的INCAR设置，基本上按照对应的INCAR来优化，得到的结构和能量都比较可信，所以对该部分不感兴趣的可以直接跳到[最后](.....)，或者跳过本小节，后面再看也可以。
+所以对该部分不感兴趣的可以直接跳过本小节，后面再看也可以。
 
 ###### user_incar_settings
 
@@ -467,3 +467,4 @@ relax_new = MPRelaxSet(
 #### 总结
 
 `MPRelaxSet`的用法就介绍到这，本章干货满满，各位多多练习~~~~
+

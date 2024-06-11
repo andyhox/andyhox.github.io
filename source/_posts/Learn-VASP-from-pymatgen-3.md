@@ -12,7 +12,7 @@ sticky: 3
 copyright: 欢迎个人转载、使用、转贴等，但请获得作者同意且注明出处！
 comment: true
 cover: /images/wallhaven-gpkd77_3840x2160.png
-excerpt: Learn VASP from pymatgen
+excerpt: "Learn VASP from pymatgen"
 ---
 
 ***¡Hola a todos!***
