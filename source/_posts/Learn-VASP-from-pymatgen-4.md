@@ -1,17 +1,21 @@
 ---
-title: Chap.4  重生之计算小白硬学VASP —— pymatgen生成计算输入文件 —— Structure Optimization
-date: 2024-06-04 00:00:00
-author: 炫酷老司机
+title: Chap.4  计算小白硬学VASP —— MPRelaxSet
 tags:
   - VASP
   - pymatgen
+  - MPRelaxSet
+  - MPScanRelaxSet
+  - Materials Project
+author: 炫酷老司机
 categories:
   - Learn VASP from pymatgen
 sticky: 4
-copyright: 欢迎个人转载、使用、转贴等，但请保留原作者信息！
+copyright: 欢迎个人转载、使用、转贴等，但请获得作者同意且注明出处！
 comment: true
 cover: /images/wallhaven-gpkd77_3840x2160.png
+date: 2024-06-04 00:00:00
 ---
+
 
 ***¡Hola a todos!***
 

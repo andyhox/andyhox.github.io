@@ -1,5 +1,5 @@
 ---
-title: Chap.1  重生之计算小白硬学VASP —— 前言
+title: Chap.1  计算小白硬学VASP —— 前言
 date: 2024-05-29 00:00:00
 author: 炫酷老司机
 tags:
@@ -8,14 +8,13 @@ tags:
 categories:
   - Learn VASP from pymatgen
 sticky: 1
-copyright: 欢迎个人转载、使用、转贴等，但请保留原作者信息！
-comment: true
+copyright: 欢迎个人转载、使用、转贴等，但请获得作者同意且注明出处！
 cover: /images/wallhaven-gpkd77_3840x2160.png
 ---
 
 ***¡Hola a todos!***
 
-我是炫酷老司机，欢迎来到《重生之计算小白硬学VASP》系列。
+我是炫酷老司机，欢迎来到《计算小白硬学VASP》系列。
 
 本系列不涉及DFT理论！不涉及DFT理论！不涉及DFT理论！主要目的是通过实例学习如何让VASP跑起来，不需要记INCAR, POTCAR, KPOINTS, POSCAR, CONTCAR等各种文件。
 
