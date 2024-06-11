@@ -1,0 +1,503 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>Chap.1  计算小白硬学VASP —— 前言</title>
+    <url>/2024/05/29/Learn-VASP-from-pymatgen-1/</url>
+    <content><![CDATA[<p><em><strong>¡Hola a todos!</strong></em></p>
+<p>我是炫酷老司机，欢迎来到《计算小白硬学VASP》系列。</p>
+<p>本系列不涉及DFT理论！不涉及DFT理论！不涉及DFT理论！主要目的是通过实例学习如何让VASP跑起来，不需要记INCAR, POTCAR, KPOINTS, POSCAR, CONTCAR等各种文件。</p>
+<p>配合上好大哥——pymatgen，实现各种计算类型输入文件生成脚本化，计算流程以及计算结果处理自动化，尽可能解放双手，告别vim。</p>
+<p>本人非大佬，普通DFT民工一名，不涉及教学，只分享经验，欢迎指正，不喜勿喷，共同进步。</p>
+<p><em><strong>¡Muchas gracias!</strong></em></p>
+]]></content>
+      <categories>
+        <category>Learn VASP from pymatgen</category>
+      </categories>
+      <tags>
+        <tag>VASP</tag>
+        <tag>pymatgen</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Chap.2  计算小白硬学VASP —— 前期准备</title>
+    <url>/2024/05/30/Learn-VASP-from-pymatgen-2/</url>
+    <content><![CDATA[<p><em><strong>¡Hola a todos!</strong></em></p>
+<p>今天正式进入本系列内容，首先介绍下如何配置pymatgen相关环境，本章如果能全程跟下来且最后配置成功，那么恭喜你，该系列的核心内容已经完成了50%。</p>
+<hr>
+<p>首先你需要一台已经编译好VASP的个人工作站或者使用已经编译了VASP的超算中心；有头铁的大哥想用自己的笔记本电脑也行，也请提前准备好虚拟环境编译好VASP。</p>
+<p>然后开始配置pymatgen相关环境，<a class="link" href="https://pymatgen.org/installation.html">官网 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>的安装教程已经相对详细了。但是考虑到本系列是“计算小白硬学VASP”，主打的就是我奶奶看了都会提交VASP任务，这里我就手把手，step by step 地走一遍配置过程。</p>
+
+  <div class="note p-4 mb-4 rounded-small info">
+    <p>后续操作均在Linux环境下进行，个人工作站请在工作站上面操作，超算中心请在账号家目录下进行。</p>
+
+  </div>
+
+<h2 id="安装Miniconda"><a href="#安装Miniconda" class="headerlink" title="安装Miniconda"></a>安装Miniconda</h2><p>Miniconda是一个开源的Python发行版本，它包含了conda、Python、pip等包管理工具，并且可以轻松安装、卸载、管理不同版本的Python环境。与Anaconda相比，Miniconda体量更小，安装速度更快，适合于个人用户、小型团队或学习目的（<em>官网教程也推荐Miniconda，我信Prof.Ceder</em>）。</p>
+<h3 id="官网下载Miniconda安装包"><a href="#官网下载Miniconda安装包" class="headerlink" title="官网下载Miniconda安装包"></a><a class="link" href="https://docs.anaconda.com/free/miniconda/">官网 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>下载Miniconda安装包</h3><p><img src="/2024/05/30/Learn-VASP-from-pymatgen-2/1_linux_pkg.png" alt="Linux_version 安装包"></p>
+<h3 id="进入到安装包目录下bash命令安装"><a href="#进入到安装包目录下bash命令安装" class="headerlink" title="进入到安装包目录下bash命令安装"></a>进入到安装包目录下bash命令安装</h3><pre><code><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line">bash Miniconda3-latest-Linux-x86_64.sh</span><br></pre></td></tr></table></figure></div>
+</code></pre>
+<h3 id="验证Miniconda是否安装成功"><a href="#验证Miniconda是否安装成功" class="headerlink" title="验证Miniconda是否安装成功"></a>验证Miniconda是否安装成功</h3><pre><code><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line">conda --version # 或conda -V</span><br></pre></td></tr></table></figure></div>
+</code></pre>
+<p>如果安装成功，会显示conda的版本号。<br><img src="/2024/05/30/Learn-VASP-from-pymatgen-2/2_check_miniconda_installation.png" alt="Linux_version conda版本"></p>
+<h2 id="配置pymatgen环境"><a href="#配置pymatgen环境" class="headerlink" title="配置pymatgen环境"></a>配置pymatgen环境</h2><h3 id="为pymatgen创建独立的运行环境"><a href="#为pymatgen创建独立的运行环境" class="headerlink" title="为pymatgen创建独立的运行环境"></a>为pymatgen创建独立的运行环境</h3><p>为什么要创建独立的运行环境？</p>
+<ul>
+<li>首先，不同package的对python以及其他依赖的版本有要求，为了避免跟base的环境相冲突，最简单的做法就是新建一个环境；</li>
+<li>其次，对于超算用户，尤其是多人共用一个账号，配置新的环境避免与其他用户的使用需求相冲突，同时也有效的保护自己配置的环境不受影响。<br>操作如下：<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line">conda create --name my_pymatgen python</span><br></pre></td></tr></table></figure></div>
+此时可以查看当前conda环境列表：<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line">conda env list</span><br></pre></td></tr></table></figure></div>
+出现下述环境列表，说明<code>my_pymatgen</code>环境新建成功，<code>*</code>号表示当前所使用的conda环境。<br><img src="/2024/05/30/Learn-VASP-from-pymatgen-2/3_conda_env_list.png" alt="Linux_version conda环境列表"><br>我们需要激活<code>my_pymatgen</code>环境来配置<code>pymatgen</code>，同时以后每次使用pymatgen都要记住激活<code>my_pymatgen</code>环境。</li>
+</ul>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line">conda activate my_pymatgen</span><br><span class="line">conda env list</span><br></pre></td></tr></table></figure></div>
+<p>此时可以看见已经激活my_pymatgen环境，<code>*</code>号变成了<code>my_pymatgen</code>。<br><img src="/2024/05/30/Learn-VASP-from-pymatgen-2/4_activate_my_pymatgen.png" alt="Linux_version conda环境列表"></p>
+<h3 id="安装pymatgen"><a href="#安装pymatgen" class="headerlink" title="安装pymatgen"></a>安装pymatgen</h3><p>直接通过conda命令安装pymatgen：</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line">conda install -c conda-forge pymatgen</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="验证pymatgen安装成功"><a href="#验证pymatgen安装成功" class="headerlink" title="验证pymatgen安装成功"></a>验证pymatgen安装成功</h3><p>命令行输入：</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line">conda list pymatgen</span><br></pre></td></tr></table></figure></div>
+<p>出现下述输出，说明pymatgen安装成功。<br><img src="/2024/05/30/Learn-VASP-from-pymatgen-2/5_check_pymatgen_installation.png" alt="Linux_version pymatgen安装成功"></p>
+<p><strong>别着急，还没完！！！距离完成只差最后一步了~~~~~~~</strong></p>
+<h3 id="配置pymatgen势函数"><a href="#配置pymatgen势函数" class="headerlink" title="配置pymatgen势函数"></a>配置pymatgen势函数</h3><p>最后我们需要配置一下势函数文件，首先你需要准备好VASP的势函数文件，由于版权问题，自行解决。一般势函数文件格式如下：</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line">POT_PAW_PBE</span><br><span class="line">├── Ac</span><br><span class="line">│   ├── POTCAR</span><br><span class="line">│   └── PSCTR</span><br><span class="line">├── Ag</span><br><span class="line">│   ├── POTCAR</span><br><span class="line">│   └── PSCTR</span><br></pre></td></tr></table></figure></div>
+<p>上述初始势函数的路径记作<code>&lt;EXTRACTED_VASP_POTCAR&gt;</code>，然后再命令行中输入：</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line">pmg config -p &lt;EXTRACTED_VASP_POTCAR&gt; &lt;MY_PSP&gt;</span><br></pre></td></tr></table></figure></div>
+<p><code>&lt;MY_PSP&gt;</code>是你自定义配置<code>pymatgen</code>可以识别的势函数的路径，比如<code>my_psp</code>，然后会指定路径下生成一个<code>my_psp</code>文件夹，里面文件格式如下：</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line">&lt;MY_PSP&gt;</span><br><span class="line">├── POT_GGA_PAW_PBE</span><br><span class="line">│   ├── POTCAR.Ac.gz</span><br><span class="line">│   ├── POTCAR.Ag.gz</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure></div>
+<p>最后，需要把<code>&lt;MY_PSP&gt;</code>配置的pyamtgen环境变量中，这样才能在使用<code>pymatgen</code>时识别到自定义的势函数，命令行输入：</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line">pmg config --add PMG_VASP_PSP_DIR &lt;MY_PSP&gt;</span><br></pre></td></tr></table></figure></div>
+<p>验证是否配置成功，可在根目录<code>.config/.pmgrc.yaml</code>文件中查看<code>PMG_VASP_PSP_DIR</code>配置项。</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line">cat ~/.config/.pmgrc.yaml</span><br></pre></td></tr></table></figure></div>
+<p>出现如下信息，说明配置成功。<br><img src="/2024/05/30/Learn-VASP-from-pymatgen-2/6_check_pmg_potential.png" alt="Linux_version pymatgen配置成功"></p>
+
+  <div class="note p-4 mb-4 rounded-small info">
+    <p>VASP有许多不同的势函数，比如<code>PBE</code>，<code>LDA</code>等等，这里我们只配置了<code>PBE</code>的势函数，如果你需要其他势函数，请自行配置。配置方法与上述相同，只需替换<code>&lt;EXTRACTED_VASP_POTCAR&gt;</code>和<code>&lt;MY_PSP&gt;</code>即可。</p>
+
+  </div>
+
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line">pmg config -p /path/to/pseudos/potcar_PBE.54 /path/to/pseudos/pmg_potcars</span><br><span class="line">pmg config -p /path/to/pseudos/potcar_LDA.54 /path/to/pseudos/pmg_potcars</span><br><span class="line">pmg config --add PMG_VASP_PSP_DIR /path/to/pseudos/pmg_potcars</span><br></pre></td></tr></table></figure></div>
+<p>使用时注意指定势函数种类（后面会讲），或者直接把常用的势函数设置成默认选项，当然如果只添加了一种势函数，该步骤可以省略。</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line">pmg config --add PMG_DEFAULT_FUNCTIONAL PBE_52</span><br></pre></td></tr></table></figure></div>
+
+<hr>
+<p>自此，前期准备工作基本已经完成，接下来就是正式进入实操阶段了，敬请期待！</p>
+<p><em><strong>¡Muchas gracias!</strong></em></p>
+]]></content>
+      <categories>
+        <category>Learn VASP from pymatgen</category>
+      </categories>
+      <tags>
+        <tag>VASP</tag>
+        <tag>pymatgen</tag>
+        <tag>Materials Project</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Chap.3  计算小白硬学VASP —— 学会使用Materials Project</title>
+    <url>/2024/05/30/Learn-VASP-from-pymatgen-3/</url>
+    <content><![CDATA[<p><em><strong>¡Hola a todos!</strong></em></p>
+<p>很遗憾的告诉各位，本章还没有开始涉及到VASP的计算。</p>
+<p><strong>Why????</strong></p>
+<p>根据老司机以往的使用经验，做计算最关键的不是了解各种输入参数的意义，不是高超的编程能力，不是各种计算流程信手拈来，而是一个靠谱的结构。往往一个靠谱的结构，你的计算就已经成功了90%，这么说一点也不为过。一个“垃圾”结构，你往往算了几天、一周、一个月，得到的结果都不见得令人满意。</p>
+<p>如何得到一个靠谱的结构，或者说到哪里去找一个靠谱的结构，这里不得不介绍一下本期嘉宾——<a class="link" href="https://next-gen.materialsproject.org/">Materials Project <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>网站（下面简称MP）。截至到今天，MP提供了超过15万个无机化合物的结构信息以及性质，其中有实验已经发现的材料，也有纯计算预测的新材料。每一种化合物的计算源文件都可以免费下载本地，特别适合小白们自学VASP。</p>
+<p><strong>当然，最重要的一点是，免费！免费！免费！Free~~~~~~~</strong></p>
+<p>你只需要邮箱登录后就可以尽情使用</p>
+<p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/0_MP_login.png" alt="Materials Project_login"></p>
+<p>登录后进入主页，开始今天的MP学习之旅。</p>
+<p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/1_MP_homepage.png" alt="MP_home"></p>
+<h2 id="Materials-Project网页端"><a href="#Materials-Project网页端" class="headerlink" title="Materials Project网页端"></a>Materials Project网页端</h2><h3 id="材料检索"><a href="#材料检索" class="headerlink" title="材料检索"></a>材料检索</h3><p>MP上面材料的检索方式有三种:</p>
+<p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/3_MP_search_type.png" alt="MP_search_type"></p>
+<ul>
+<li><code>Only Elements</code>: 仅包含选定元素，如输入<code>Si</code>检索出来的结构只是单质硅；</li>
+<li><code>At least Elements</code>: 至少包含选定元素，如输入<code>Si</code>检索出来的结构既有单质硅，也有含<code>Si</code>的化合物：<code>SiO</code>、<code>SiO2</code>等；</li>
+<li><code>Formula</code>: 输入完整的分子式，如输入<code>SiO2</code>，检索出来的结构只有<code>SiO2</code>。</li>
+</ul>
+<p>这里我们用<code>Only Elements</code>检索<code>Si</code>，可以得到一系列的<code>Si</code>单质结构。</p>
+<p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/4_MP_Si.png" alt="MP_search_Si"></p>
+<p>这么多<code>Si</code>单质结构，到底哪个是我们想要的呢？我们可以根据<code>Crystal System</code>、<code>Spacegroup</code>等信息筛选，这里我们以第一个<code>Si</code>结构为例，了解一下MP上面提供了哪些信息。</p>
+<h3 id="页面信息"><a href="#页面信息" class="headerlink" title="页面信息"></a>页面信息</h3><p><code>Summary</code>一栏基本提供了晶体结构的常见基本信息：MP编号(mp-149)、空间群信息、能带信息、磁性信息、实验上是否得到等。</p>
+
+  <div class="note p-4 mb-4 rounded-small info">
+    <p>MP编号相当于材料的身份证，是Materials Project网站上每一个材料的唯一标识符，在后续会用到。</p>
+
+  </div>
+
+<p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/5_MP_Si_info1.png" alt="MP_Si_info1"></p>
+<p>继续往下拉还可以看到具体的晶格常数信息，能带态密度图、模拟光谱信息等。</p>
+<ul>
+<li>晶格常数信息</li>
+</ul>
+<p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/6_MP_Si_info2.png" alt="MP_Si_info2"></p>
+<ul>
+<li>能带态密度图</li>
+</ul>
+<p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/7_MP_Si_info3.png" alt="MP_Si_info3"></p>
+<ul>
+<li>模拟光谱</li>
+</ul>
+<p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/8_MP_Si_info4.png" alt="MP_Si_info4"></p>
+<p>MP上面还有很多其他信息，大家可以自行探索，这里就不一一介绍了。</p>
+<h2 id="MP-API接口"><a href="#MP-API接口" class="headerlink" title="MP-API接口"></a>MP-API接口</h2><p>MP网页端的优势在于可以直观地看到材料的结构，但是从获取信息的角度来说，效率还是太低了。因此，MP还提供了API接口，可以方便地大批量获取到材料的结构、性质等各种信息。尤其适用于data mining、机器学习等领域。Anyway，即使你没有大规模数据下载分析的需求，对于日常使用来说，API接口用来找结构，查询信息还是很方便的。</p>
+<h3 id="如何使用Materials-Project-API"><a href="#如何使用Materials-Project-API" class="headerlink" title="如何使用Materials Project API"></a>如何使用Materials Project API</h3><p>使用API接口非常简单，只需要几步即可。</p>
+<ul>
+<li>获取API key<br>在MP网页端注册账号，登录后，点击右上角的<code>API</code>，选择<code>API Key</code>，生成API Key即可，该字符串可复制保存，可长期使用。</li>
+</ul>
+<p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/2_MP_api_key.png" alt="MP_API_key"></p>
+<ul>
+<li>安装mp_api包</li>
+</ul>
+<p>获取API key后，我们需要安装<code>mp_api</code>包，该包是Materials Project API的Python封装。后续的操作都需要在Python环境中进行，这个时候回到终端环境，激活<code>my_pymatgen</code>环境，可直接pip命令安装：</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line">conda activate my_pymatgen</span><br><span class="line">pip install mp_api</span><br><span class="line">pip show mp_api</span><br></pre></td></tr></table></figure></div>
+<p>出现下面类似信息说明安装成功：</p>
+<p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/9_mp_api_install.png" alt="mp_api_install"></p>
+<ul>
+<li>实例1：获取<code>Si</code>单质结构信息<br>python脚本的编写推荐使用IDE工具，如VSCode、PyCharm等，或者Jupyter Notebook。下面的操作均以Jupyter Notebook为例，如果您不熟悉Jupyter Notebook，可以参考<a class="link" href="https://jupyter.org/documentation">Jupyter Notebook官方文档 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>。</li>
+</ul>
+<p>如果没有安装Jupyter Notebook，可以先安装：</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line">conda install -c conda-forge notebook</span><br></pre></td></tr></table></figure></div>
+<p>然后在终端运行：</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line">jupyter notebook</span><br></pre></td></tr></table></figure></div>
+<p>会跳转到外部页面，此时新建一个Jupyter Notebook文件，test.ipynb打开，输入以下代码：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> mp_api.client <span class="keyword">import</span> MPRester</span><br><span class="line"></span><br><span class="line">api_key = <span class="string">&quot;aaaaabbbbb&quot;</span>  <span class="comment"># 请替换成你的API key</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> MPRester(api_key) <span class="keyword">as</span> mpr:</span><br><span class="line">    <span class="comment"># 获取Si单质结构信息</span></span><br><span class="line">    structure = mpr.get_structure_by_material_id(<span class="string">&quot;mp-149&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(structure)          <span class="comment"># 打印结构信息</span></span><br></pre></td></tr></table></figure></div>
+<p>这里我们是通过MP编号<code>mp-149</code>获取了<code>Si</code>单质结构信息，正如前文所说，MP编号相当于材料的身份证，是Materials Project网站上每一个材料的唯一标识符。</p>
+<p>在Jupyter Notebook中运行代码命令为<code>Shift+Enter</code>，运行后会出现输出结果：</p>
+<p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/10_case1.png" alt="MP_API_Si_structure"></p>
+
+  <div class="note p-4 mb-4 rounded-small info">
+    <p>无论是Jupyter Notebook还是VSCode，输出结果都是一样的。</p>
+
+  </div>
+
+<h3 id="检索材料信息"><a href="#检索材料信息" class="headerlink" title="检索材料信息"></a>检索材料信息</h3><h4 id="实例1：根据MP编号获取材料信息"><a href="#实例1：根据MP编号获取材料信息" class="headerlink" title="实例1：根据MP编号获取材料信息"></a>实例1：根据MP编号获取材料信息</h4><p>有人会说了，好像只打印出了一些简单的结构信息，并没有网页端的数据完整。别急，让我们丰富一下输出内容。MP-API提供了查询结构信息的方法<code>MPRester.materials.summary.search()</code>，通过这个函数方法，我们可以批量准确的查询到所需的材料信息，完整代码如下：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">from</span> mp_api.client <span class="keyword">import</span> MPRester</span><br><span class="line"></span><br><span class="line">api_key = <span class="string">&quot;aaaaabbbbb&quot;</span>  <span class="comment"># 请替换成你的API key</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> MPRester(api_key) <span class="keyword">as</span> mpr:</span><br><span class="line">    docs = mpr.materials.summary.search(</span><br><span class="line">        material_ids=<span class="string">&#x27;mp-149&#x27;</span>,</span><br><span class="line">        fields=[<span class="string">&quot;band_gap&quot;</span>, <span class="string">&quot;density&quot;</span>,<span class="string">&quot;formula_pretty&quot;</span>, <span class="string">&quot;symmetry&quot;</span>]</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">data = []               <span class="comment"># 空列表用于储存结果</span></span><br><span class="line"><span class="keyword">for</span> doc <span class="keyword">in</span> docs:</span><br><span class="line">    symmetry_info = doc.symmetry</span><br><span class="line">    data.append(&#123;</span><br><span class="line">        <span class="string">&quot;band_gap&quot;</span>: doc.band_gap,</span><br><span class="line">        <span class="string">&quot;density&quot;</span>: doc.density,</span><br><span class="line">        <span class="string">&quot;formula_pretty&quot;</span>: doc.formula_pretty,</span><br><span class="line">        <span class="string">&quot;symbol&quot;</span>: <span class="built_in">getattr</span>(symmetry_info, <span class="string">&quot;symbol&quot;</span>, <span class="string">&quot;NONE&quot;</span>),</span><br><span class="line">        <span class="string">&quot;crystal_system&quot;</span>: <span class="built_in">getattr</span>(symmetry_info, <span class="string">&quot;crystal_system&quot;</span>, <span class="string">&quot;NONE&quot;</span>),</span><br><span class="line">        <span class="string">&quot;space_group_num&quot;</span>: <span class="built_in">getattr</span>(symmetry_info, <span class="string">&quot;number&quot;</span>, <span class="string">&quot;NONE&quot;</span>)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">df = pd.DataFrame(data)  <span class="comment"># 转换为DataFrame格式</span></span><br><span class="line"><span class="built_in">print</span>(df)</span><br></pre></td></tr></table></figure></div>
+
+<p>初次看到这个代码，可能会有点晕，不过不要着急，慢慢看，我们一步一步来。这个代码的逻辑主要分为两步：</p>
+<ul>
+<li>1、调用api接口采用<code>MPRester.materials.summary.search()</code>查询编号为<code>mp-149</code>的材料具体信息，这里指定的字段有<code>band_gap</code>、<code>density</code>、<code>formula_pretty</code>、<code>symmetry</code>，分别表示带隙、密度、分子式、空间群信息：</li>
+</ul>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">with</span> MPRester(api_key) <span class="keyword">as</span> mpr:</span><br><span class="line">    docs = mpr.materials.summary.search(</span><br><span class="line">        material_ids=<span class="string">&#x27;mp-149&#x27;</span>,</span><br><span class="line">        fields=[<span class="string">&quot;band_gap&quot;</span>, <span class="string">&quot;density&quot;</span>,<span class="string">&quot;formula_pretty&quot;</span>, <span class="string">&quot;symmetry&quot;</span>]</span><br><span class="line">    )</span><br></pre></td></tr></table></figure></div>
+
+<p>这里fields参数可以指定需要查询的参数，也可以不指定，默认会返回所有参数。<code>MPRester.materials.summary.search()</code>可以查询的参数详情可参考<a class="link" href="https://materialsproject.github.io/api/_modules/mp_api/client/routes/materials/summary.html">官方文档 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/11_search_details.png" alt="MP_API_search_fields"></p>
+<p>上述即为部分参数，每个参数表示的意义基本就是英文直译，另有不懂的也可以在文档中找到具体的说明。</p>
+<p>回到代码，<code>docs</code>是一个列表，存储了我们制定的<code>fields</code>参数的信息，但是此时直接<code>print(docs)</code>输出的结果不利于查看，如果我们直接<code>print(docs)</code>，会看到：</p>
+<p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/12_prindocs.png" alt="MP_print_docs"></p>
+<p>可以看到除了指定的参数，为写入<code>fields</code>的参数也会列出来，这样得到的结果老司机看到就头大，所以我们需要对其进行处理。</p>
+<ul>
+<li>2、使用pandas库将查询结果转换为DataFrame格式并输出，也就是第二段代码：</li>
+</ul>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line">data = []               <span class="comment"># 空列表用于储存结果</span></span><br><span class="line"><span class="keyword">for</span> doc <span class="keyword">in</span> docs:</span><br><span class="line">    symmetry_info = doc.symmetry</span><br><span class="line">    data.append(&#123;</span><br><span class="line">        <span class="string">&quot;band_gap&quot;</span>: doc.band_gap,</span><br><span class="line">        <span class="string">&quot;density&quot;</span>: doc.density,</span><br><span class="line">        <span class="string">&quot;formula_pretty&quot;</span>: doc.formula_pretty,</span><br><span class="line">        <span class="string">&quot;symbol&quot;</span>: <span class="built_in">getattr</span>(symmetry_info, <span class="string">&quot;symbol&quot;</span>, <span class="string">&quot;NONE&quot;</span>),</span><br><span class="line">        <span class="string">&quot;crystal_system&quot;</span>: <span class="built_in">getattr</span>(symmetry_info, <span class="string">&quot;crystal_system&quot;</span>, <span class="string">&quot;NONE&quot;</span>),</span><br><span class="line">        <span class="string">&quot;space_group_num&quot;</span>: <span class="built_in">getattr</span>(symmetry_info, <span class="string">&quot;number&quot;</span>, <span class="string">&quot;NONE&quot;</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">df = pd.DataFrame(data)  <span class="comment"># 转换为DataFrame格式</span></span><br></pre></td></tr></table></figure></div>
+
+<p>上述代码第2-11行用for循环遍历<code>docs</code>列表，将对应的属性储存在<code>data</code>列表中，具体提取的信息包括：</p>
+<ul>
+<li>band_gap: 材料的带隙</li>
+<li>density: 材料的密度</li>
+<li>formula_pretty: 材料的化学式</li>
+<li>symbol: 材料的空间群信息。使用getattr函数获取属性值，如果属性不存在，则使用默认值”NONE”。</li>
+<li>crystal_system: 材料的晶系（crystal system）。使用getattr函数获取属性值，如果属性不存在，则使用默认值”NONE”。</li>
+<li>space_group_num: 材料的空间群编号（space group number）。使用getattr函数获取属性值，如果属性不存在，则使用默认值”NONE”。</li>
+</ul>
+<p>这里采用了getattr函数来提取<code>doc.symmetry</code>中的属性值，原因是因为<code>doc.symmetry</code>是一个字典，里面包含了多个属性，上述的<code>symbol</code>、<code>crystal_system</code>、<code>space_group_num</code>都是字典的键值。</p>
+<p>第12行将<code>data</code>列表转换为DataFrame格式，运行print(df)后，可以得到如下结果：</p>
+<p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/13_Si.png" alt="MP_API_Si_structure_df"></p>
+<p>此次，我们通过MP-API根据MP编号获取了结构信息，并将其转换为DataFrame格式，方便后续分析，下面我们再试一下更有意思的玩法。</p>
+<h4 id="实例2：根据元素获取材料信息"><a href="#实例2：根据元素获取材料信息" class="headerlink" title="实例2：根据元素获取材料信息"></a>实例2：根据元素获取材料信息</h4><p>在上述代码的基础上，修改检索的条件，将通过MP编号获取改成通过元素获取材料信息，代码如下：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line">......</span><br><span class="line">......</span><br><span class="line"><span class="keyword">with</span> MPRester(api_key) <span class="keyword">as</span> mpr:</span><br><span class="line">    docs = mpr.materials.summary.search(</span><br><span class="line">        elements=[<span class="string">&#x27;Si&#x27;</span>,<span class="string">&#x27;O&#x27;</span>],</span><br><span class="line">        fields=[<span class="string">&quot;material_id&quot;</span>,<span class="string">&quot;band_gap&quot;</span>, <span class="string">&quot;density&quot;</span>,<span class="string">&quot;formula_pretty&quot;</span>, <span class="string">&quot;symmetry&quot;</span>]</span><br><span class="line">    )</span><br><span class="line">......</span><br><span class="line">......</span><br></pre></td></tr></table></figure></div>
+<p>其余代码保持不变，运行代码后，可以得到如下结果：</p>
+<p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/14_contain_SiO.png" alt="contain_SiO"></p>
+<p>可以看到，这一次直接返回了所有含有<code>Si</code>和<code>O</code>元素的材料信息，一共有7637个结构。但是，如果我们并不想看到所有材料信息，而是只想看到其中只包含<code>Si</code>和<code>O</code>元素的材料信息，这时候我们需要继续添加筛选条件：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line">......</span><br><span class="line">......</span><br><span class="line"><span class="keyword">with</span> MPRester(api_key) <span class="keyword">as</span> mpr:</span><br><span class="line">    docs = mpr.materials.summary.search(</span><br><span class="line">        elements=[<span class="string">&#x27;Si&#x27;</span>,<span class="string">&#x27;O&#x27;</span>],</span><br><span class="line">        fields=[<span class="string">&quot;material_id&quot;</span>,<span class="string">&quot;band_gap&quot;</span>, <span class="string">&quot;density&quot;</span>,<span class="string">&quot;formula_pretty&quot;</span>, <span class="string">&quot;symmetry&quot;</span>],</span><br><span class="line">        num_elements=<span class="number">2</span></span><br><span class="line">    )</span><br><span class="line">......</span><br><span class="line">......</span><br></pre></td></tr></table></figure></div>
+<p><code>num_elements</code>参数限制了返回结果中的元素只有两种，即只包含Si和O的材料。运行代码后，可以得到如下结果：</p>
+<p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/15_contain_SiO_num2.png" alt="contain_SiO_num2"></p>
+<p>可以看到此时筛选得到的结构只有343个结构了。至此，大家应该明白了，MP-API的强大之处在于可以根据各种条件筛选材料信息，并进一步分析。根据不同的需求，只需要调节对应的限制参数，就可以得到所需的材料信息。如上述筛选条件还可以修改成：</p>
+<ul>
+<li>2 ≤ 元素种类 ≤ 4</li>
+<li>至少含有<code>Si</code>和<code>O</code>元素</li>
+<li>带隙大于1.5的材料</li>
+</ul>
+<p>代码如下：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line">......</span><br><span class="line">......</span><br><span class="line"><span class="keyword">with</span> MPRester(api_key) <span class="keyword">as</span> mpr:</span><br><span class="line">    docs = mpr.materials.summary.search(</span><br><span class="line">        elements=[<span class="string">&#x27;Si&#x27;</span>,<span class="string">&#x27;O&#x27;</span>],</span><br><span class="line">        fields=[<span class="string">&quot;material_id&quot;</span>,<span class="string">&quot;band_gap&quot;</span>, <span class="string">&quot;density&quot;</span>,<span class="string">&quot;formula_pretty&quot;</span>, <span class="string">&quot;symmetry&quot;</span>],</span><br><span class="line">        num_elements=(<span class="number">2</span>,<span class="number">4</span>),</span><br><span class="line">        band_gap=(<span class="number">1.5</span>,<span class="literal">None</span>)</span><br><span class="line">    )</span><br><span class="line">......</span><br><span class="line">......</span><br></pre></td></tr></table></figure></div>
+
+<p>运行代码后，可以得到如下结果：</p>
+<p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/16_contain_SiO_3.png" alt="contain_SiO_3"></p>
+<h4 id="实例3：小练习"><a href="#实例3：小练习" class="headerlink" title="实例3：小练习"></a>实例3：小练习</h4><p>相信如果全程跟着老司机一起操作的话，应该对如何筛选有了一定了解，可以自行尝试一下下面的筛选条件：</p>
+<ul>
+<li>元素种类 ≥ 3</li>
+<li>含有<code>O</code>元素</li>
+<li>不含有：Fe、Co、Ni元素</li>
+<li>0.5 ≤ 带隙值 ≤ 1</li>
+<li>输出晶格常数abc</li>
+<li>输出空间群信息</li>
+</ul>
+<p>结果如下，可以自行对照检验：<br><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/17_ex1_results.png" alt="ex1_result"></p>
+<details class="yellow" data-header-exclude><summary><i class="fa-solid fa-chevron-right"></i>参考代码 </summary>
+              <div class="content">
+              <div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">from</span> mp_api.client <span class="keyword">import</span> MPRester</span><br><span class="line"></span><br><span class="line">api_key = <span class="string">&quot;aaaaaabbbbbbb&quot;</span>  <span class="comment"># 请替换成你的API key</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> MPRester(api_key) <span class="keyword">as</span> mpr:</span><br><span class="line">    docs = mpr.materials.summary.search(</span><br><span class="line">        elements=[<span class="string">&#x27;O&#x27;</span>],</span><br><span class="line">        exclude_elements=[<span class="string">&#x27;Fe&#x27;</span>,<span class="string">&#x27;Co&#x27;</span>,<span class="string">&#x27;Ni&#x27;</span>],</span><br><span class="line">        fields=[<span class="string">&quot;material_id&quot;</span>,<span class="string">&quot;band_gap&quot;</span>, <span class="string">&quot;structure&quot;</span>,<span class="string">&quot;formula_pretty&quot;</span>, <span class="string">&quot;symmetry&quot;</span>],</span><br><span class="line">        num_elements=(<span class="number">3</span>,<span class="literal">None</span>),</span><br><span class="line">        band_gap=(<span class="number">0.5</span>,<span class="number">1</span>)</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">data = []               <span class="comment"># 空列表用于储存结果</span></span><br><span class="line"><span class="keyword">for</span> doc <span class="keyword">in</span> docs:</span><br><span class="line">    symmetry_info = doc.symmetry</span><br><span class="line">    structure_info = doc.structure</span><br><span class="line">    data.append(&#123;</span><br><span class="line">        <span class="string">&quot;mp-id&quot;</span>: doc.material_id,</span><br><span class="line">        <span class="string">&quot;band_gap&quot;</span>: doc.band_gap,</span><br><span class="line">        <span class="string">&quot;formula_pretty&quot;</span>: doc.formula_pretty,</span><br><span class="line">        <span class="string">&quot;symbol&quot;</span>: <span class="built_in">getattr</span>(symmetry_info, <span class="string">&quot;symbol&quot;</span>, <span class="string">&quot;NONE&quot;</span>),</span><br><span class="line">        <span class="string">&quot;a&quot;</span>: structure_info.lattice.a,</span><br><span class="line">        <span class="string">&quot;b&quot;</span>: structure_info.lattice.b,</span><br><span class="line">        <span class="string">&quot;c&quot;</span>: structure_info.lattice.c,</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">df = pd.DataFrame(data)  <span class="comment"># 转换为DataFrame格式</span></span><br><span class="line"><span class="built_in">print</span>(df)</span><br></pre></td></tr></table></figure></div>
+              </div>
+            </details>
+
+<h3 id="导出检索结果"><a href="#导出检索结果" class="headerlink" title="导出检索结果"></a>导出检索结果</h3><p>DateFrame格式的材料信息，可以方便的进行分析和处理，但是如果需要将结果导出为其他格式，比如csv文件，这时候就需要用到pandas的to_csv()方法，上述代码最后加入如下一行代码即可：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line">......</span><br><span class="line">......</span><br><span class="line">df = pd.DataFrame(data)</span><br><span class="line">df.to_csv(<span class="string">&quot;result.csv&quot;</span>, index=<span class="literal">False</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Export result to result.csv&quot;</span>)</span><br></pre></td></tr></table></figure></div>
+
+<p>运行代码后，会在当前目录下生成<code>result.csv</code>文件，打开csv文件后就可以看到检索结果了。</p>
+<p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/18_csv_result.png" alt="export_csv"></p>
+<h3 id="下载结构cif文件"><a href="#下载结构cif文件" class="headerlink" title="下载结构cif文件"></a>下载结构cif文件</h3><p>如果下载上述csv文件的所有结构的cif文件，可以运行如下代码：</p>
+<details class="yellow" data-header-exclude><summary><i class="fa-solid fa-chevron-right"></i>该代码会下载4000+个cif结构，请谨慎运行！！ </summary>
+              <div class="content">
+              <div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">from</span> mp_api.client <span class="keyword">import</span> MPRester</span><br><span class="line"></span><br><span class="line">api_key = <span class="string">&quot;aaaaaabbbbbb&quot;</span>  <span class="comment"># 请替换成你的API key</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> MPRester(api_key) <span class="keyword">as</span> mpr:</span><br><span class="line">    docs = mpr.materials.summary.search(</span><br><span class="line">        elements=[<span class="string">&#x27;O&#x27;</span>],</span><br><span class="line">        exclude_elements=[<span class="string">&#x27;Fe&#x27;</span>,<span class="string">&#x27;Co&#x27;</span>,<span class="string">&#x27;Ni&#x27;</span>],</span><br><span class="line">        fields=[<span class="string">&quot;material_id&quot;</span>,<span class="string">&quot;band_gap&quot;</span>, <span class="string">&quot;structure&quot;</span>,<span class="string">&quot;formula_pretty&quot;</span>, <span class="string">&quot;symmetry&quot;</span>],</span><br><span class="line">        num_elements=(<span class="number">3</span>,<span class="literal">None</span>),</span><br><span class="line">        band_gap=(<span class="number">0.5</span>,<span class="number">1</span>)</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">data = []               <span class="comment"># 空列表用于储存结果</span></span><br><span class="line"><span class="keyword">for</span> doc <span class="keyword">in</span> docs:</span><br><span class="line">    symmetry_info = doc.symmetry</span><br><span class="line">    structure_info = doc.structure</span><br><span class="line">    data.append(&#123;</span><br><span class="line">        <span class="string">&quot;mp-id&quot;</span>: doc.material_id,</span><br><span class="line">        <span class="string">&quot;band_gap&quot;</span>: doc.band_gap,</span><br><span class="line">        <span class="string">&quot;formula_pretty&quot;</span>: doc.formula_pretty,</span><br><span class="line">        <span class="string">&quot;symbol&quot;</span>: <span class="built_in">getattr</span>(symmetry_info, <span class="string">&quot;symbol&quot;</span>, <span class="string">&quot;NONE&quot;</span>),</span><br><span class="line">        <span class="string">&quot;a&quot;</span>: structure_info.lattice.a,</span><br><span class="line">        <span class="string">&quot;b&quot;</span>: structure_info.lattice.b,</span><br><span class="line">        <span class="string">&quot;c&quot;</span>: structure_info.lattice.c,</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">df = pd.DataFrame(data)  <span class="comment"># 转换为DataFrame格式</span></span><br><span class="line">df.to_csv(<span class="string">&quot;result.csv&quot;</span>, index=<span class="literal">False</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Export result to result.csv&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 遍历所有材料并下载其 CIF 文件</span></span><br><span class="line">    <span class="keyword">for</span> doc <span class="keyword">in</span> docs:</span><br><span class="line">        material_id = doc.material_id</span><br><span class="line">        structure = mpr.get_structure_by_material_id(material_id, final=<span class="literal">True</span>)</span><br><span class="line">        structure.to(<span class="string">f&quot;<span class="subst">&#123;material_id&#125;</span>.cif&quot;</span>)</span><br></pre></td></tr></table></figure></div>
+              </div>
+            </details>
+
+<p>如果只需要下载指定MP编号的cif文件，可以调用<code>get_structure_by_material_id</code>方法储存结构信息并写入到本地，这里我们下载<code>mp-149</code>的cif文件，代码如下：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> mp_api.client <span class="keyword">import</span> MPRester</span><br><span class="line"></span><br><span class="line">api_key = <span class="string">&quot;aaaaaabbbbbb&quot;</span>  <span class="comment"># 请替换成你的API key</span></span><br><span class="line"></span><br><span class="line">mpid = <span class="string">&quot;mp-149&quot;</span>  </span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> MPRester(api_key) <span class="keyword">as</span> mpr:</span><br><span class="line">    structure = mpr.get_structure_by_material_id(mpid, final=<span class="literal">True</span>)</span><br><span class="line">    </span><br><span class="line">    structure.to(<span class="string">f&quot;<span class="subst">&#123;mpid&#125;</span>.cif&quot;</span>)</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>MP-API的介绍就到此为止啦~~~~<br>目前为止，介绍了如何调用API接口；如果根据需求检索材料并汇总成csv文件；以及最后根据需求下载cif文件。当然，MP-API还有很多功能，比如获取结构的电子结构、能量等信息，这里就不一一介绍了。更多功能详解有需求后面再单独补充介绍。</p>
+<p><em><strong>¡Muchas gracias!</strong></em></p>
+]]></content>
+      <categories>
+        <category>Learn VASP from pymatgen</category>
+      </categories>
+      <tags>
+        <tag>VASP</tag>
+        <tag>pymatgen</tag>
+        <tag>Materials Project</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Chap.4  计算小白硬学VASP —— MPRelaxSet</title>
+    <url>/2024/06/04/Learn-VASP-from-pymatgen-4/</url>
+    <content><![CDATA[<p><em><strong>¡Hola a todos!</strong></em></p>
+<p>VASP计算运行流程简单示意图：</p>
+<pre class="mermaid">flowchart LR
+    input 
+    vasp(vasp)
+    converged(converged)
+    raw_data(raw_data)
+    
+    subgraph prep_input
+    1([INCAR])-->input
+    2([KPOINTS])-->input
+    3([POSCAR])-->input
+    4([POTCAR])-->input
+    5([sub_job.script])-->input
+    end
+    input-->vasp
+    subgraph vasp_black_box
+    vasp---relax([relax])-->converged
+    vasp---scf_calc([scf_calc])-->converged
+    vasp---nonscf_calc([nonscf_calc])-->converged
+    vasp---ect([......])-->converged
+    end
+    converged-->raw_data
+    subgraph post_processing
+    raw_data-->table([table])
+    raw_data-->gra([graph])
+    raw_data-->animation([animation])
+    
+    end</pre>
+
+<ul>
+<li><p>第一步为输入文件的准备，除了准备<code>INCAR KPOINTS POSCAR POTCAR</code>这四个VASP必需的输入文件之外，通常使用超算集群的用户还需要准备任务提交脚本<code>sub_job.script</code>；</p>
+</li>
+<li><p>第二步为提交运行VASP进行计算，这里可以把软件运算过程当成一个黑匣子，作为使用者的角度，我们无需去了解它是如何迭代计算，只需要根据不同的计算内容，我们能够根据不同的依据来判断计算是否完成，也就是是否收敛；</p>
+</li>
+<li><p>第三步为数据后处理过程，VASP输出的输出一般都不能直接转化成为可用的结果，需要我们进一步去分析电荷文件、波函数文件、<code>OUTCAR</code>文件等，从其中得到我们最终可以绘图<code>or</code>制表的数据。</p>
+</li>
+</ul>
+<h3 id="Why-pymatgen"><a href="#Why-pymatgen" class="headerlink" title="Why pymatgen"></a>Why pymatgen</h3><p>完整的计算流程中除了第二步依赖于软件本身，其余的工作都需要花费大量的人力时间来操作。传统操作来讲，输入文件可能用<code>vim</code>、<code>Notepad++</code>、<code>VScode</code>等手动编辑；计算结果的处理除了用插件得到<code>raw_data</code>还需要用到<code>origin</code>手动作图。</p>
+<p>对于少量计算来说，手动的亲力亲为的效率反而更高，但是遇到大量计算的计算操作，比如高通量计算，人的专注度是有限的，很容易就会出问题，老司机踩过的坑就包括但不仅限于以下：</p>
+<ul>
+<li><p>修改后的<code>POSCAR</code>，忘记对应修改<code>POTCAR</code> </p>
+</li>
+<li><p>磁性体系没开<code>ISPIN</code></p>
+</li>
+<li><p>未收敛的结果继续做自洽计算</p>
+</li>
+<li><p>……</p>
+</li>
+</ul>
+<p>这些操作看起来非常的离谱，初学VASP的兄弟肯定会说这个太夸张了。相信我，经历过大量计算的老哥们肯定或多或少都踩过类似的坑。</p>
+<p>回到正题，why pymatgen？看看下面的图你就知道：</p>
+<p><img src="/2024/06/04/Learn-VASP-from-pymatgen-4/pmg_chart.png" alt="pmg_chart"></p>
+<p>这个是<code>pymatgen</code>的功能示意图，不难发现，好像<code>pymatgen</code>把我们要干的活都给干了：</p>
+<ul>
+<li><p>支持根据计算类型生成输入文件</p>
+</li>
+<li><p>支持识别多种格式的结构文件</p>
+</li>
+<li><p>支持分析计算结果</p>
+</li>
+<li><p>……</p>
+</li>
+</ul>
+<p>配合上<code>matplotlib</code>绘图，妥妥的实现整个计算流程脚本自动化：</p>
+<p>代码一年写一次，一次用三年。</p>
+<h3 id="自动生成结构弛豫（优化）输入文件"><a href="#自动生成结构弛豫（优化）输入文件" class="headerlink" title="自动生成结构弛豫（优化）输入文件"></a>自动生成结构弛豫（优化）输入文件</h3><h4 id="MPRelaxSet-or-MPScanRelaxSet：如何选择合适的模块"><a href="#MPRelaxSet-or-MPScanRelaxSet：如何选择合适的模块" class="headerlink" title="MPRelaxSet or MPScanRelaxSet：如何选择合适的模块"></a>MPRelaxSet or MPScanRelaxSet：如何选择合适的模块</h4><p>本小节主要介绍下<code>pymatgen</code>中生成结构优化输入文件的模块的相关功能。看标题老司机给出了两个模块，这两个模块都是用于生成结构优化的输入文件，但是使用场景却有些许差别，需要根据使用场景和个人需求来自主选择。</p>
+<p>总所周知，<code>pymatgen</code>就是由<code>Materials Project</code>的团队开发的，而<code>Materials Project</code>上的结构的相关数据也都是通过<code>pymatgen</code>的生成的输入来进行计算而得到。</p>
+<p>那么问题来了，<code>Materials project</code>2011年就成立了，受限于当时的计算资源，面对如此庞大的高通量计算，当时的计算参数的设置稍显粗糙，放在如今的精度评判标准来看显然是不够的。为此官方也多次在<code>Github</code>的Issue里面提到过网页端的数据目前看来部分是<code>outdated</code>，但是官网也会定期的更新<code>datebase</code>，有兴趣可以看下每个版本都更新了哪些数据 <a class="link" href="https://docs.materialsproject.org/changes/database-versions">link <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>。而已有的数据绝大部分都是基于<code>MPRelaxSet</code>模块优化的结构计算的。</p>
+<p>下面是两个模块分别针对<code>Si</code>单质生成的<code>INCAR</code>词条对比：</p>
+<p><img src="/2024/06/04/Learn-VASP-from-pymatgen-4/Si_oldINCAR-17177292067111.png" alt="Si_oldINCAR">           <img src="/2024/06/04/Learn-VASP-from-pymatgen-4/Si_newINCAR.png" alt="Si_newINCAR"></p>
+<p>不用去管每个词条是什么意思，单看词条数量，俗话说：”一寸长，一寸强“，单从词条的长度就可以大致凭借经验判断，短的可能精度比较低，没错，短的就是<code>MPRelaxSet</code>生成的。</p>
+<p>那么是不是说明<code>MPRelaxSet</code>就不能用了呢？大可不必直接否定。</p>
+<h5 id="MPRelaxSet默认参数适用场景"><a href="#MPRelaxSet默认参数适用场景" class="headerlink" title="MPRelaxSet默认参数适用场景"></a>MPRelaxSet默认参数适用场景</h5><ul>
+<li><p>相图计算</p>
+<p>相图的计算需要设计许多中间相结构的计算，而<code>Materials project</code>作为数据库已经记录了许多结构的标准化输入的能量，这些数据都是可以直接调用的，因此对我们计算相图提供了极大的便利。基于此，我们在补充结构进行计算时，也需要保持<code>Materials project</code>数据的默认设置，所以此时调用<code>MPRelaxSet</code>模块是相对合适的；</p>
+</li>
+<li><p>电化学窗口</p>
+<p>同理电化学窗口的计算也需要计算大量的结构。为此，这类需要调用<code>Materials project</code>上面结构能量数据来节省计算量的，可以使用<code>MPRelaxSet</code>模块；</p>
+</li>
+<li><p>粗收敛</p>
+<p>我们之前说过，好的结构是好结果的关键，那么其中重要的步骤就是优化过程。对于复杂结构：异质结、磁性体系、超大模型等，采用<code>MPRelaxSet</code>模块进行粗收敛来初步判断结构建模以及参数设置是否合理，同时不失为一个节省计算总时长的好办法。</p>
+</li>
+</ul>
+
+  <div class="note p-4 mb-4 rounded-small info">
+    <p>如果需要对应<code>Materials project</code>上的结构数据，势函数的种类选择也要对应，这里先提一下留意一下，后面详细说明。</p>
+
+  </div>
+
+<h5 id="MPScanRelaxSet介绍"><a href="#MPScanRelaxSet介绍" class="headerlink" title="MPScanRelaxSet介绍"></a>MPScanRelaxSet介绍</h5><p><code>MPScanRelaxSet</code>模块的使用条件就比较限制了，软件方面的适用条件：</p>
+<ul>
+<li><p><code>VASP</code>版本6.0.0及以上</p>
+</li>
+<li><p>默认引入了更准确的<code>METAGGA = r2SCAN</code>方法，此方法要求<code>VASP</code>版本6.2及以上</p>
+</li>
+<li><p><code>METAGGA</code>要求势函数包含<code>kinetic energy density of the core-electrons</code>，也就是势函数必须要用<code>PBE_52</code>及以上版本</p>
+<p>看到这里是否有点不知道在讲什么，其实老司机也只是把文档的内容汉化成以上三点，平常我也是使用的<code>MPRelaxSet</code>模块，因为目前我使用的VASP版本还是5.4.4 <code>QAQ</code></p>
+</li>
+</ul>
+<h5 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h5><p>这里，老司机建议先使用<code>MPRelaxSet</code>模块就足够了，对于目前大部分<code>pymatgen</code>的用户来说，<code>MPRelaxSet</code>模块的使用还是占主要的。而且也不必担心计算精度问题，既然模块有默认参数，那么在使用过程中我们也可以根据需求进行调整精度。后续的计算也是基于<code>VASP_v5.4.4</code>，用<code>MPRelaxSet</code>模块实例。</p>
+<p><em><strong>PS：</strong></em>其实就是老司机使用的服务器没有<code>VASP_v6.0+</code>版本，不然高低也得详细对比测一下，给出更详细的使用建议。</p>
+<h4 id="MPRelaxSet使用实例"><a href="#MPRelaxSet使用实例" class="headerlink" title="MPRelaxSet使用实例"></a>MPRelaxSet使用实例</h4><h5 id="实例1：生成Si单质结构优化输入文件"><a href="#实例1：生成Si单质结构优化输入文件" class="headerlink" title="实例1：生成Si单质结构优化输入文件"></a>实例1：生成Si单质结构优化输入文件</h5><p><code>MPRelaxSet</code>模块调用命令是：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.sets <span class="keyword">import</span> MPRelaxSet</span><br></pre></td></tr></table></figure></div>
+
+<p><code>sets</code>里还包含其他模块，除上面的<code>MPScanRelaxSet</code>，还有<code>LobsterSet</code>、<code>MPAbsorptionSet</code>、<code>MPHSEBSSet</code>等等，后续有需要会一一介绍。</p>
+<p>导入模块之后，我们必须提供的只有结构信息，而读取结构信息还需要用到的模块是<code>Structure</code>，同样也需要导入：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br></pre></td></tr></table></figure></div>
+
+<h6 id="输入结构信息"><a href="#输入结构信息" class="headerlink" title="输入结构信息"></a>输入结构信息</h6><p><code>Structure</code>支持的结构信息类型非常多可以自己写，也可以只提供提供文件路径供识别：</p>
+<ul>
+<li>手写晶格常数，元素种类，原子坐标</li>
+</ul>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.core <span class="keyword">import</span> Lattice</span><br><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"></span><br><span class="line"><span class="comment"># 晶格常数</span></span><br><span class="line">lattice = Lattice([[<span class="number">4.2</span>, <span class="number">0.0</span>, <span class="number">0.0</span>], [<span class="number">0.0</span>, <span class="number">4.2</span>, <span class="number">0.0</span>], [<span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">4.2</span>]])</span><br><span class="line"></span><br><span class="line"><span class="comment">#原子种类</span></span><br><span class="line">species = [<span class="string">&quot;Si&quot;</span>, <span class="string">&quot;Si&quot;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">#原子坐标</span></span><br><span class="line">coords = [[<span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>], [<span class="number">0.25</span>, <span class="number">0.25</span>, <span class="number">0.25</span>]]</span><br><span class="line"></span><br><span class="line"><span class="comment">#创建Si结构</span></span><br><span class="line">struct = Structure(lattice, species, coords)</span><br></pre></td></tr></table></figure></div>
+
+<p>但是该方法极不推荐，why，因为很麻烦，而且复杂结构的原子坐标根本写不出来，但是对于单原子的结构建模，还是可以使用。</p>
+<ul>
+<li>提供现成结构文件，目前可以识别的格式有：</li>
+</ul>
+<ol>
+<li><p>Crystallographic Information Format file (.cif文件)</p>
+</li>
+<li><p>VASP输入输出中包含结构信息的文件：POSCAR、CONTCAR、CHGCAR、LOCPOT、vasprun.xml</p>
+</li>
+<li><p>CSSR、Netcdf、pymatgen结构JSON文件</p>
+</li>
+</ol>
+<p>前两种的结构文件是比较常见的，也是常用的：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"></span><br><span class="line"><span class="comment"># 结构文件路径</span></span><br><span class="line">poscar = <span class="string">&quot;./POSCAR&quot;</span>		<span class="comment">#当前文件夹下有POSCAR文件</span></span><br><span class="line"></span><br><span class="line">struct = Structure.from_file(poscar)	<span class="comment">#from_file用法是固定的，用于读取该路径下的结构文件</span></span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>MP-API获取结构：</li>
+</ul>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">with</span> MPRester(api_key) <span class="keyword">as</span> mpr:</span><br><span class="line">    struct = mpr.get_structure_by_material_id(<span class="string">&quot;mp-149&quot;</span>) <span class="comment"># Si的MP编号</span></span><br></pre></td></tr></table></figure></div>
+
+<p>这里Si的结构信息就被储存到<code>structure</code>变量了</p>
+<h6 id="MPRelaxSet生成并导出输入文件"><a href="#MPRelaxSet生成并导出输入文件" class="headerlink" title="MPRelaxSet生成并导出输入文件"></a>MPRelaxSet生成并导出输入文件</h6><p>结构准备好了之后，就可以直接生成输入文件了，下面是完整代码：</p>
+<details class="yellow" data-header-exclude><summary><i class="fa-solid fa-chevron-right"></i>参考代码 </summary>
+              <div class="content">
+              <div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.sets <span class="keyword">import</span> MPRelaxSet</span><br><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"><span class="keyword">from</span> pymatgen.core <span class="keyword">import</span> Lattice</span><br><span class="line"><span class="keyword">from</span> mp_api.client <span class="keyword">import</span> MPRester</span><br><span class="line"></span><br><span class="line"><span class="comment">## 方法1</span></span><br><span class="line"><span class="comment"># 晶格常数</span></span><br><span class="line">lattice = Lattice([[<span class="number">4.2</span>, <span class="number">0.0</span>, <span class="number">0.0</span>], [<span class="number">0.0</span>, <span class="number">4.2</span>, <span class="number">0.0</span>], [<span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">4.2</span>]])</span><br><span class="line"><span class="comment">#原子种类</span></span><br><span class="line">species = [<span class="string">&quot;Si&quot;</span>, <span class="string">&quot;Si&quot;</span>]</span><br><span class="line"><span class="comment">#原子坐标</span></span><br><span class="line">coords = [[<span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>], [<span class="number">0.25</span>, <span class="number">0.25</span>, <span class="number">0.25</span>]]</span><br><span class="line"><span class="comment">#创建Si结构</span></span><br><span class="line">struct1 = Structure(lattice, species, coords)</span><br><span class="line"><span class="comment">#调用MPRelaxSet</span></span><br><span class="line">relax1 = MPRelaxSet(struct1)</span><br><span class="line"><span class="comment">#导出文件</span></span><br><span class="line">relax1.write_input(<span class="string">&#x27;./1&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;文件成功保存到1&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">##方法2</span></span><br><span class="line"><span class="comment"># 结构文件路径</span></span><br><span class="line">Si_poscar = <span class="string">&quot;./POSCAR&quot;</span>		<span class="comment">#当前文件夹下准备Si的POSCAR文件</span></span><br><span class="line">struct2 = Structure.from_file(Si_poscar)</span><br><span class="line"><span class="comment">#调用MPRelaxSet</span></span><br><span class="line">relax2 = MPRelaxSet(struct2)</span><br><span class="line"><span class="comment">#导出文件</span></span><br><span class="line">relax2.write_input(<span class="string">&#x27;./2&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;文件成功保存到2&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">##方法3</span></span><br><span class="line">api_key = <span class="string">&quot;aaaaabbbbb&quot;</span>	<span class="comment">#换成你的key</span></span><br><span class="line"><span class="keyword">with</span> MPRester(api_key) <span class="keyword">as</span> mpr:</span><br><span class="line">    struct3 = mpr.get_structure_by_material_id(<span class="string">&quot;mp-149&quot;</span>)</span><br><span class="line">    relax3 = MPRelaxSet(struct3)</span><br><span class="line">    <span class="comment">#导出文件</span></span><br><span class="line">	relax3.write_input(<span class="string">&#x27;./3&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;文件成功保存到3&quot;</span>)</span><br></pre></td></tr></table></figure></div>
+              </div>
+            </details>
+
+<p>运行</p>
+<p><img src="/2024/06/04/Learn-VASP-from-pymatgen-4/Sirelax_input.png" alt="Sirelax_input"></p>
+<p>当前路径生成三个文件夹，每个文件夹对于不同方法生成的输入文件，可以发现其中的<code>INCAR</code>几乎是一样的，除了方法3中<code>INCAR</code>的原子初始磁矩<code>MAGMOM</code>都设置成0了，这是因为方法3是直接读取的<code>Materials project</code>的数据，直接包含了磁矩信息，覆盖了默认设置。</p>
+<p><img src="/2024/06/04/Learn-VASP-from-pymatgen-4/Si_incar_compare.png" alt="Si_incar_compare"></p>
+<h5 id="实例2：自定义输入参数（进阶设置）"><a href="#实例2：自定义输入参数（进阶设置）" class="headerlink" title="实例2：自定义输入参数（进阶设置）"></a>实例2：自定义输入参数（进阶设置）</h5><p>前面我们讲了<code>MPRelaxSet</code>的默认参数精度是比较低的，正常来说，默认计算后得到的结构和能量数据都不建议使用。但是，不用担心，我们可以自定义输入参数，包括截断能、收敛标准，优化步数等等。</p>
+<p>虽然前面讲过不需要去学习参数词条就可以学会VASP计算。严格来说实例1学会之后，任何结构你都可以生成输入去用VASP算一下看看结果。</p>
+<p>本实例也可以说是进阶内容，主要是利于针对每个人自己对应的研究体系，能够设置相对合理的参数，需要对基本的<code>INCAR</code>词条有一定了解。</p>
+<p>但是，老司机会在最后给出针对不同体系普适性比较搞的INCAR设置，基本上按照对应的INCAR来优化，得到的结构和能量都比较可信，所以对该部分不感兴趣的可以直接跳到<a href=".....">最后</a>，或者跳过本小节，后面再看也可以。</p>
+<h6 id="user-incar-settings"><a href="#user-incar-settings" class="headerlink" title="user_incar_settings"></a>user_incar_settings</h6><p>之前的代码中，<code>MPRelaxSet</code>中我们只提供了结构，如果是用于自定义INCAR参数，还可以继续添加<code>user_incar_settings</code>来覆盖默认的设置，这里不需要写完整的所有INCAR设置，只需要写你想要改变的词条。</p>
+
+  <div class="note p-4 mb-4 rounded-small info">
+    <p><code>INCAR</code>词条有默认的设置，即使不写入<code>INCAR</code>里面也会在计算中采用默认的设置，详情默认设置的值以及解释见[VASP官网](<a class="link" href="https://www.vasp.at/wiki/index.php/The_VASP_Manual">The VASP Manual - VASP Wiki <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>)</p>
+
+  </div>
+
+<p>语法如下：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.sets <span class="keyword">import</span> MPRelaxSet</span><br><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"></span><br><span class="line">Si_poscar = <span class="string">&quot;./POSCAR&quot;</span></span><br><span class="line">struct = Structure.from_file(Si_poscar)</span><br><span class="line">relax_old = MPRelaxSet(struct2)</span><br><span class="line">relax_new = MPRelaxSet(</span><br><span class="line">    struct2,</span><br><span class="line">    user_incar_settings=&#123;<span class="string">&#x27;EDIFFG&#x27;</span>:-<span class="number">0.01</span>&#125;</span><br><span class="line">)</span><br><span class="line">relax_old.write_input(<span class="string">&#x27;./old&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Default settings have been written&quot;</span>)</span><br><span class="line">relax_new.write_input(<span class="string">&#x27;./new&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;New settings have been added&quot;</span>)</span><br></pre></td></tr></table></figure></div>
+
+<p>运行后对比<code>new</code>和<code>old</code>文件夹里的<code>INCAR</code></p>
+<p><img src="/2024/06/04/Learn-VASP-from-pymatgen-4/add_EDIFFG.png" alt="add_EDIFFG"></p>
+<p>成功添加了<code>EDIFFG</code>词条，此时控制结构收敛的标准从能量收敛变成了更为严格靠谱的力收敛。</p>
+<p>如果想修改更多的词条，我们也只需要在<code>user_incar_settings</code>对应的字典后面逐个添加即可：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line">user_incar_settings=&#123;</span><br><span class="line">    <span class="string">&#x27;EDIFFG&#x27;</span>:-<span class="number">0.01</span>,</span><br><span class="line">    <span class="string">&#x27;ENCUT&#x27;</span>:<span class="number">400</span>,</span><br><span class="line">    <span class="string">&#x27;NSW&#x27;</span>:<span class="number">200</span>,</span><br><span class="line">    <span class="string">&#x27;ISPIN&#x27;</span>:<span class="number">1</span>,</span><br><span class="line">    <span class="string">&#x27;ALGO&#x27;</span>:<span class="string">&#x27;Normal&#x27;</span></span><br><span class="line">    ......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h6 id="user-kpoints-settings"><a href="#user-kpoints-settings" class="headerlink" title="user_kpoints_settings"></a>user_kpoints_settings</h6><p>说完了<code>INCAR</code>的自定义设置，<code>KPOINTS</code>的自定义设置也类似。</p>
+<ul>
+<li>调用<code>Kpoints</code>模块来生成</li>
+</ul>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line">......</span><br><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.inputs <span class="keyword">import</span> Kpoints</span><br><span class="line"></span><br><span class="line">......</span><br><span class="line"><span class="comment"># 1.指定K点</span></span><br><span class="line">kpoints = Kpoints(kpts=[(<span class="number">3</span>,<span class="number">3</span>,<span class="number">3</span>)])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2.全自动K空间网格</span></span><br><span class="line">kpoints = Kpoints.automatic(<span class="number">50</span>)	<span class="comment"># 50表示倒格子空间向量长度与分隔的K点的乘积</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 3.根据K点密度自动生成</span></span><br><span class="line">kpoints = Kpoints.automatic_density(struct, <span class="number">1000</span>) <span class="comment"># 1000表示K空间里整个K点的数量</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 4.与2类似，指定每条向量</span></span><br><span class="line">kpoints = Kpoints.automatic_density_by_lengths(struct, [<span class="number">50</span>,<span class="number">50</span>,<span class="number">10</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 5.根据体积平均生成K点</span></span><br><span class="line">kpoints = Kpoints.automatic_density_by_vol(struct,<span class="number">500</span>)</span><br><span class="line"></span><br><span class="line">relax_new = MPRelaxSet(</span><br><span class="line">    struct,</span><br><span class="line">    user_incar_settings=&#123;<span class="string">&#x27;EDIFFG&#x27;</span>:-<span class="number">0.01</span>&#125;,</span><br><span class="line">    user_kpoints_settings=kpoints</span><br><span class="line">)</span><br></pre></td></tr></table></figure></div>
+
+
+  <div class="note p-4 mb-4 rounded-small info">
+    <p>强烈推荐1和2方法</p>
+
+  </div>
+
+<ul>
+<li><p>修改<code>MPRelaxSet</code>默认KPOINTS设置</p>
+<p>在之前的代码中，我们并没有进行K点的相关设置，但是生成的输入文件中也给我们生成了<code>KPOINTS</code>文件。查阅官网文档内容可以发现，实际上K点的设置是已经给我们设置了默认的参数：<code>&#123;&#39;reciprocal_density&#39;: 64&#125;</code>，此外还有其他的设置方式：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line">......</span><br><span class="line"><span class="comment"># 倒格子密度</span></span><br><span class="line">kpoints = &#123;<span class="string">&#x27;reciprocal_density&#x27;</span>: <span class="number">64</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 网格密度</span></span><br><span class="line">kpoints = &#123;<span class="string">&#x27;grid_density&#x27;</span>: <span class="number">500</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 全自动K点</span></span><br><span class="line">kpoints = &#123;<span class="string">&#x27;length&#x27;</span>:<span class="number">30</span>&#125;</span><br><span class="line"></span><br><span class="line">relax_new = MPRelaxSet(</span><br><span class="line">    struct,</span><br><span class="line">    user_incar_settings=&#123;<span class="string">&#x27;EDIFFG&#x27;</span>:-<span class="number">0.01</span>&#125;,</span><br><span class="line">    user_kpoints_settings=kpoints</span><br><span class="line">)</span><br></pre></td></tr></table></figure></div>
+
+<p>除上述外，官方支持的全部格式如下：</p>
+<ol>
+<li><p><code>&#39;grid_density&#39;</code> for Kpoints.automatic_density generation </p>
+</li>
+<li><p><code>&#39;reciprocal_density&#39;</code> for KPoints.automatic_density_by_vol generation</p>
+</li>
+<li><p><code>&#39;length&#39;</code> for Kpoints.automatic generation</p>
+</li>
+<li><p><code>&#39;line_density&#39;</code> for line mode generation</p>
+</li>
+<li><p><code>&#39;added_kpoints&#39;</code> for specific k-points to include</p>
+</li>
+<li><p><code>&#39;zero_weighted_reciprocal_density&#39;</code> for a zero weighted uniform mesh</p>
+</li>
+<li><p><code>&#39;zero_weighted_line_density&#39;</code> for a zero weighted line mode mesh</p>
+</li>
+</ol>
+</li>
+</ul>
+<h6 id="user-potcar-settings"><a href="#user-potcar-settings" class="headerlink" title="user_potcar_settings"></a>user_potcar_settings</h6><p><code>POTCAR</code>的自定义设定主要是用于指定元素的势函数种类，语法如下：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line">......</span><br><span class="line"><span class="comment"># pymatgen默认指定Li元素用Li_sv势，Na元素用Na_pv势，根据个人需求可改成调用普通的势</span></span><br><span class="line">potcar = &#123;</span><br><span class="line">    <span class="string">&#x27;Li&#x27;</span>:<span class="string">&#x27;Li&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Na&#x27;</span>：<span class="string">&#x27;Na&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">relax_new = MPRelaxSet(</span><br><span class="line">    struct,</span><br><span class="line">    user_incar_settings=&#123;<span class="string">&#x27;EDIFFG&#x27;</span>:-<span class="number">0.01</span>&#125;,</span><br><span class="line">    user_potcar_settings=potcar</span><br><span class="line">)</span><br><span class="line">......</span><br></pre></td></tr></table></figure></div>
+
+<h6 id="user-potcar-functional"><a href="#user-potcar-functional" class="headerlink" title="user_potcar_functional"></a>user_potcar_functional</h6><p><code>MPRelaxSet</code>默认的函数指定的是<code>&#39;PBE&#39;</code>，前面说到，<code>MPRelaxSet</code>的相关设置都是比较落后的，在势函数上默认的选择也是比较老的<code>&#39;PBE&#39;</code>，尤其是目前vasp版本已经更新到了6.4了，势函数也更新到了<code>&#39;PBE_64&#39;</code>。</p>
+<p>在上面的实操过程中，如果你的<code>&lt;PMG_VASP_PSP_DIR&gt;</code>路径下没有<code>&#39;PBE&#39;</code>势函数，可能会报错且没有文件生成：</p>
+<p><code>You do not have the right POTCAR with functional=&#39;PBE&#39; and symbol=&#39;Si&#39; in your PMG_VASP_PSP_DIR</code></p>
+<p>注意：这个并不是说咱的操作有问题，只是<code>MPRelaxSet</code>函数默认读取<code>&#39;PBE&#39;</code>，且<code>&#39;PBE&#39;</code>目前来说已经过时了。</p>
+<p>因此在使用的时候，我们需要加上<code>user_potcar_functional</code>参数来指定我们使用的势函数，这里我用的是<code>&#39;PBE_54&#39;</code>:</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line">......</span><br><span class="line">relax_new = MPRelaxSet(</span><br><span class="line">    struct,</span><br><span class="line">    user_incar_settings=&#123;<span class="string">&#x27;EDIFFG&#x27;</span>:-<span class="number">0.01</span>&#125;,</span><br><span class="line">    user_potcar_functional=<span class="string">&#x27;PBE_54&#x27;</span>,</span><br><span class="line">)</span><br><span class="line">......</span><br></pre></td></tr></table></figure></div>
+
+<p>再次运行，可正常生成输入文件。</p>
+<p>还没完！！！</p>
+<p>运行完上述的命令，输入文件可以正常生成了，但是又有新的Warning：</p>
+<blockquote>
+<p><strong>BadInputSetWarning:</strong> Overriding the POTCAR functional is generally not recommended  as it significantly affect the results of calculations and compatibility with other calculations done with the same input set. Note that some POTCAR symbols specified in the configuration file may not be available in the selected functional.</p>
+</blockquote>
+<blockquote>
+<p><strong>BadInputSetWarning:</strong> POTCAR data with symbol Si is not known by pymatgen to correspond with the selected user_potcar_functional&#x3D;’PBE_54’. This POTCAR is known to correspond with functionals [‘PBE_52_W_HASH’, ‘PBE_54_W_HASH’, ‘PBE_64’]. Please verify that you are using the right POTCARs!  warnings.warn(</p>
+</blockquote>
+<p><code>VASP</code>计算中有句话：Warning不算报错，能算就继续算。</p>
+<p>这里也是一样，这个Warning并不表示你的参数设置有问题，而是<code>VASP</code>官方会随着版本更新，相应的也会更新势函数的版本，同样地，<code>pymatgen</code>在更新的时候的时候也会同步把新版的势函数的<code>hash</code>值加入进来以便识别。简而言之，这个warning就是提醒你目前推荐的势函数版本是什么，比如这里推荐的是<code>&#39;PBE_64&#39;</code>。当然并不是说明<code>&#39;PBE_54&#39;</code>的势函数就是错的。官方<code>Github</code>的<code>Issue</code>里面有很多类似的讨论，这个Warning主要就是要提醒用户，了解自己在做什么。</p>
+<h4 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h4><p><code>MPRelaxSet</code>的用法就介绍到这，本章干货满满，各位多多练习~~~~</p>
+]]></content>
+      <categories>
+        <category>Learn VASP from pymatgen</category>
+      </categories>
+      <tags>
+        <tag>VASP</tag>
+        <tag>pymatgen</tag>
+        <tag>Materials Project</tag>
+        <tag>MPRelaxSet</tag>
+        <tag>MPScanRelaxSet</tag>
+      </tags>
+  </entry>
+</search>
