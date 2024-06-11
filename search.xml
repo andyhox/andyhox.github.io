@@ -261,7 +261,7 @@
       </tags>
   </entry>
   <entry>
-    <title>Chap.4  计算小白硬学VASP —— MPRelaxSet</title>
+    <title>Chap.4  计算小白硬学VASP —— MPRelaxSet用法</title>
     <url>/2024/06/04/Learn-VASP-from-pymatgen-4/</url>
     <content><![CDATA[<p><em><strong>¡Hola a todos!</strong></em></p>
 <p>VASP计算运行流程简单示意图：</p>
@@ -413,7 +413,7 @@
 <h5 id="实例2：自定义输入参数（进阶设置）"><a href="#实例2：自定义输入参数（进阶设置）" class="headerlink" title="实例2：自定义输入参数（进阶设置）"></a>实例2：自定义输入参数（进阶设置）</h5><p>前面我们讲了<code>MPRelaxSet</code>的默认参数精度是比较低的，正常来说，默认计算后得到的结构和能量数据都不建议使用。但是，不用担心，我们可以自定义输入参数，包括截断能、收敛标准，优化步数等等。</p>
 <p>虽然前面讲过不需要去学习参数词条就可以学会VASP计算。严格来说实例1学会之后，任何结构你都可以生成输入去用VASP算一下看看结果。</p>
 <p>本实例也可以说是进阶内容，主要是利于针对每个人自己对应的研究体系，能够设置相对合理的参数，需要对基本的<code>INCAR</code>词条有一定了解。</p>
-<p>但是，老司机会在最后给出针对不同体系普适性比较搞的INCAR设置，基本上按照对应的INCAR来优化，得到的结构和能量都比较可信，所以对该部分不感兴趣的可以直接跳到<a href=".....">最后</a>，或者跳过本小节，后面再看也可以。</p>
+<p>所以对该部分不感兴趣的可以直接跳过本小节，后面再看也可以。</p>
 <h6 id="user-incar-settings"><a href="#user-incar-settings" class="headerlink" title="user_incar_settings"></a>user_incar_settings</h6><p>之前的代码中，<code>MPRelaxSet</code>中我们只提供了结构，如果是用于自定义INCAR参数，还可以继续添加<code>user_incar_settings</code>来覆盖默认的设置，这里不需要写完整的所有INCAR设置，只需要写你想要改变的词条。</p>
 
   <div class="note p-4 mb-4 rounded-small info">
