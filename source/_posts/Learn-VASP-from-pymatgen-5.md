@@ -1,19 +1,20 @@
 ---
-title: Chap.5  计算小白硬学VASP —— Bulk模型各类性质计算（1）
-date: 2024-06-11 16:00:00 
-author: 炫酷老司机
+title: Chap.5  计算小白硬学VASP —— 材料性质计算—>态密度
 tags:
   - VASP
   - pymatgen
   - Materials Project
+author: 炫酷老司机
 categories:
   - Learn VASP from pymatgen
 sticky: 5
 copyright: 欢迎个人转载、使用、转贴等，但请获得作者同意且注明出处！
 comment: true
 cover: /images/wallhaven-gpkd77_3840x2160.png
-excerpt: "Learn VASP from pymatgen"
+excerpt: Learn VASP from pymatgen
+date: 2024-06-11 16:00:00
 ---
+
 
 ***¡Hola a todos!***
 
@@ -90,6 +91,16 @@ print("DOS_calc is ready!")
 
 默认的`INCAR`中增加`ICHARG`词条，当`ICHARG≥10`时，计算过程中电荷密度不进行自洽更新，`CHGCAR`和`CHG`文件内容不变，即非自洽计算。
 
+态密度计算仅读`CHGCAR`即可，即只用复制`CHGCAR`至态密度计算文件夹。
+
+{% note info %}
+
+**如果使用`MPNonSCFSet`的`from_prev_calc`方法，默认会复制上一步自洽计算的`CHGCAR`文件到当前文件夹；如果只用`MPNonSCFSet`，则需要指定结构文件`struct`，以及自行把`CHGCAR`复制到当前目录。**
+
+{% endnote %}
+
+##### 自定义参数设置
+
 此外，本小节主要介绍`DOS`计算，默认的INCAR参数中，部分的设置是不太合理的，或者说不利于后续的数据分析。
 
 {% note info %}
@@ -97,3 +108,55 @@ print("DOS_calc is ready!")
 **前面提到，`VASP`对许多词条的值有默认值，如果不在`INCAR`中覆写，计算采用的就是默认值**
 
 {% endnote %}
+
+- `EMIN`：态密度能量下区间（默认值：`lowest KS-eigenvalue - Δ`）
+- `EMAX`：态密度能量上区间（默认值：`lowest KS-eigenvalue - Δ`）
+- `NEDOS`：态密度的网格点数（默认值：301）
+- `ISPIN`：是否考虑电子自旋
+
+上述的三个参数根据作图需求进行调整，比如态密度图主要是分析费米能级附近的占据情况，实际计算时，默认的能量区间可能非常大，同时`NEDOS`的数值是确定的，所以会一定程度降低费米能级附近的精度。因此，如果你只需要费米能级附近的信息，可以在`INCAR`中指定能量区间，如`EMIN=-8`、`EMAX=8`，然后选取适当的`NEDOS`(推荐2001)，这样的话精度是比较合适的，作图也不会因为`NEDOS`数量过少而出现锯齿线条。`ISPIN`本身是控制体系是否考虑自旋，一般认为是与磁性计算有关，但是在态密度计算中，是否考虑自旋影响最后输出的数据是否把自旋向上的轨道与自旋向下的轨道区分开。
+
+- `LORBIT`：决定投影轨道的形式（常用设置为10和11）
+
+`LORBIT=10`时，态密度投影的轨道只包含s/p/d/f轨道；`LORBIT=11`时，态密度除了输出总的轨道信息，还会投影到分轨道上，如`px`、`py`、`pz`等。
+
+总的来说，计算前先确定`LORBIT`的数值来决定是否需要分轨道的数据，然后再确定`ISPIN`、`EMIN`、`EMAX`、`NEDOS`的数值来考虑作图需求。
+
+{% note info %}
+
+磁性体系必须打开`ISPIN`
+
+{% endnote %}
+
+##### KPOINTS文件
+
+`MPNonSCFSet`模块默认生成的`KPOINTS`文件中的K点写法是`line-mode`，该方法一般用于能带结构的计算。因此在态密度计算中，我们可以写常规的K点进行覆盖：
+
+```python
+from pymatgen.io.vasp.sets import MPNonSCFSet
+
+kpoints = {
+    "length":100,
+}
+
+nonscf_dos = MPNonSCFSet.from_prev_calc(
+    prev_calc_dir='./static', 
+    user_potcar_functional='PBE_54',
+    user_kpoints_settings=kpoints,
+)
+
+nonscf_dos.write_input('./dos')
+print("DOS_calc is ready!")
+```
+
+{% note info %}
+
+态密度计算的K网格要足够大才算的准，在普通结构优化的K点个数3倍以上，大体系算不动可适量降低。
+
+{% endnote %}
+
+#### 总结
+
+态密度计算就介绍到这，各位多多练习~~~~
+
+***¡Muchas gracias!***
