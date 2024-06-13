@@ -1,5 +1,5 @@
 ---
-title: Chap.6  计算小白硬学VASP —— 材料性质计算—>能带
+title: Chap.6  计算小白硬学VASP —— 材料性质计算—>态密度分析
 tags:
   - VASP
   - pymatgen
@@ -16,3 +16,7 @@ date: 2024-06-13
 ---
 
 ***¡Hola a todos!***
+
+本章介绍如何使用`pymatgen`对态密度结果进行分析。
+
+案例1：
