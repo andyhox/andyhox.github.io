@@ -488,6 +488,7 @@
 <p><code>VASP</code>计算中有句话：Warning不算报错，能算就继续算。</p>
 <p>这里也是一样，这个Warning并不表示你的参数设置有问题，而是<code>VASP</code>官方会随着版本更新，相应的也会更新势函数的版本，同样地，<code>pymatgen</code>在更新的时候的时候也会同步把新版的势函数的<code>hash</code>值加入进来以便识别。简而言之，这个warning就是提醒你目前推荐的势函数版本是什么，比如这里推荐的是<code>&#39;PBE_64&#39;</code>。当然并不是说明<code>&#39;PBE_54&#39;</code>的势函数就是错的。官方<code>Github</code>的<code>Issue</code>里面有很多类似的讨论，这个Warning主要就是要提醒用户，了解自己在做什么。</p>
 <h4 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h4><p><code>MPRelaxSet</code>的用法就介绍到这，本章干货满满，各位多多练习~~~~</p>
+<p><em><strong>¡Muchas gracias!</strong></em></p>
 ]]></content>
       <categories>
         <category>Learn VASP from pymatgen</category>
@@ -498,6 +499,178 @@
         <tag>Materials Project</tag>
         <tag>MPRelaxSet</tag>
         <tag>MPScanRelaxSet</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Chap.5  计算小白硬学VASP —— 材料性质计算—&gt;态密度</title>
+    <url>/2024/06/11/Learn-VASP-from-pymatgen-5/</url>
+    <content><![CDATA[<p><em><strong>¡Hola a todos!</strong></em></p>
+<p>上一章我们主要分享了结构优化的输入文件的生成，以及自定义输入文件参数；本章简单介绍下，对于Bulk模型来说，各类性质计算的输入文章生成，以及参数设置要点。</p>
+<h4 id="简单自洽计算"><a href="#简单自洽计算" class="headerlink" title="简单自洽计算"></a>简单自洽计算</h4><p>性质计算的前提是进行结构优化得到稳定的结构。对于不同的性质计算，计算的步骤往往需要多步进行，例如态密度计算，需要先进行自洽计算得到电荷、波函数文件，然后再进行一步非自洽计算。</p>
+<p>首先介绍下普通的自洽计算，用于得到电荷、波函数文件。</p>
+<h5 id="调用MPStaticSet"><a href="#调用MPStaticSet" class="headerlink" title="调用MPStaticSet"></a>调用MPStaticSet</h5><p>自洽计算的输入文件生成可以调用<code>MPStaticSet</code>模块，以<code>Si</code>为例，默认生成输入文件如下：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.sets <span class="keyword">import</span> MPStaticSet</span><br><span class="line"></span><br><span class="line">static = MPStaticSet.from_prev_calc(</span><br><span class="line">    <span class="comment"># 上一步优化的文件夹</span></span><br><span class="line">    prev_calc_dir=<span class="string">&#x27;./relax&#x27;</span>,</span><br><span class="line">    user_potcar_functional=<span class="string">&#x27;PBE_54&#x27;</span></span><br><span class="line">	)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">static.write_input(<span class="string">&#x27;./static&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;static_calc is ready!&quot;</span>)</span><br></pre></td></tr></table></figure></div>
+
+<p>从用法上来说<code>MPStaticSet</code>的用法跟<code>MPRelaxSet</code>类似。但是这里细心的可以发现，这里老司机并没有提供结构文件，而是用了<code>from_prev_calc</code>方法，顾名思义就是读取前一步计算的文件进行计算，这里读取的就是之前优化计算的文件夹。</p>
+<p>该方法通用于所有<code>set</code>类的模块，例如之前介绍的<code>MPRelaxSet</code>模块也可以使用，区别就是现在需要提供的是你希望读取的上一步计算的路径。该操作简而言之就是<code>VASP</code>中的续算操作。</p>
+<p>运行上述代码后，可以得到如下<code>static</code>的<code>INCAR</code>：</p>
+<p><img src="/2024/06/11/Learn-VASP-from-pymatgen-5/staticVSrelax.png" alt="staticVSrelax"></p>
+<p>与优化的<code>INCAR</code>对比可以发现，主要是修改了与优化有关的参数：<code>IBRION</code>、<code>NSW</code>；关于<code>ISMEAR</code>参数，<code>VASP</code>提供了比较友好的经验选择方法：</p>
+<blockquote>
+<ul>
+<li><p>If you have no a priori knowledge of your system, for instance, if you do not know whether your system is an insulator, semiconductor or metal then always use Gaussian smearing ISMEAR&#x3D;0 in combination with a small <a class="link" href="https://www.vasp.at/wiki/index.php/SIGMA">SIGMA <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>&#x3D;0.03-0.05.</p>
+</li>
+<li><p>For semiconductors or insulators, use the tetrahedron method (ISMEAR&#x3D;-5), if the cell is too large (or if you use only a single or two <strong>k</strong> points) use ISMEAR&#x3D;0 in combination with a small <a class="link" href="https://www.vasp.at/wiki/index.php/SIGMA">SIGMA <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>&#x3D;0.03-0.05.</p>
+</li>
+<li><p>For relaxations <em>in metals</em>, use ISMEAR&#x3D;1 or ISMEAR&#x3D;2 and an appropriate <a class="link" href="https://www.vasp.at/wiki/index.php/SIGMA">SIGMA <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a> value (the entropy term should be less than 1 meV per atom). For metals a reasonable value is often SIGMA&#x3D; 0.2 (which is the default).</p>
+</li>
+<li><p>For the calculations of the DOS and very accurate total-energy calculations (no relaxation in metals), use the tetrahedron method (ISMEAR&#x3D;-5).</p>
+</li>
+</ul>
+</blockquote>
+
+  <div class="note p-4 mb-4 rounded-small info">
+    <p><strong>上述INCAR的设置为MPStaticSet的默认设置，针对具体性质计算，需要调整的词条参数不同</strong></p>
+
+  </div>
+
+<h4 id="态密度计算"><a href="#态密度计算" class="headerlink" title="态密度计算"></a>态密度计算</h4><p>态密度计算需要先进行一步自洽计算，然后进行一步非自洽计算得到最终的态密度数据。在第一步的自洽计算我们只需要得到电荷文件<code>CHGCAR</code>和<code>CHG</code>就可以了（<code>WAVECAR</code>文件较大，且态密度非自洽计算可以不读<code>WAVECAR</code>），而上一步<code>MPStaticSet</code>默认输出电荷文件（<code>LCHARG = True</code>)，所以自洽计算的参数不用过多调整。下面主要介绍非自洽计算用到的模块。</p>
+<h5 id="调用MPNonSCFSet"><a href="#调用MPNonSCFSet" class="headerlink" title="调用MPNonSCFSet"></a>调用MPNonSCFSet</h5><p>我们可以先看下<code>MPNonSCFSet</code>模块默认生成的<code>INCAR</code>是什么样的：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.sets <span class="keyword">import</span> MPNonSCFSet</span><br><span class="line"></span><br><span class="line">nonscf_dos = MPNonSCFSet.from_prev_calc(prev_calc_dir=<span class="string">&#x27;./static&#x27;</span>, user_potcar_functional=<span class="string">&#x27;PBE_54&#x27;</span>)</span><br><span class="line"></span><br><span class="line">nonscf_dos.write_input(<span class="string">&#x27;./dos&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;DOS_calc is ready!&quot;</span>)</span><br></pre></td></tr></table></figure></div>
+
+<p>运行代码：</p>
+<p><img src="/2024/06/11/Learn-VASP-from-pymatgen-5/dos_default_input.png" alt="dos_default_input"></p>
+<p>默认的<code>INCAR</code>中增加<code>ICHARG</code>词条，当<code>ICHARG≥10</code>时，计算过程中电荷密度不进行自洽更新，<code>CHGCAR</code>和<code>CHG</code>文件内容不变，即非自洽计算。</p>
+<p>态密度计算仅读<code>CHGCAR</code>即可，即只用复制<code>CHGCAR</code>至态密度计算文件夹。</p>
+
+  <div class="note p-4 mb-4 rounded-small info">
+    <p><strong>如果使用<code>MPNonSCFSet</code>的<code>from_prev_calc</code>方法，默认会复制上一步自洽计算的<code>CHGCAR</code>文件到当前文件夹；如果只用<code>MPNonSCFSet</code>，则需要指定结构文件<code>struct</code>，以及自行把<code>CHGCAR</code>复制到当前目录。</strong></p>
+
+  </div>
+
+<h5 id="自定义参数设置"><a href="#自定义参数设置" class="headerlink" title="自定义参数设置"></a>自定义参数设置</h5><p>此外，本小节主要介绍<code>DOS</code>计算，默认的INCAR参数中，部分的设置是不太合理的，或者说不利于后续的数据分析。</p>
+
+  <div class="note p-4 mb-4 rounded-small info">
+    <p><strong>前面提到，<code>VASP</code>对许多词条的值有默认值，如果不在<code>INCAR</code>中覆写，计算采用的就是默认值</strong></p>
+
+  </div>
+
+<ul>
+<li><code>EMIN</code>：态密度能量下区间（默认值：<code>lowest KS-eigenvalue - Δ</code>）</li>
+<li><code>EMAX</code>：态密度能量上区间（默认值：<code>lowest KS-eigenvalue - Δ</code>）</li>
+<li><code>NEDOS</code>：态密度的网格点数（默认值：301）</li>
+<li><code>ISPIN</code>：是否考虑电子自旋</li>
+</ul>
+<p>上述的三个参数根据作图需求进行调整，比如态密度图主要是分析费米能级附近的占据情况，实际计算时，默认的能量区间可能非常大，同时<code>NEDOS</code>的数值是确定的，所以会一定程度降低费米能级附近的精度。因此，如果你只需要费米能级附近的信息，可以在<code>INCAR</code>中指定能量区间，如<code>EMIN=-8</code>、<code>EMAX=8</code>，然后选取适当的<code>NEDOS</code>(推荐2001)，这样的话精度是比较合适的，作图也不会因为<code>NEDOS</code>数量过少而出现锯齿线条。<code>ISPIN</code>本身是控制体系是否考虑自旋，一般认为是与磁性计算有关，但是在态密度计算中，是否考虑自旋影响最后输出的数据是否把自旋向上的轨道与自旋向下的轨道区分开。</p>
+<ul>
+<li><code>LORBIT</code>：决定投影轨道的形式（常用设置为10和11）</li>
+</ul>
+<p><code>LORBIT=10</code>时，态密度投影的轨道只包含s&#x2F;p&#x2F;d&#x2F;f轨道；<code>LORBIT=11</code>时，态密度除了输出总的轨道信息，还会投影到分轨道上，如<code>px</code>、<code>py</code>、<code>pz</code>等。</p>
+<p>总的来说，计算前先确定<code>LORBIT</code>的数值来决定是否需要分轨道的数据，然后再确定<code>ISPIN</code>、<code>EMIN</code>、<code>EMAX</code>、<code>NEDOS</code>的数值来考虑作图需求。</p>
+
+  <div class="note p-4 mb-4 rounded-small info">
+    <p>磁性体系必须打开<code>ISPIN</code></p>
+
+  </div>
+
+<h5 id="KPOINTS文件"><a href="#KPOINTS文件" class="headerlink" title="KPOINTS文件"></a>KPOINTS文件</h5><p><code>MPNonSCFSet</code>模块默认生成的<code>KPOINTS</code>文件中的K点写法是<code>line-mode</code>，该方法一般用于能带结构的计算。因此在态密度计算中，我们可以写常规的K点进行覆盖：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.sets <span class="keyword">import</span> MPNonSCFSet</span><br><span class="line"></span><br><span class="line">kpoints = &#123;</span><br><span class="line">    <span class="string">&quot;length&quot;</span>:<span class="number">100</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">nonscf_dos = MPNonSCFSet.from_prev_calc(</span><br><span class="line">    prev_calc_dir=<span class="string">&#x27;./static&#x27;</span>, </span><br><span class="line">    user_potcar_functional=<span class="string">&#x27;PBE_54&#x27;</span>,</span><br><span class="line">    user_kpoints_settings=kpoints,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">nonscf_dos.write_input(<span class="string">&#x27;./dos&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;DOS_calc is ready!&quot;</span>)</span><br></pre></td></tr></table></figure></div>
+
+
+  <div class="note p-4 mb-4 rounded-small info">
+    <p>态密度计算的K网格要足够大才算的准，在普通结构优化的K点个数2倍以上，大体系算不动可适量降低。</p>
+
+  </div>
+
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>态密度计算就介绍到这，各位多多练习~~~~</p>
+<p><em><strong>¡Muchas gracias!</strong></em></p>
+]]></content>
+      <categories>
+        <category>Learn VASP from pymatgen</category>
+      </categories>
+      <tags>
+        <tag>VASP</tag>
+        <tag>pymatgen</tag>
+        <tag>Materials Project</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Chap.6  计算小白硬学VASP —— 材料性质计算—&gt;态密度分析(1)</title>
+    <url>/2024/06/13/Learn-VASP-from-pymatgen-6/</url>
+    <content><![CDATA[<p><em><strong>¡Hola a todos!</strong></em></p>
+<p>本章介绍如何使用<code>pymatgen</code>对态密度结果进行分析。</p>
+<h4 id="案例1：Si态密度"><a href="#案例1：Si态密度" class="headerlink" title="案例1：Si态密度"></a>案例1：Si态密度</h4><p>先从一个简单的案例入手，了解下<code>pymatgen</code>怎么从<code>VASP</code>的计算结构中分析态密度数据。</p>
+<p>下面是生成从结构优化到态密度计算的完整代码：</p>
+<details class="yellow" data-header-exclude><summary><i class="fa-solid fa-chevron-right"></i>参考代码 </summary>
+              <div class="content">
+              <div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.sets <span class="keyword">import</span> MPRelaxSet, MPStaticSet, MPNonSCFSet</span><br><span class="line"><span class="keyword">from</span> mp_api.client <span class="keyword">import</span> MPRester</span><br><span class="line"></span><br><span class="line">api_key = <span class="string">&quot;your key&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> MPRester(api_key) <span class="keyword">as</span> mpr:</span><br><span class="line">  struct = mpr.get_structure_by_material_id(<span class="string">&quot;mp-149&quot;</span>)</span><br><span class="line">  struct.to(filename=<span class="string">&quot;./SiPOSCAR&quot;</span>)</span><br><span class="line">    </span><br><span class="line"><span class="comment"># 结构优化</span></span><br><span class="line">relax_kpoints = &#123;<span class="string">&quot;length&quot;</span>:<span class="number">30</span>&#125;</span><br><span class="line">relax_incar = &#123;</span><br><span class="line">    <span class="string">&quot;EDIFFG&quot;</span>:-<span class="number">0.01</span>,</span><br><span class="line">    <span class="string">&quot;ISMEAR&quot;</span>:<span class="number">0</span>,</span><br><span class="line">    <span class="string">&quot;ENCUT&quot;</span>:<span class="number">300</span>,    </span><br><span class="line">&#125;</span><br><span class="line">relax = MPRelaxSet(</span><br><span class="line">    struct, </span><br><span class="line">    user_kpoints_settings=relax_kpoints,</span><br><span class="line">    user_incar_settings=relax_incar,</span><br><span class="line">    user_potcar_functional=<span class="string">&#x27;PBE_54&#x27;</span>,</span><br><span class="line">    )</span><br><span class="line">relax.write_input(<span class="string">&#x27;./relax&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 静态自洽计算(等relax算完再运行)</span></span><br><span class="line">static_kpoints = &#123;<span class="string">&quot;length&quot;</span>:<span class="number">60</span>&#125;</span><br><span class="line">static = MPStaticSet.from_prev_calc(</span><br><span class="line">    prev_calc_dir=<span class="string">&#x27;./relax&#x27;</span>, </span><br><span class="line">    user_kpoints_settings=static_kpoints,</span><br><span class="line">    user_potcar_functional=<span class="string">&#x27;PBE_54&#x27;</span>,</span><br><span class="line">    )</span><br><span class="line">static.write_input(<span class="string">&#x27;./static&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># DOS计算(等静态自洽算完再运行)</span></span><br><span class="line">dos_incar = &#123;</span><br><span class="line">    <span class="string">&quot;EMIN&quot;</span>:-<span class="number">10</span>,</span><br><span class="line">    <span class="string">&quot;EMAX&quot;</span>:<span class="number">10</span>,</span><br><span class="line">    <span class="string">&quot;NEDOS&quot;</span>:<span class="number">2001</span>,</span><br><span class="line">    <span class="string">&quot;LORBIT&quot;</span>:<span class="number">10</span>,</span><br><span class="line">&#125;</span><br><span class="line">dos_kpoints = &#123;<span class="string">&quot;length&quot;</span>:<span class="number">60</span>&#125;</span><br><span class="line">DOS = MPNonSCFSet.from_prev_calc(</span><br><span class="line">    prev_calc_dir=<span class="string">&#x27;./static&#x27;</span>, </span><br><span class="line">    user_incar_settings=dos_incar,</span><br><span class="line">    user_kpoints_settings=dos_kpoints,</span><br><span class="line">    user_potcar_functional=<span class="string">&#x27;PBE_54&#x27;</span>,</span><br><span class="line">    )</span><br><span class="line">DOS.write_input(<span class="string">&#x27;./dos&#x27;</span>)</span><br></pre></td></tr></table></figure></div>
+              </div>
+            </details>
+
+<p>分析态密度的结果需要读<code>vasprun.xml</code>文件，这里我们需要导入<code>Vasprun</code>模块：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.io.vasp <span class="keyword">import</span> Vasprun</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读态密度算完的vasprun.xml文件</span></span><br><span class="line">vasprun = Vasprun(<span class="string">&#x27;./dos/vasprun.xml&#x27;</span>)</span><br><span class="line"><span class="comment"># 获取Complete dos对象</span></span><br><span class="line">dos = vasprun.complete_dos</span><br></pre></td></tr></table></figure></div>
+
+<p>导入<code>Vasprun</code>模块后，通过该模块<code>complete_dos</code>方法获取完整的态密度对象，<code>dos</code>里面包含着所有的态密度信息以及对应的能量范围。<strong>但是有一点需要注意，通过<code>pymatgen</code>获取的<code>dos</code>里面，费米能级是没有拟合到0的，然而为了便于分析，一般的操作是把费米能级拟合到0，因此我们还需要手动把<code>Energy</code>范围拟合一下：</strong></p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.io.vasp <span class="keyword">import</span> Vasprun</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读态密度算完的vasprun.xml文件</span></span><br><span class="line">vasprun = Vasprun(<span class="string">&#x27;./dos/vasprun.xml&#x27;</span>)</span><br><span class="line"><span class="comment"># 获取Complete dos对象</span></span><br><span class="line">dos = vasprun.complete_dos</span><br><span class="line"><span class="comment"># 获取费米能级</span></span><br><span class="line">fermi = dos.efermi</span><br><span class="line"><span class="comment"># 整体能量平移至费米能级为0</span></span><br><span class="line">energy = dos.energy - fermi</span><br></pre></td></tr></table></figure></div>
+
+<h5 id="体系总态密度"><a href="#体系总态密度" class="headerlink" title="体系总态密度"></a>体系总态密度</h5><p>体系总态密度，即TDOS；代码如下：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.io.vasp <span class="keyword">import</span> Vasprun</span><br><span class="line"><span class="keyword">from</span> pymatgen.core.periodic_table <span class="keyword">import</span> Element</span><br><span class="line"><span class="keyword">from</span> pymatgen.electronic_structure.core <span class="keyword">import</span> OrbitalType, Spin</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line">vasprun = Vasprun(<span class="string">&#x27;./dos/vasprun.xml&#x27;</span>)</span><br><span class="line">dos = vasprun.complete_dos</span><br><span class="line">energy = dos.energies - dos.efermi</span><br><span class="line"></span><br><span class="line"><span class="comment"># 体系总态密度</span></span><br><span class="line"><span class="comment"># 获取全部的Density</span></span><br><span class="line">total_densities = dos.densities</span><br><span class="line"><span class="comment"># 将费米能级拟合至0之后的Energy与Density重新组合</span></span><br><span class="line">total_dos = pd.DataFrame(&#123;<span class="string">&#x27;Energy&#x27;</span>: energy, <span class="string">&#x27;Density&#x27;</span>: total_densities[Spin.up]&#125;)</span><br><span class="line"><span class="comment"># 输出TDOS</span></span><br><span class="line"><span class="built_in">print</span>(total_dos)</span><br><span class="line"><span class="comment"># 保存为csv文件</span></span><br><span class="line">total_dos.to_csv(<span class="string">&#x27;total_dos.csv&#x27;</span>, index=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure></div>
+
+
+  <div class="note p-4 mb-4 rounded-small info">
+    <p>上述代码第14行<code>&#39;Density&#39;: total_densities[Spin.up]</code>只指定了自旋向上的态。是因为体系无磁性，<code>MPNonSCFSet</code>读<code>static</code>文件夹自动生成输入是把<code>ISPIN</code>关掉了，所以这里的<code>Spin.up</code>的数值就是总的<code>Density</code>的数值。同理，对于有磁性的体系，这一行代码可以写成：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line">total_dos = pd.DataFrame(&#123;<span class="string">&#x27;Energy&#x27;</span>: energy, <span class="string">&#x27;Spin_Up&#x27;</span>: total_densities[Spin.up], <span class="string">&#x27;Spin_Dn&#x27;</span>: total_densities[Spin.down]&#125;)</span><br></pre></td></tr></table></figure></div>
+
+  </div>
+
+<h5 id="元素总态密度"><a href="#元素总态密度" class="headerlink" title="元素总态密度"></a>元素总态密度</h5><p>代码如下：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.io.vasp <span class="keyword">import</span> Vasprun</span><br><span class="line"><span class="keyword">from</span> pymatgen.core.periodic_table <span class="keyword">import</span> Element</span><br><span class="line"><span class="keyword">from</span> pymatgen.electronic_structure.core <span class="keyword">import</span> OrbitalType, Spin</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line">vasprun = Vasprun(<span class="string">&#x27;./dos/vasprun.xml&#x27;</span>)</span><br><span class="line">dos = vasprun.complete_dos</span><br><span class="line">energy = dos.energies - dos.efermi</span><br><span class="line"></span><br><span class="line"><span class="comment"># 元素总态密度</span></span><br><span class="line"><span class="comment"># dos信息按照元素分类</span></span><br><span class="line">element_dos = dos.get_element_dos()</span><br><span class="line"><span class="comment"># 提取指定元素的Density</span></span><br><span class="line">Si_densities = element_dos[Element(<span class="string">&#x27;Si&#x27;</span>)].densities</span><br><span class="line"><span class="comment"># 组合</span></span><br><span class="line">Si_dos = pd.DataFrame(&#123;<span class="string">&#x27;Energy&#x27;</span>: energy, <span class="string">&#x27;Density&#x27;</span>: Si_densities[Spin.up]&#125;)</span><br><span class="line"><span class="built_in">print</span>(Si_dos)</span><br><span class="line"><span class="comment"># 保存输出</span></span><br><span class="line">Si_dos.to_csv(<span class="string">&#x27;Si_dos.csv&#x27;</span>, index=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure></div>
+
+<p>需要注意的是第11行，12行，这里如果我们打印出11行的内容可以得到：</p>
+<blockquote>
+<p><em>{Element Si: &lt;pymatgen.electronic_structure.dos.Dos object at 0x000001918E2EE6D0&gt;}</em></p>
+</blockquote>
+<p>说明<code>get_element_dos()</code>的输出实际是一个字典，对应着元素的种类已经对应的态密度信息对象。因此为了得到具体的态密度值，就需要第12行代码的内容来进行提取，打印第12行的内容，可以得到以下结果：</p>
+<blockquote>
+<p><em>{&lt;Spin.up: 1&gt;: array([0.    , 0.    , 0.    , …, 0.5654, 0.3542, 0.145 ])}</em></p>
+</blockquote>
+<p>此时的数据还是字典形式，提取<code>Spin.up</code>的值就是下一步中的<code>Si_densities[Spin.up]</code>；同理，对于磁性体系，<code>spin.down</code>值的提取也类似。</p>
+<h5 id="体系分态密度"><a href="#体系分态密度" class="headerlink" title="体系分态密度"></a>体系分态密度</h5><p>代码如下：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.io.vasp <span class="keyword">import</span> Vasprun</span><br><span class="line"><span class="keyword">from</span> pymatgen.core.periodic_table <span class="keyword">import</span> Element</span><br><span class="line"><span class="keyword">from</span> pymatgen.electronic_structure.core <span class="keyword">import</span> OrbitalType, Spin</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line">vasprun = Vasprun(<span class="string">&#x27;./dos/vasprun.xml&#x27;</span>)</span><br><span class="line">dos = vasprun.complete_dos</span><br><span class="line">energy = dos.energies - dos.efermi</span><br><span class="line"></span><br><span class="line"><span class="comment"># 体系分态密度</span></span><br><span class="line">spd_dos = dos.get_spd_dos()</span><br><span class="line"><span class="comment"># 体系s轨道Density</span></span><br><span class="line">total_s = spd_dos[OrbitalType.s].densities</span><br><span class="line"><span class="comment"># 体系s轨道Density</span></span><br><span class="line">total_p = spd_dos[OrbitalType.p].densities</span><br><span class="line"><span class="comment"># 重组</span></span><br><span class="line">total_sp_dos = pd.DataFrame(&#123;<span class="string">&#x27;Energy&#x27;</span>: energy, <span class="string">&#x27;Total_s&#x27;</span>: total_s[Spin.up], <span class="string">&#x27;Total_p&#x27;</span>: total_p[Spin.up]&#125;)</span><br><span class="line"><span class="built_in">print</span>(total_sp_dos)</span><br><span class="line"><span class="comment"># 保存输出</span></span><br><span class="line">total_sp_dos.to_csv(<span class="string">&#x27;total_sp_dos.csv&#x27;</span>, index=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure></div>
+
+<h5 id="元素分态密度"><a href="#元素分态密度" class="headerlink" title="元素分态密度"></a>元素分态密度</h5><p>代码如下：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.io.vasp <span class="keyword">import</span> Vasprun</span><br><span class="line"><span class="keyword">from</span> pymatgen.core.periodic_table <span class="keyword">import</span> Element</span><br><span class="line"><span class="keyword">from</span> pymatgen.electronic_structure.core <span class="keyword">import</span> OrbitalType, Spin</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line">vasprun = Vasprun(<span class="string">&#x27;./dos/vasprun.xml&#x27;</span>)</span><br><span class="line">dos = vasprun.complete_dos</span><br><span class="line">energy = dos.energies - dos.efermi</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 元素分态密度</span></span><br><span class="line"><span class="comment"># 获取元素所有轨道</span></span><br><span class="line">Si_spd_dos = dos.get_element_spd_dos(<span class="string">&#x27;Si&#x27;</span>)</span><br><span class="line"><span class="comment"># 提取s轨道</span></span><br><span class="line">Si_s = Si_spd_dos[OrbitalType.s].densities</span><br><span class="line"><span class="comment"># 提取p轨道</span></span><br><span class="line">Si_p = Si_spd_dos[OrbitalType.p].densities</span><br><span class="line"><span class="comment"># 重组</span></span><br><span class="line">Si_sp_dos = pd.DataFrame(&#123;<span class="string">&#x27;Energy&#x27;</span>: energy, <span class="string">&#x27;Si_s&#x27;</span>: Si_s[Spin.up], <span class="string">&#x27;Si_p&#x27;</span>: Si_p[Spin.up]&#125;)</span><br><span class="line"><span class="built_in">print</span>(Si_sp_dos)</span><br><span class="line"><span class="comment"># 保存输出</span></span><br><span class="line">Si_sp_dos.to_csv(<span class="string">&#x27;Si_sp_dos.csv&#x27;</span>, index=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure></div>
+
+<h5 id="原子总态密度"><a href="#原子总态密度" class="headerlink" title="原子总态密度"></a>原子总态密度</h5><p>代码如下：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.io.vasp <span class="keyword">import</span> Vasprun</span><br><span class="line"><span class="keyword">from</span> pymatgen.core.periodic_table <span class="keyword">import</span> Element</span><br><span class="line"><span class="keyword">from</span> pymatgen.electronic_structure.core <span class="keyword">import</span> OrbitalType, Spin</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line">vasprun = Vasprun(<span class="string">&#x27;./dos/vasprun.xml&#x27;</span>)</span><br><span class="line">dos = vasprun.complete_dos</span><br><span class="line">energy = dos.energies - dos.efermi</span><br><span class="line"></span><br><span class="line"><span class="comment"># 元素位点总态密度</span></span><br><span class="line"><span class="comment"># 提取指定原子Density，structure[0]表示1号原子</span></span><br><span class="line">site_densities = dos.get_site_dos(dos.structure[<span class="number">0</span>]).densities</span><br><span class="line"><span class="comment"># 重组</span></span><br><span class="line">site_dos = pd.DataFrame(&#123;<span class="string">&#x27;Energy&#x27;</span>: energy, <span class="string">&#x27;Density&#x27;</span>: site_densities[Spin.up]&#125;)</span><br><span class="line"><span class="built_in">print</span>(site_dos)</span><br><span class="line"><span class="comment"># 保存输出</span></span><br><span class="line">site_dos.to_csv(<span class="string">&#x27;site_dos.csv&#x27;</span>, index=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure></div>
+
+<h5 id="原子分态密度"><a href="#原子分态密度" class="headerlink" title="原子分态密度"></a>原子分态密度</h5><p>代码如下：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.io.vasp <span class="keyword">import</span> Vasprun</span><br><span class="line"><span class="keyword">from</span> pymatgen.core.periodic_table <span class="keyword">import</span> Element</span><br><span class="line"><span class="keyword">from</span> pymatgen.electronic_structure.core <span class="keyword">import</span> OrbitalType, Spin</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line">vasprun = Vasprun(<span class="string">&#x27;./dos/vasprun.xml&#x27;</span>)</span><br><span class="line">dos = vasprun.complete_dos</span><br><span class="line">energy = dos.energies - dos.efermi</span><br><span class="line"></span><br><span class="line"><span class="comment"># 元素位点分态密度</span></span><br><span class="line"><span class="comment"># 获取1号原子所有轨道态密度</span></span><br><span class="line">site_spd_dos = dos.get_site_spd_dos(dos.structure[<span class="number">0</span>])</span><br><span class="line"><span class="comment"># 提取s轨道</span></span><br><span class="line">site_s_densities = site_spd_dos[OrbitalType.s].densities</span><br><span class="line"><span class="comment"># 提取p轨道</span></span><br><span class="line">site_p_densities = site_spd_dos[OrbitalType.p].densities</span><br><span class="line"><span class="comment"># 重组</span></span><br><span class="line">site_sp_dos = pd.DataFrame(&#123;<span class="string">&#x27;Energy&#x27;</span>: energy, <span class="string">&#x27;s&#x27;</span>: site_s_densities[Spin.up], <span class="string">&#x27;p&#x27;</span>: site_p_densities[Spin.up]&#125;)</span><br><span class="line"><span class="built_in">print</span>(site_sp_dos)</span><br><span class="line"><span class="comment"># 保存输出</span></span><br><span class="line">site_sp_dos.to_csv(<span class="string">&#x27;site_sp_dos.csv&#x27;</span>, index=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure></div>
+
+<h5 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h5><p>上述介绍了从体系整体，元素种类到具体单个原子的总态密度和分态密度的处理方法，每种方法的使用都比较类似，跟着老司机的代码实操一遍应该问题不大。总的来说，就是根据不同的需求，使用不同的方法：</p>
+<ul>
+<li><p><strong>体系总态密度</strong>：使用 <code>dos.densities</code></p>
+</li>
+<li><p><strong>元素总态密度</strong>：使用 <code>dos.get_element_dos()</code></p>
+</li>
+<li><p><strong>体系分态密度</strong>：使用 <code>dos.get_spd_dos()</code></p>
+</li>
+<li><p><strong>元素分态密度</strong>：使用 <code>dos.get_element_spd_dos()</code></p>
+</li>
+<li><p><strong>原子总态密度</strong>：使用 <code>dos.get_site_dos()</code></p>
+</li>
+<li><p><strong>原子分态密度</strong>：使用 <code>dos.get_site_spd_dos()</code></p>
+</li>
+</ul>
+<p><em><strong>¡Muchas gracias!</strong></em></p>
+]]></content>
+      <categories>
+        <category>Learn VASP from pymatgen</category>
+      </categories>
+      <tags>
+        <tag>VASP</tag>
+        <tag>pymatgen</tag>
+        <tag>Materials Project</tag>
       </tags>
   </entry>
 </search>
