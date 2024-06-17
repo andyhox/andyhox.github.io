@@ -1,5 +1,5 @@
 ---
-title: Chap.6  计算小白硬学VASP —— 材料性质计算—>态密度分析
+title: Chap.6  计算小白硬学VASP —— 材料性质计算—>态密度分析(1)
 tags:
   - VASP
   - pymatgen
@@ -12,8 +12,9 @@ copyright: 欢迎个人转载、使用、转贴等，但请获得作者同意且
 comment: true
 cover: /images/wallhaven-gpkd77_3840x2160.png
 excerpt: Learn VASP from pymatgen
-date: 2024-06-13
+date: 2024-06-13 00:00:00
 ---
+
 
 ***¡Hola a todos!***
 
@@ -179,20 +180,126 @@ Si_dos.to_csv('Si_dos.csv', index=False)
 
 ##### 体系分态密度
 
+代码如下：
+
+```python
+from pymatgen.io.vasp import Vasprun
+from pymatgen.core.periodic_table import Element
+from pymatgen.electronic_structure.core import OrbitalType, Spin
+import pandas as pd
+
+vasprun = Vasprun('./dos/vasprun.xml')
+dos = vasprun.complete_dos
+energy = dos.energies - dos.efermi
+
+# 体系分态密度
+spd_dos = dos.get_spd_dos()
+# 体系s轨道Density
+total_s = spd_dos[OrbitalType.s].densities
+# 体系s轨道Density
+total_p = spd_dos[OrbitalType.p].densities
+# 重组
+total_sp_dos = pd.DataFrame({'Energy': energy, 'Total_s': total_s[Spin.up], 'Total_p': total_p[Spin.up]})
+print(total_sp_dos)
+# 保存输出
+total_sp_dos.to_csv('total_sp_dos.csv', index=False)
+```
+
+##### 元素分态密度
+
+代码如下：
+
+```python
+from pymatgen.io.vasp import Vasprun
+from pymatgen.core.periodic_table import Element
+from pymatgen.electronic_structure.core import OrbitalType, Spin
+import pandas as pd
+
+vasprun = Vasprun('./dos/vasprun.xml')
+dos = vasprun.complete_dos
+energy = dos.energies - dos.efermi
 
 
+# 元素分态密度
+# 获取元素所有轨道
+Si_spd_dos = dos.get_element_spd_dos('Si')
+# 提取s轨道
+Si_s = Si_spd_dos[OrbitalType.s].densities
+# 提取p轨道
+Si_p = Si_spd_dos[OrbitalType.p].densities
+# 重组
+Si_sp_dos = pd.DataFrame({'Energy': energy, 'Si_s': Si_s[Spin.up], 'Si_p': Si_p[Spin.up]})
+print(Si_sp_dos)
+# 保存输出
+Si_sp_dos.to_csv('Si_sp_dos.csv', index=False)
+```
 
+##### 原子总态密度
 
+代码如下：
 
+```python
+from pymatgen.io.vasp import Vasprun
+from pymatgen.core.periodic_table import Element
+from pymatgen.electronic_structure.core import OrbitalType, Spin
+import pandas as pd
 
-**体系总态密度**：使用 `dos.densities`
+vasprun = Vasprun('./dos/vasprun.xml')
+dos = vasprun.complete_dos
+energy = dos.energies - dos.efermi
 
-**元素总态密度**：使用 `dos.get_element_dos()`
+# 元素位点总态密度
+# 提取指定原子Density，structure[0]表示1号原子
+site_densities = dos.get_site_dos(dos.structure[0]).densities
+# 重组
+site_dos = pd.DataFrame({'Energy': energy, 'Density': site_densities[Spin.up]})
+print(site_dos)
+# 保存输出
+site_dos.to_csv('site_dos.csv', index=False)
+```
 
-**体系分态密度**：使用 `dos.get_spd_dos()`
+##### 原子分态密度
 
-**元素分态密度**：使用 `dos.get_element_spd_dos()`
+代码如下：
 
-**原子总态密度**：使用 `dos.get_site_dos()`
+```python
+from pymatgen.io.vasp import Vasprun
+from pymatgen.core.periodic_table import Element
+from pymatgen.electronic_structure.core import OrbitalType, Spin
+import pandas as pd
 
-**原子分态密度**：使用 `dos.get_site_spd_dos()`
+vasprun = Vasprun('./dos/vasprun.xml')
+dos = vasprun.complete_dos
+energy = dos.energies - dos.efermi
+
+# 元素位点分态密度
+# 获取1号原子所有轨道态密度
+site_spd_dos = dos.get_site_spd_dos(dos.structure[0])
+# 提取s轨道
+site_s_densities = site_spd_dos[OrbitalType.s].densities
+# 提取p轨道
+site_p_densities = site_spd_dos[OrbitalType.p].densities
+# 重组
+site_sp_dos = pd.DataFrame({'Energy': energy, 's': site_s_densities[Spin.up], 'p': site_p_densities[Spin.up]})
+print(site_sp_dos)
+# 保存输出
+site_sp_dos.to_csv('site_sp_dos.csv', index=False)
+```
+
+##### 总结
+
+上述介绍了从体系整体，元素种类到具体单个原子的总态密度和分态密度的处理方法，每种方法的使用都比较类似，跟着老司机的代码实操一遍应该问题不大。总的来说，就是根据不同的需求，使用不同的方法：
+
+- **体系总态密度**：使用 `dos.densities`
+
+- **元素总态密度**：使用 `dos.get_element_dos()`
+
+- **体系分态密度**：使用 `dos.get_spd_dos()`
+
+- **元素分态密度**：使用 `dos.get_element_spd_dos()`
+
+- **原子总态密度**：使用 `dos.get_site_dos()`
+
+- **原子分态密度**：使用 `dos.get_site_spd_dos()`
+
+***¡Muchas gracias!***
