@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://andyhox.github.io/2024/06/17/Learn-VASP-from-pymatgen-7/</loc>
+    
+    <lastmod>2024-06-18</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://andyhox.github.io/2024/06/13/Learn-VASP-from-pymatgen-6/</loc>
     
     <lastmod>2024-06-17</lastmod>
