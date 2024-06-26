@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="炫酷老司机">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+        
+        
+        
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="https://andyhox.github.io/2024/06/20/pyprocar-tutorial-1/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="Be lazy, stay efficient, and enjoy your coffee break!">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算工具系列 —— Pyprocar库">
+<meta property="og:url" content="https://andyhox.github.io/2024/06/20/Pyprocar-tutorial-1/index.html">
+<meta property="og:site_name" content="Andy">
+<meta property="og:description" content="Be lazy, stay efficient, and enjoy your coffee break!">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://andyhox.github.io/2024/06/20/Pyprocar-tutorial-1/image-20240620123342020.png">
+<meta property="og:image" content="https://andyhox.github.io/2024/06/20/Pyprocar-tutorial-1/image-20240620124055490.png">
+<meta property="og:image" content="https://andyhox.github.io/2024/06/20/Pyprocar-tutorial-1/orbitals.png">
+<meta property="og:image" content="https://andyhox.github.io/2024/06/20/Pyprocar-tutorial-1/image-20240620142112989.png">
+<meta property="og:image" content="https://andyhox.github.io/2024/06/20/Pyprocar-tutorial-1/image-20240620142145114.png">
+<meta property="og:image" content="https://andyhox.github.io/2024/06/20/Pyprocar-tutorial-1/image-20240620142220215.png">
+<meta property="og:image" content="https://andyhox.github.io/2024/06/20/Pyprocar-tutorial-1/image-20240620143531454.png">
+<meta property="og:image" content="https://andyhox.github.io/2024/06/20/Pyprocar-tutorial-1/image-20240620144303956.png">
+<meta property="og:image" content="https://andyhox.github.io/2024/06/20/Pyprocar-tutorial-1/image-20240626154522277.png">
+<meta property="og:image" content="https://andyhox.github.io/2024/06/20/Pyprocar-tutorial-1/image-20240626155508247.png">
+<meta property="og:image" content="https://andyhox.github.io/2024/06/20/Pyprocar-tutorial-1/image-20240626161041969.png">
+<meta property="og:image" content="https://andyhox.github.io/2024/06/20/Pyprocar-tutorial-1/image-20240626160253746.png">
+<meta property="og:image" content="https://andyhox.github.io/2024/06/20/Pyprocar-tutorial-1/image-20240626161701325.png">
+<meta property="og:image" content="https://andyhox.github.io/2024/06/20/Pyprocar-tutorial-1/image-20240626170909285.png">
+<meta property="article:published_time" content="2024-06-19T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-06-26T09:14:16.856Z">
+<meta property="article:author" content="andyhoo">
+<meta property="article:tag" content="VASP">
+<meta property="article:tag" content="Pyprocar">
+<meta property="article:tag" content="Band">
+<meta property="article:tag" content="DOS">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://andyhox.github.io/2024/06/20/Pyprocar-tutorial-1/image-20240620123342020.png">
+    
+    
+        <!-- Google tag (gtag.js) -->
+        <script src="https://www.googletagmanager.com/gtag/js?id=G-XD3VSCSSYQ"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-XD3VSCSSYQ');
+        </script>
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/redefine-favicon.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/redefine-favicon.svg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/images/redefine-favicon.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            计算工具系列 —— Pyprocar库 -
+        
+        A&amp;H
+    </title>
+
+    <link rel="stylesheet" href="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/fonts/Chillax/chillax.css">
+
+    <!--- Inject Part-->
+    
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        <link rel="stylesheet" href="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/assets/build/styles.css">
+    
+
+    <link rel="stylesheet" href="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/fonts/GeistMono/geist-mono.css">
+    <link rel="stylesheet" href="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/fonts/Geist/geist.css">
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    
+        <script src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/libs/anime.min.js"></script>
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"andyhox.github.io","root":"/","language":"zh-CN","path":"search.xml"};
+    window.theme = {"articles":{"style":{"font_size":"18px","line_height":1.5,"image_border_radius":"14px","image_alignment":"left","image_caption":false,"link_icon":true,"title_alignment":"left","headings_top_spacing":{"h1":"5rem","h2":"4rem","h3":"2.8rem","h4":"2.5rem","h5":"2.2rem","h6":"2rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":["Lv99"]},"code_block":{"copy":true,"style":"mac","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":5,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":false,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":"Ma Shan Zheng","url":"https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap"},"english":{"enable":false,"family":"Varela Round","url":"https://fonts.googleapis.com/css2?family=Varela+Round&display=swap"}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":true,"open_graph":true,"google_analytics":{"enable":true,"id":"G-XD3VSCSSYQ"}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-4lky22_1920x1080.png","dark":"/images/wallhaven-1pprk1_1920x1080.png"},"title":[" "],"subtitle":{"text":[" "],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#000000","dark":"#000000"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":true,"style":"default","links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":"andyhoo0716@gmail.com"},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":true,"version":"9.3.0"}},"version":"2.6.4","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"categories":{"path":"/categories","icon":"fa-regular fa-folder"}},"search":{"enable":true,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":"Email: andyhoo0716@gmail.com","show_on_mobile":true,"links":{"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"Tags":{"path":"/tags","icon":"fa-regular fa-tags"},"Categories":{"path":"/categories","icon":"fa-regular fa-folder"},"Feedback":{"path":"/feedback","icon":"fa-regular fa-comment"}}},"article_date_format":"YYYY-MM-DD","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2024/05/29 00:00:00"};
+    window.lang_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    <link rel="stylesheet" href="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/fontawesome/fontawesome.min.css">
+    <link rel="stylesheet" href="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/fontawesome/brands.min.css">
+    <link rel="stylesheet" href="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/fontawesome/solid.min.css">
+    <link rel="stylesheet" href="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/fontawesome/regular.min.css">
+    
+    
+    
+    
+<meta name="generator" content="Hexo 7.2.0"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+<!--        <span class="swup-progress-icon">-->
+<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+<!--        </span>-->
+    
+</div>
+
+
+
+    <style>
+    :root {
+        --preloader-background-color: #fff;
+        --preloader-text-color: #000;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --preloader-background-color: #202124;
+            --preloader-text-color: #fff;
+        }
+    }
+
+    @media (prefers-color-scheme: light) {
+        :root {
+            --preloader-background-color: #fff;
+            --preloader-text-color: #000;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .ml13 {
+            font-size: 2.6rem !important; /* Adjust this value as needed */
+        }
+    }
+
+    .preloader {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem; /* Tailwind 'gap-4' is 1rem */
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        padding: 12px;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh; /* 'h-screen' is 100% of the viewport height */
+        background-color: var(--preloader-background-color);
+        z-index: 1100; /* 'z-[1100]' sets the z-index */
+        transition: opacity 0.2s ease-in-out;
+    }
+
+    .ml13 {
+        font-size: 3.2rem;
+        /* text-transform: uppercase; */
+        color: var(--preloader-text-color);
+        letter-spacing: -1px;
+        font-weight: 500;
+        font-family: 'Chillax-Variable', sans-serif;
+        text-align: center;
+    }
+
+    .ml13 .word {
+        display: inline-flex;
+        flex-wrap: wrap;
+        white-space: nowrap;
+    }
+
+    .ml13 .letter {
+        display: inline-block;
+        line-height: 1em;
+    }
+</style>
+
+<div class="preloader">
+    <h2 class="ml13">
+        A&amp;H
+    </h2>
+    <script>
+        var textWrapper = document.querySelector('.ml13');
+        // Split text into words
+        var words = textWrapper.textContent.trim().split(' ');
+
+        // Clear the existing content
+        textWrapper.innerHTML = '';
+
+        // Wrap each word and its letters in spans
+        words.forEach(function(word) {
+            var wordSpan = document.createElement('span');
+            wordSpan.classList.add('word');
+            wordSpan.innerHTML = word.replace(/\S/g, "<span class='letter'>$&</span>");
+            textWrapper.appendChild(wordSpan);
+            textWrapper.appendChild(document.createTextNode(' ')); // Add space between words
+        });
+
+        var animation = anime.timeline({loop: true})
+            .add({
+                targets: '.ml13 .letter',
+                translateY: [40,0],
+                translateZ: 0,
+                opacity: [0,1],
+                filter: ['blur(5px)', 'blur(0px)'], // Starting from blurred to unblurred
+                easing: "easeOutExpo",
+                duration: 1400,
+                delay: (el, i) => 300 + 30 * i,
+            }).add({
+                targets: '.ml13 .letter',
+                translateY: [0,-40],
+                opacity: [1,0],
+                filter: ['blur(0px)', 'blur(5px)'], // Ending from unblurred to blurred
+                easing: "easeInExpo",
+                duration: 1200,
+                delay: (el, i) => 100 + 30 * i,
+                complete: function() {
+                    hidePreloader(); // Call hidePreloader after the animation completes
+                }
+            });
+
+        let themeStatus = JSON.parse(localStorage.getItem('REDEFINE-THEME-STATUS'))?.isDark;
+
+        // If the theme status is not found in local storage, check the preferred color scheme
+        if (themeStatus === undefined || themeStatus === null) {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                themeStatus = 'dark';
+            } else {
+                themeStatus = 'light';
+            }
+        }
+
+        // Now you can use the themeStatus variable in your code
+        if (themeStatus) {
+            document.documentElement.style.setProperty('--preloader-background-color', '#202124');
+            document.documentElement.style.setProperty('--preloader-text-color', '#fff');
+        } else {
+            document.documentElement.style.setProperty('--preloader-background-color', '#fff');
+            document.documentElement.style.setProperty('--preloader-text-color', '#000');
+        }
+
+        window.addEventListener('load', function () {
+            setTimeout(hidePreloader, 5000); // Call hidePreloader after 5000 milliseconds if not already called by animation
+        });
+
+        function hidePreloader() {
+            var preloader = document.querySelector('.preloader');
+            preloader.style.opacity = '0';
+            setTimeout(function () {
+                preloader.style.display = 'none';
+            }, 200);
+        }
+    </script>
+</div>
+
+<main class="page-container" id="swup">
+
+    
+
+    <div class="main-content-container">
+
+
+        <div class="main-content-header">
+            <header class="navbar-container px-6 md:px-12">
+
+    <div class="navbar-content ">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                A&amp;H
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    首页
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/archives"
+                                        >
+                                    <i class="fa-regular fa-archive fa-fw"></i>
+                                    归档
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories"
+                                        >
+                                    <i class="fa-regular fa-folder fa-fw"></i>
+                                    分类
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                        <li class="navbar-item search search-popup-trigger">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-screen w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                首页
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/archives"
+                        >
+                            <span>
+                                归档
+                            </span>
+                            
+                                <i class="fa-regular fa-archive fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories"
+                        >
+                            <span>
+                                分类
+                            </span>
+                            
+                                <i class="fa-regular fa-folder fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+
+            
+            
+                
+                    
+                    
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
+                           href="/tags"
+                        >
+                            <span>Tags</span>
+                            <i class="fa-regular fa-tags fa-sm fa-fw"></i>
+                        </a>
+                    </li>
+                
+                    
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
+                           href="/categories"
+                        >
+                            <span>Categories</span>
+                            <i class="fa-regular fa-folder fa-sm fa-fw"></i>
+                        </a>
+                    </li>
+                
+                    
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
+                           href="/feedback"
+                        >
+                            <span>Feedback</span>
+                            <i class="fa-regular fa-comment fa-sm fa-fw"></i>
+                        </a>
+                    </li>
+                
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">9</div>
+        <div class="label text-third-text-color text-sm">标签</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">2</div>
+        <div class="label text-third-text-color text-sm">分类</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">11</div>
+        <div class="label text-third-text-color text-sm">文章</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="post-page-container flex relative justify-between box-border w-full h-full">
+    <div class="article-content-container">
+
+        <div class="article-title relative w-full">
+            
+                
+                
+                <img src="/images/toolkit.png" alt="计算工具系列 —— Pyprocar库" class="w-full h-60 sm:h-72 md:h-80 object-cover sm:rounded-t-large dark:brightness-75"/>
+                
+                <div class="w-full flex items-center absolute bottom-0 justify-start">
+                    <h1 class="article-title-cover text-center mx-6 my-6 text-second-text-color bg-background-color-transparent px-4 py-3 text-3xl sm:text-4xl md:text-5xl font-semibold backdrop-blur-lg rounded-xl border border-border-color ">计算工具系列 —— Pyprocar库</h1>
+                </div>
+            
+            </div>
+
+        
+            <div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+                <div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+                    <img src="/images/avatar.jpg">
+                </div>
+                <div class="info flex flex-col justify-between">
+                    <div class="author flex items-center">
+                        <span class="name text-default-text-color text-lg font-semibold">炫酷老司机</span>
+                        
+                            <span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv99</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2024-06-20</span>
+        <span class="mobile">2024-06-20</span>
+        <span class="hover-info">创建</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2024-06-26 17:14:16</span>
+            <span class="mobile">2024-06-26 17:14:16</span>
+            <span class="hover-info">更新</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/toolkit/">toolkit</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/VASP/">VASP</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/Pyprocar/">Pyprocar</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/Band/">Band</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/DOS/">DOS</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>2.6k 字</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>12 分钟</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        
+
+
+        <div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+            <p><em><strong>¡Hola a todos!</strong></em></p>
+<p>最近学习了一下<code>Pyprocar</code>的用法，分享一下使用心得。</p>
+<p>对于老司机这种天生反骨的打工人，每天想的都是怎么偷懒，但是又想保住份工，就只能在效率上面想办法了，总之就是：</p>
+<blockquote>
+<p><strong>Be lazy, stay efficient, and enjoy your coffee break!</strong></p>
+</blockquote>
+<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>[官网](<a class="link" target="_blank" rel="noopener" href="https://romerogroup.github.io/pyprocar/">PyProcar — PyProcar 6.1.10 documentation (romerogroup.github.io) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>)：</p>
+<blockquote>
+<p><em><strong>PyProcar is a robust, open-source Python library used for pre- and post-processing of the electronic structure data coming from DFT calculations. PyProcar provides a set of functions that manage data from the PROCAR format obtained from various DFT codes. Basically, the PROCAR file is a projection of the Kohn-Sham states over atomic orbitals. That projection is performed to every 𝑘-point in the considered mesh, every energy band and every atom. PyProcar is capable of performing a multitude of tasks including plotting plain and spin/atom/orbital projected band structures and Fermi surfaces- both in 2D and 3D, Fermi velocity plots, unfolding bands of a super cell, comparing band structures from multiple DFT calculations, plotting partial density of states and generating a 𝑘-path for a given crystal structure.</strong></em></p>
+</blockquote>
+<p>简而言之，自动出图，解放双手。而且对比其他后处理软件，老司机个人感觉<code>Pyprocar</code>出的图相对来说已经比较好看了，作为工作狗来说妥妥够用不需要二次处理了；放在顶刊文章里可能还需要再编辑下，不过还好<code>Pyprocar</code>提供了<code>matplotlib</code>再处理的功能，所以对图片要求更加高大上的也不用担心，再次编辑就行了。</p>
+<h2 id="处理能带"><a href="#处理能带" class="headerlink" title="处理能带"></a>处理能带</h2><p>能带VASP计算流程参照参照<code>Learn VASP from pyamtgen</code>系列——<a href="https://andyhox.github.io/2024/06/18/Learn-VASP-from-pymatgen-8/">Chap.8 计算小白硬学VASP —— 材料性质计算—&gt;能带计算 - A&amp;H (andyhox.github.io)</a>，直接处理案例的数据。</p>
+<h3 id="Pyprocar后处理"><a href="#Pyprocar后处理" class="headerlink" title="Pyprocar后处理"></a>Pyprocar后处理</h3><h4 id="普通能带"><a href="#普通能带" class="headerlink" title="普通能带"></a>普通能带</h4><p><code>Pyprocar</code>的代码非常简单，只需要简单设置就可以得到基本的能带图，主要用到的方法为<code>pyprocar.bandsplot</code>。</p>
+<p>代码如下：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pyprocar</span><br><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.outputs <span class="keyword">import</span> Vasprun</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取vasprun.xml文件</span></span><br><span class="line">vasprun = Vasprun(<span class="string">'./ZrNiSn_primitive/band/vasprun.xml'</span>)</span><br><span class="line"><span class="comment"># 获取费米能级</span></span><br><span class="line">efermi=vasprun.efermi</span><br><span class="line"><span class="comment"># 打印gap信息</span></span><br><span class="line"><span class="built_in">print</span>(vasprun.get_band_structure().get_band_gap())</span><br><span class="line"></span><br><span class="line">band_dir = <span class="string">'./ZrNiSn_primitive/band'</span></span><br><span class="line"><span class="comment"># pyprocar设置</span></span><br><span class="line">pyprocar.bandsplot(</span><br><span class="line">    code=<span class="string">'vasp'</span>,		<span class="comment"># 定义计算类型，默认为’vasp'</span></span><br><span class="line">    dirname=band_dir,	<span class="comment"># 指定文件路径，程序会自动读取对应文件</span></span><br><span class="line">    mode=<span class="string">'plain'</span>,		<span class="comment"># 处理模式，'plain'为绘制普通band</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure></div>
+
+<p>运行代码：</p>
+<p>首先调用<code>pymatgen</code>会输出gap信息：</p>
+<blockquote>
+<p><em><strong>{‘direct’: False, ‘energy’: 0.5058999999999987, ‘transition’: ‘GAMMA-X’}</strong></em></p>
+</blockquote>
+<p>结构为间接半导体，<strong>VBM→CBM</strong>方向为：<strong>GAMMA→X</strong>，禁带宽度为：<strong>0.5 eV</strong></p>
+<p>默认参数输出的能带图：</p>
+<p><img src="/2024/06/20/Pyprocar-tutorial-1/image-20240620123342020.png" alt="image-20240620123342020"></p>
+<p>ok，此时的能带图初见轮廓但是不利于分析。默认参数下没有平移费米能级至0，已经选择合适的energy interval，所以我们需要优化一下：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pyprocar</span><br><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.outputs <span class="keyword">import</span> Vasprun</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取vasprun.xml文件</span></span><br><span class="line">vasprun = Vasprun(<span class="string">'./ZrNiSn_primitive/band/vasprun.xml'</span>)</span><br><span class="line"><span class="comment"># 获取费米能级</span></span><br><span class="line">efermi=vasprun.efermi</span><br><span class="line"><span class="comment"># 打印gap信息</span></span><br><span class="line"><span class="built_in">print</span>(vasprun.get_band_structure().get_band_gap())</span><br><span class="line"></span><br><span class="line">band_dir = <span class="string">'./ZrNiSn_primitive/band'</span></span><br><span class="line"><span class="comment"># pyprocar设置</span></span><br><span class="line">pyprocar.bandsplot(</span><br><span class="line">    <span class="comment"># 源参数</span></span><br><span class="line">    code=<span class="string">'vasp'</span>,		<span class="comment"># 定义计算类型，默认为’vasp'</span></span><br><span class="line">    dirname=band_dir,	<span class="comment"># 指定文件路径，程序会自动读取对应文件</span></span><br><span class="line">    mode=<span class="string">'plain'</span>,		<span class="comment"># 处理模式，'plain'为绘制普通band</span></span><br><span class="line">    elimit=[-<span class="number">2</span>,<span class="number">2</span>],		<span class="comment"># 指定Energy interval</span></span><br><span class="line">    fermi=efermi,		<span class="comment"># 提供费米能级，参数中提供费米能级后，默认会平移至0</span></span><br><span class="line">    <span class="comment"># 绘图参数</span></span><br><span class="line">    linewidth=[<span class="number">2</span>],		<span class="comment"># 曲线宽度</span></span><br><span class="line">    fermi_linewidth=<span class="number">2</span>	<span class="comment"># 费米能级参考线线宽</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure></div>
+
+<p>运行：</p>
+<p><img src="/2024/06/20/Pyprocar-tutorial-1/image-20240620124055490.png" alt="image-20240620124055490"></p>
+<p>针对上述图片，我们增加了源参数：</p>
+<ul>
+<li><p><code>elimit</code>：控制纵坐标能量范围；</p>
+</li>
+<li><p><code>fermi</code>：提供费米能级</p>
+</li>
+</ul>
+<p>源参数即<code>pyprocar.bandsplot</code>读取后输出对应的图，具体参数即含义可[参考文档](<a class="link" target="_blank" rel="noopener" href="https://romerogroup.github.io/pyprocar/index.html">PyProcar — PyProcar 6.1.10 documentation (romerogroup.github.io) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>)。参数有很多，但是实际操作中只需要设置几个参数就可以得到非常好的图了。</p>
+<p>绘图参数是在此基础上调整图片的线宽，字体大小等，同样也只需要设置有限个参数就可以得到很好的图片了。</p>
+<details class="blue" data-header-exclude><summary><i class="fa-solid fa-chevron-right"></i>绘图参数 </summary>
+              <div class="content">
+              <blockquote><p>spin_colors : {‘description’: ‘The colors for the plot lines.’, ‘value’: [‘blue’, ‘red’]}</p><p>color : {‘description’: ‘The colors for the plot lines.’, ‘value’: ‘black’}</p><p>colorbar_title : {‘description’: ‘Title of the colorbar.’, ‘value’: ‘Atomic Orbital Projections’}</p><p>colorbar_title_size : {‘description’: ‘Font size of the title of the colorbar.’, ‘value’: 15}</p><p>colorbar_title_padding : {‘description’: ‘Padding of the title of the colorbar.’, ‘value’: 20}</p><p>colorbar_tick_labelsize : {‘description’: ‘Size of the title of the colorbar ticks’, ‘value’: 10}</p><p>cmap : {‘description’: ‘The colormap used for the plot.’, ‘value’: ‘jet’}</p><p>clim : {‘description’: ‘The color scale for the color bar’, ‘value’: [None, None]}</p><p>fermi_color : {‘description’: ‘The color of the Fermi line.’, ‘value’: ‘blue’}</p><p>fermi_linestyle : {‘description’: ‘The linestyle of the Fermi line.’, ‘value’: ‘dotted’}</p><p>fermi_linewidth : {‘description’: ‘The linewidth of the Fermi line.’, ‘value’: 1}</p><p>grid : {‘description’: ‘If true, a grid will be shown on the plot.’, ‘value’: False}</p><p>grid_axis : {‘description’: ‘Which axis (or both) the grid lines should be drawn on.’, ‘value’: ‘both’}</p><p>grid_color : {‘description’: ‘The color of the grid lines.’, ‘value’: ‘grey’}</p><p>grid_linestyle : {‘description’: ‘The linestyle of the grid lines.’, ‘value’: ‘solid’}</p><p>grid_linewidth : {‘description’: ‘The linewidth of the grid lines.’, ‘value’: 1}</p><p>grid_which : {‘description’: ‘Which grid lines to draw (major, minor or both).’, ‘value’: ‘major’}</p><p>label : {‘description’: ‘The labels for the plot lines.’, ‘value’: [‘<mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.437ex;" xmlns="http://www.w3.org/2000/svg" width="1.131ex" height="2.007ex" role="img" focusable="false" viewbox="0 -694 500 887"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mo"><path data-c="2191" d="M27 414Q17 414 17 433Q17 437 17 439T17 444T19 447T20 450T22 452T26 453T30 454T36 456Q80 467 120 494T180 549Q227 607 238 678Q240 694 251 694Q259 694 261 684Q261 677 265 659T284 608T320 549Q340 525 363 507T405 479T440 463T467 455T479 451Q483 447 483 433Q483 413 472 413Q467 413 458 416Q342 448 277 545L270 555V-179Q262 -193 252 -193H250H248Q236 -193 230 -179V555L223 545Q192 499 146 467T70 424T27 414Z"/></g></g></g></svg></mjx-container>’, ‘<mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.439ex;" xmlns="http://www.w3.org/2000/svg" width="1.131ex" height="2.009ex" role="img" focusable="false" viewbox="0 -694 500 888"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mo"><path data-c="2193" d="M473 86Q483 86 483 67Q483 63 483 61T483 56T481 53T480 50T478 48T474 47T470 46T464 44Q428 35 391 14T316 -55T264 -168Q264 -170 263 -173T262 -180T261 -184Q259 -194 251 -194Q242 -194 238 -176T221 -121T180 -49Q169 -34 155 -21T125 2T95 20T67 33T44 42T27 47L21 49Q17 53 17 67Q17 87 28 87Q33 87 42 84Q158 52 223 -45L230 -55V312Q230 391 230 482T229 591Q229 662 231 676T243 693Q244 694 251 694Q264 692 270 679V-55L277 -45Q307 1 353 33T430 76T473 86Z"/></g></g></g></svg></mjx-container>’]}</p><p>legend : {‘description’: ‘If true, a legend will be shown on the plot.’, ‘value’: True}</p><p>linestyle : {‘description’: ‘The linestyles for the plot lines.’, ‘value’: [‘solid’, ‘dashed’]}</p><p>linewidth : {‘description’: ‘The linewidths for the plot lines.’, ‘value’: [1.0, 1.0]}</p><p>marker : {‘description’: ‘The marker styles for the plot points.’, ‘value’: [‘o’, ‘v’, ‘^’, ‘D’]}</p><p>markersize : {‘description’: ‘The size of the markers for the plot points.’, ‘value’: [0.2, 0.2]}</p><p>opacity : {‘description’: ‘The opacities for the plot lines.’, ‘value’: [1.0, 1.0]}</p><p>plot_color_bar : {‘description’: ‘If true, a color bar will be shown on the plot.’, ‘value’: True}</p><p>savefig : {‘description’: ‘The file name to save the figure. If null, the figure will not be saved.’, ‘value’: None}</p><p>title : {‘description’: ‘The title for the plot. If null, no title will be displayed.’, ‘value’: None}</p><p>weighted_color : {‘description’: ‘If true, the color of the lines will be weighted.’, ‘value’: True}</p><p>weighted_width : {‘description’: ‘If true, the width of the lines will be weighted.’, ‘value’: False}</p><p>figure_size : {‘description’: ‘The size of the figure (width, height) in inches.’, ‘value’: [9, 6]}</p><p>dpi : {‘description’: “The resolution in dots per inch. If ‘figure’, use the figure’s dpi value.”, ‘value’: ‘figure’}</p></blockquote>
+              </div>
+            </details>
+
+<h4 id="轨道投影能带图"><a href="#轨道投影能带图" class="headerlink" title="轨道投影能带图"></a>轨道投影能带图</h4><h5 id="线性"><a href="#线性" class="headerlink" title="线性"></a>线性</h5><p><code>LORBIT</code>设置成12的话，轨道的分类如下：</p>
+<p><img src="/2024/06/20/Pyprocar-tutorial-1/orbitals.png" alt="orbitals"></p>
+<p>此时<code>pyprocar.bandsplot</code>中设置<code>mode=parametric</code>，同时也需要指定轨道：</p>
+<ul>
+<li><code>orbitals=[1]</code>：只分析<code>py</code>亚轨道；</li>
+<li><code>orbitals=[1,2,3]</code>：分析全部p轨道;</li>
+<li>以此类推……</li>
+</ul>
+<p>下面为primtive_cell的结果：</p>
+<div class="tabs" id="tab-primtive_cell"><ul class="nav-tabs"><li class="tab active"><a class="#primtive_cell-1">s轨道</a></li><li class="tab"><a class="#primtive_cell-2">p轨道</a></li><li class="tab"><a class="#primtive_cell-3">d轨道</a></li></ul><div class="tab-content"><div class="tab-pane active" id="primtive_cell-1"><div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pyprocar</span><br><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.outputs <span class="keyword">import</span> Vasprun</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取vasprun.xml文件</span></span><br><span class="line">vasprun = Vasprun(<span class="string">'./ZrNiSn_primitive/band/vasprun.xml'</span>)</span><br><span class="line">efermi = vasprun.efermi</span><br><span class="line"></span><br><span class="line">band_dir = <span class="string">'./ZrNiSn_primitive/band'</span></span><br><span class="line"></span><br><span class="line">pyprocar.bandsplot(</span><br><span class="line">    code=<span class="string">'vasp'</span>,</span><br><span class="line">    dirname=band_dir,</span><br><span class="line">    mode=<span class="string">'parametric'</span>,</span><br><span class="line">    elimit=[-<span class="number">2</span>,<span class="number">2</span>],</span><br><span class="line">    orbitals=[<span class="number">0</span>],   <span class="comment"># s轨道</span></span><br><span class="line">    fermi=efermi,</span><br><span class="line">    clim=[<span class="number">0</span>,<span class="number">1</span>],		<span class="comment"># color bar的刻度</span></span><br><span class="line">    linewidth=[<span class="number">2</span>],</span><br><span class="line">    fermi_linewidth=<span class="number">2</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure></div>
+
+<p>运行代码：</p>
+<p><img src="/2024/06/20/Pyprocar-tutorial-1/image-20240620142112989.png" alt="image-20240620142112989"></p></div><div class="tab-pane" id="primtive_cell-2"><div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pyprocar</span><br><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.outputs <span class="keyword">import</span> Vasprun</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取vasprun.xml文件</span></span><br><span class="line">vasprun = Vasprun(<span class="string">'./ZrNiSn_primitive/band/vasprun.xml'</span>)</span><br><span class="line">efermi = vasprun.efermi</span><br><span class="line"></span><br><span class="line">band_dir = <span class="string">'./ZrNiSn_primitive/band'</span></span><br><span class="line"></span><br><span class="line">pyprocar.bandsplot(</span><br><span class="line">    code=<span class="string">'vasp'</span>,</span><br><span class="line">    dirname=band_dir,</span><br><span class="line">    mode=<span class="string">'parametric'</span>,</span><br><span class="line">    elimit=[-<span class="number">2</span>,<span class="number">2</span>],</span><br><span class="line">    orbitals=[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],   <span class="comment"># p轨道</span></span><br><span class="line">    fermi=efermi,</span><br><span class="line">    clim=[<span class="number">0</span>,<span class="number">1</span>],			<span class="comment"># color bar的刻度</span></span><br><span class="line">    linewidth=[<span class="number">2</span>],</span><br><span class="line">    fermi_linewidth=<span class="number">2</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure></div>
+
+<p>运行代码：</p>
+<p><img src="/2024/06/20/Pyprocar-tutorial-1/image-20240620142145114.png" alt="image-20240620142145114"></p></div><div class="tab-pane" id="primtive_cell-3"><div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pyprocar</span><br><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.outputs <span class="keyword">import</span> Vasprun</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取vasprun.xml文件</span></span><br><span class="line">vasprun = Vasprun(<span class="string">'./ZrNiSn_primitive/band/vasprun.xml'</span>)</span><br><span class="line">efermi = vasprun.efermi</span><br><span class="line"></span><br><span class="line">band_dir = <span class="string">'./ZrNiSn_primitive/band'</span></span><br><span class="line"></span><br><span class="line">pyprocar.bandsplot(</span><br><span class="line">    code=<span class="string">'vasp'</span>,</span><br><span class="line">    dirname=band_dir,</span><br><span class="line">    mode=<span class="string">'parametric'</span>,</span><br><span class="line">    elimit=[-<span class="number">2</span>,<span class="number">2</span>],</span><br><span class="line">    orbitals=[<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>],   <span class="comment"># d轨道</span></span><br><span class="line">    fermi=efermi,</span><br><span class="line">    clim=[<span class="number">0</span>,<span class="number">1</span>],				<span class="comment"># color bar的刻度</span></span><br><span class="line">    linewidth=[<span class="number">2</span>],</span><br><span class="line">    fermi_linewidth=<span class="number">2</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure></div>
+
+<p>运行代码：</p>
+<p><img src="/2024/06/20/Pyprocar-tutorial-1/image-20240620142220215.png" alt="image-20240620142220215"></p></div></div></div>
+
+<p>如果是对于自旋体系，在源参数中增加<code>spins</code>即可控制绘图考虑的自旋方向：</p>
+<ul>
+<li><code>spins=[0]</code>：绘制spin up</li>
+<li><code>spins=[1]</code>：绘制spin down</li>
+<li><code>spins=[0,1]</code>：同时绘制spin up &amp; spin down</li>
+</ul>
+<p>老司机这里计算的时候把自旋关了，所以输出也就只有一条，不用额外设置。</p>
+<p>除此之外，还可以输出原子的贡献，操作就是把<code>oribitals</code>换成<code>atoms</code>，如下：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pyprocar</span><br><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.outputs <span class="keyword">import</span> Vasprun</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取vasprun.xml文件</span></span><br><span class="line">vasprun = Vasprun(<span class="string">'./ZrNiSn_primitive/band/vasprun.xml'</span>)</span><br><span class="line">efermi = vasprun.efermi</span><br><span class="line"></span><br><span class="line">band_dir = <span class="string">'./ZrNiSn_primitive/band'</span></span><br><span class="line"></span><br><span class="line">pyprocar.bandsplot(</span><br><span class="line">    code=<span class="string">'vasp'</span>,</span><br><span class="line">    dirname=band_dir,</span><br><span class="line">    mode=<span class="string">'parametric'</span>,</span><br><span class="line">    elimit=[-<span class="number">2</span>,<span class="number">2</span>],</span><br><span class="line">    atoms=[<span class="number">0</span>],   			<span class="comment"># 1号原子贡献</span></span><br><span class="line">    fermi=efermi,</span><br><span class="line">    clim=[<span class="number">0</span>,<span class="number">1</span>],				<span class="comment"># color bar的刻度</span></span><br><span class="line">    linewidth=[<span class="number">2</span>],</span><br><span class="line">    fermi_linewidth=<span class="number">2</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure></div>
+
+<p>运行代码：</p>
+<p><img src="/2024/06/20/Pyprocar-tutorial-1/image-20240620143531454.png" alt="image-20240620143531454"></p>
+<p>如果想得到某一元素的贡献，只需要在<code>atoms=[]</code>中包含同一元素原子所有的序号即可，上面计算用到的primtive cell中每个元素只有一个原子，即上图为<code>Zr</code>元素的贡献。</p>
+<h5 id="散点"><a href="#散点" class="headerlink" title="散点"></a>散点</h5><p>还可以用散点来表示，差别只是把<code>mode='parametric</code>‘换成<code>mode='scatter'</code>，其余设置一样，如下：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pyprocar</span><br><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.outputs <span class="keyword">import</span> Vasprun</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取vasprun.xml文件</span></span><br><span class="line">vasprun = Vasprun(<span class="string">'./ZrNiSn_primitive/band/vasprun.xml'</span>)</span><br><span class="line">efermi = vasprun.efermi</span><br><span class="line"></span><br><span class="line">band_dir = <span class="string">'./ZrNiSn_primitive/band'</span></span><br><span class="line"></span><br><span class="line">pyprocar.bandsplot(</span><br><span class="line">    code=<span class="string">'vasp'</span>,</span><br><span class="line">    dirname=band_dir,</span><br><span class="line">    mode=<span class="string">'scatter'</span>,</span><br><span class="line">    elimit=[-<span class="number">2</span>,<span class="number">2</span>],</span><br><span class="line">    atoms=[<span class="number">0</span>],   			<span class="comment"># 1号原子贡献</span></span><br><span class="line">    fermi=efermi,</span><br><span class="line">    clim=[<span class="number">0</span>,<span class="number">1</span>],				<span class="comment"># color bar的刻度</span></span><br><span class="line">    markersize=[<span class="number">60</span>],		<span class="comment"># 调整散点大小</span></span><br><span class="line">    fermi_linewidth=<span class="number">2</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure></div>
+
+<p>运行代码：</p>
+<p><img src="/2024/06/20/Pyprocar-tutorial-1/image-20240620144303956.png" alt="image-20240620144303956"></p>
+<h2 id="处理态密度"><a href="#处理态密度" class="headerlink" title="处理态密度"></a>处理态密度</h2><p>态密度的处理方法与能带类似，使用<code>pyprocar.dosplot</code>，VASP计算流程参照<code>Learn VASP from pyamtgen</code>系列——<a href="https://andyhox.github.io/2024/06/11/Learn-VASP-from-pymatgen-5/">Chap.5 计算小白硬学VASP —— 材料性质计算—&gt;态密度 - A&amp;H (andyhox.github.io)</a>。</p>
+<p>直接接着后处理上文<code>ZrNiSn</code>结构的态密度。</p>
+<h3 id="Pyrocar-后处理"><a href="#Pyrocar-后处理" class="headerlink" title="Pyrocar 后处理"></a>Pyrocar 后处理</h3><h4 id="总态密度TDOS"><a href="#总态密度TDOS" class="headerlink" title="总态密度TDOS"></a>总态密度TDOS</h4><p>代码如下：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pyprocar</span><br><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.outputs <span class="keyword">import</span> Vasprun</span><br><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取vasprun.xml文件</span></span><br><span class="line">prim_dos_vrun = Vasprun(<span class="string">"./ZrNiSn_primitive/dos/vasprun.xml"</span>)</span><br><span class="line">prim_efermi = prim_dos_vrun.efermi</span><br><span class="line"></span><br><span class="line">prim_dos = pyprocar.dosplot(</span><br><span class="line">    code=<span class="string">'vasp'</span>,</span><br><span class="line">    mode=<span class="string">'plain'</span>,</span><br><span class="line">    dirname=<span class="string">'ZrNiSn_primitive/dos'</span>,</span><br><span class="line">    fermi=prim_efermi,</span><br><span class="line">    elimit=[-<span class="number">5</span>,<span class="number">5</span>],</span><br><span class="line">    dos_limit=[<span class="number">0</span>,<span class="number">50</span>],</span><br><span class="line">    )</span><br></pre></td></tr></table></figure></div>
+
+<p>运行代码：</p>
+<p><img src="/2024/06/20/Pyprocar-tutorial-1/image-20240626154522277.png" alt="image-20240626154522277"></p>
+<p>上述案例没有考虑<code>ISPIN</code>，故只显示一个方向。</p>
+<h4 id="分态密度PDOS"><a href="#分态密度PDOS" class="headerlink" title="分态密度PDOS"></a>分态密度PDOS</h4><h5 id="指定元素和轨道"><a href="#指定元素和轨道" class="headerlink" title="指定元素和轨道"></a>指定元素和轨道</h5><p>这里可以绘制<code>ZrNiSn</code>中Zr-d、Ni-d、Sn-sp轨道，此时用到<code>mode=overlay</code>，同时也需要设置<code>items</code>指定元素及轨道。代码如下：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pyprocar</span><br><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.outputs <span class="keyword">import</span> Vasprun</span><br><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取vasprun.xml文件</span></span><br><span class="line">prim_dos_vrun = Vasprun(<span class="string">"./ZrNiSn_primitive/dos/vasprun.xml"</span>)</span><br><span class="line">prim_efermi = prim_dos_vrun.efermi</span><br><span class="line"></span><br><span class="line"><span class="comment"># primtive_cell</span></span><br><span class="line"></span><br><span class="line">prim_dos = pyprocar.dosplot(</span><br><span class="line">    code=<span class="string">'vasp'</span>,</span><br><span class="line">    mode=<span class="string">'overlay'</span>,</span><br><span class="line">    dirname=<span class="string">'ZrNiSn_primitive/dos'</span>,</span><br><span class="line">    fermi=prim_efermi,</span><br><span class="line">    items=<span class="built_in">dict</span>(Zr=(<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>),Ni=(<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>),Sn=(<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>)),</span><br><span class="line">    elimit=[-<span class="number">2</span>,<span class="number">2</span>],</span><br><span class="line">    dos_limit=[<span class="number">0</span>,<span class="number">50</span>],</span><br><span class="line">    )</span><br></pre></td></tr></table></figure></div>
+
+<p>运行代码：</p>
+<p><img src="/2024/06/20/Pyprocar-tutorial-1/image-20240626155508247.png" alt="image-20240626155508247"></p>
+<h5 id="分析指定原子的PDOS"><a href="#分析指定原子的PDOS" class="headerlink" title="分析指定原子的PDOS"></a>分析指定原子的PDOS</h5><p>如果需要分析指定编号单个原子或多个原子的PDOS，可以采用<code>mode=overlay_orbitals</code>方法，此时只需要指定<code>atoms</code>对应的原子序号列表，如这里分析Zr+Ni的PDOS。代码如下：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pyprocar</span><br><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.outputs <span class="keyword">import</span> Vasprun</span><br><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取vasprun.xml文件</span></span><br><span class="line">prim_dos_vrun = Vasprun(<span class="string">"./ZrNiSn_primitive/dos/vasprun.xml"</span>)</span><br><span class="line">prim_efermi = prim_dos_vrun.efermi</span><br><span class="line"></span><br><span class="line"><span class="comment"># primtive_cell</span></span><br><span class="line"></span><br><span class="line">prim_dos = pyprocar.dosplot(</span><br><span class="line">    code=<span class="string">'vasp'</span>,</span><br><span class="line">    mode=<span class="string">'overlay_orbitals'</span>,</span><br><span class="line">    dirname=<span class="string">'ZrNiSn_primitive/dos'</span>,</span><br><span class="line">    fermi=prim_efermi,</span><br><span class="line">    atoms=[<span class="number">0</span>,<span class="number">1</span>],</span><br><span class="line">    elimit=[-<span class="number">2</span>,<span class="number">2</span>],</span><br><span class="line">    dos_limit=[<span class="number">0</span>,<span class="number">50</span>],</span><br><span class="line">    )</span><br></pre></td></tr></table></figure></div>
+
+<p>运行代码：</p>
+<p><img src="/2024/06/20/Pyprocar-tutorial-1/image-20240626161041969.png" alt="image-20240626161041969"></p>
+<h5 id="指定所有元素同一个轨道"><a href="#指定所有元素同一个轨道" class="headerlink" title="指定所有元素同一个轨道"></a>指定所有元素同一个轨道</h5><p>如果对于给定的体系需要分析所有元素的同一个轨道，比如过渡金属高熵合金只看d轨道的话，可以采用<code>mode=overlay_species</code>，且只需要指定<code>orbitals</code>即可。代码如下：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pyprocar</span><br><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.outputs <span class="keyword">import</span> Vasprun</span><br><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取vasprun.xml文件</span></span><br><span class="line">prim_dos_vrun = Vasprun(<span class="string">"./ZrNiSn_primitive/dos/vasprun.xml"</span>)</span><br><span class="line">prim_efermi = prim_dos_vrun.efermi</span><br><span class="line"></span><br><span class="line"><span class="comment"># primtive_cell</span></span><br><span class="line"></span><br><span class="line">prim_dos = pyprocar.dosplot(</span><br><span class="line">    code=<span class="string">'vasp'</span>,</span><br><span class="line">    mode=<span class="string">'overlay_species'</span>,</span><br><span class="line">    dirname=<span class="string">'ZrNiSn_primitive/dos'</span>,</span><br><span class="line">    fermi=prim_efermi,</span><br><span class="line">    orbitals=[<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>],</span><br><span class="line">    elimit=[-<span class="number">2</span>,<span class="number">2</span>],</span><br><span class="line">    dos_limit=[<span class="number">0</span>,<span class="number">50</span>],</span><br><span class="line">    )</span><br></pre></td></tr></table></figure></div>
+
+<p>运行代码：</p>
+<p><img src="/2024/06/20/Pyprocar-tutorial-1/image-20240626160253746.png" alt="image-20240626160253746"></p>
+<p>初次之外，图片还可以垂直的方式输出，只需要添加<code>orientation='vertical'</code>，如上述代码改为垂直输出：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pyprocar</span><br><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.outputs <span class="keyword">import</span> Vasprun</span><br><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取vasprun.xml文件</span></span><br><span class="line">prim_dos_vrun = Vasprun(<span class="string">"./ZrNiSn_primitive/dos/vasprun.xml"</span>)</span><br><span class="line">prim_efermi = prim_dos_vrun.efermi</span><br><span class="line"></span><br><span class="line"><span class="comment"># primtive_cell</span></span><br><span class="line"></span><br><span class="line">prim_dos = pyprocar.dosplot(</span><br><span class="line">    code=<span class="string">'vasp'</span>,</span><br><span class="line">    mode=<span class="string">'overlay_species'</span>,</span><br><span class="line">    orientation=<span class="string">'vertical'</span>,</span><br><span class="line">    dirname=<span class="string">'ZrNiSn_primitive/dos'</span>,</span><br><span class="line">    fermi=prim_efermi,</span><br><span class="line">    orbitals=[<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>],</span><br><span class="line">    elimit=[-<span class="number">2</span>,<span class="number">2</span>],</span><br><span class="line">    dos_limit=[<span class="number">0</span>,<span class="number">50</span>],</span><br><span class="line">    )</span><br></pre></td></tr></table></figure></div>
+
+<p>运行代码：</p>
+<p><img src="/2024/06/20/Pyprocar-tutorial-1/image-20240626161701325.png" alt="image-20240626161701325"></p>
+<h2 id="同时绘制能带态密度"><a href="#同时绘制能带态密度" class="headerlink" title="同时绘制能带态密度"></a>同时绘制能带态密度</h2><p>用到<code>pyprocar.bandsdosplot</code>方法，只需要分别设置<code>band</code>和<code>dos</code>的参数，然后用<code>bandsdosplot</code>组合在一起即可，代码如下：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pyprocar</span><br><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.outputs <span class="keyword">import</span> Vasprun</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取vasprun.xml文件</span></span><br><span class="line">prim_dos_vrun = Vasprun(<span class="string">"./ZrNiSn_primitive/dos/vasprun.xml"</span>)</span><br><span class="line">prim_efermi = prim_dos_vrun.efermi</span><br><span class="line"></span><br><span class="line">bands_settings = {</span><br><span class="line">                  <span class="string">'mode'</span>:<span class="string">'plain'</span>,</span><br><span class="line">                  <span class="string">'fermi'</span>:prim_efermi, </span><br><span class="line">                  <span class="string">'dirname'</span>: bands_dir</span><br><span class="line">                  }</span><br><span class="line"></span><br><span class="line">dos_settings = {</span><br><span class="line">               <span class="string">'mode'</span>:<span class="string">'plain'</span>,</span><br><span class="line">               <span class="string">'fermi'</span>:prim_efermi,   </span><br><span class="line">               <span class="string">'dirname'</span>: dos_dir</span><br><span class="line">                }</span><br><span class="line"></span><br><span class="line">pyprocar.bandsdosplot(code=<span class="string">'vasp'</span>,</span><br><span class="line">                bands_settings=bands_settings,</span><br><span class="line">                dos_settings=dos_settings,</span><br><span class="line">                )</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+
+<p>运行代码：</p>
+<p><img src="/2024/06/20/Pyprocar-tutorial-1/image-20240626170909285.png" alt="image-20240626170909285"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><code>Pyprocar</code>的用法就介绍到这，欢迎补充！</p>
+<p><em><strong>¡Muchas gracias!</strong></em></p>
+
+        </div>
+
+        
+            <div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>标题:</strong> 计算工具系列 —— Pyprocar库</li>
+        <li><strong>作者:</strong> 炫酷老司机</li>
+        <li><strong>创建于
+                :</strong> 2024-06-20 00:00:00</li>
+        
+            <li>
+                <strong>更新于
+                    :</strong> 2024-06-26 17:14:16
+            </li>
+        
+        <li>
+            <strong>链接:</strong> https://andyhox.github.io/2024/06/20/Pyprocar-tutorial-1/
+        </li>
+        <li>
+            <strong>
+                版权声明:
+            </strong>
+            
+
+            
+                欢迎个人转载、使用、转贴等，但请获得作者同意且注明出处！
+            
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+            <ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+                
+                    <li class="tag-item mx-0.5">
+                        <a href="/tags/VASP/">#VASP</a>&nbsp;
+                    </li>
+                
+                    <li class="tag-item mx-0.5">
+                        <a href="/tags/Pyprocar/">#Pyprocar</a>&nbsp;
+                    </li>
+                
+                    <li class="tag-item mx-0.5">
+                        <a href="/tags/Band/">#Band</a>&nbsp;
+                    </li>
+                
+                    <li class="tag-item mx-0.5">
+                        <a href="/tags/DOS/">#DOS</a>&nbsp;
+                    </li>
+                
+            </ul>
+        
+
+        
+
+        
+            <div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+                
+                    <div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+                        <a class="prev"
+                        rel="prev"
+                        href="/2024/06/20/Learn-VASP-from-pymatgen-TOC/"
+                        >
+                            <span class="left arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">计算小白硬学VASP系列——《Learn VASP from pymatgen》章节目录</span>
+                                <span class="post-nav-item">上一篇</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+                        <a class="next"
+                        rel="next"
+                        href="/2024/06/18/Learn-VASP-from-pymatgen-8/"
+                        >
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">Chap.8  计算小白硬学VASP —— 材料性质计算—&gt;能带计算</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                            <span class="right arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+
+        
+    </div>
+
+    
+        <div class="toc-content-container">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">此页目录</div>
+        <div class="page-title">计算工具系列 —— Pyprocar库</div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%84%E7%90%86%E8%83%BD%E5%B8%A6"><span class="nav-text">处理能带</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Pyprocar%E5%90%8E%E5%A4%84%E7%90%86"><span class="nav-text">Pyprocar后处理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%99%AE%E9%80%9A%E8%83%BD%E5%B8%A6"><span class="nav-text">普通能带</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BD%A8%E9%81%93%E6%8A%95%E5%BD%B1%E8%83%BD%E5%B8%A6%E5%9B%BE"><span class="nav-text">轨道投影能带图</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%BA%BF%E6%80%A7"><span class="nav-text">线性</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%95%A3%E7%82%B9"><span class="nav-text">散点</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%84%E7%90%86%E6%80%81%E5%AF%86%E5%BA%A6"><span class="nav-text">处理态密度</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Pyrocar-%E5%90%8E%E5%A4%84%E7%90%86"><span class="nav-text">Pyrocar 后处理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%80%BB%E6%80%81%E5%AF%86%E5%BA%A6TDOS"><span class="nav-text">总态密度TDOS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%86%E6%80%81%E5%AF%86%E5%BA%A6PDOS"><span class="nav-text">分态密度PDOS</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%8C%87%E5%AE%9A%E5%85%83%E7%B4%A0%E5%92%8C%E8%BD%A8%E9%81%93"><span class="nav-text">指定元素和轨道</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%88%86%E6%9E%90%E6%8C%87%E5%AE%9A%E5%8E%9F%E5%AD%90%E7%9A%84PDOS"><span class="nav-text">分析指定原子的PDOS</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%8C%87%E5%AE%9A%E6%89%80%E6%9C%89%E5%85%83%E7%B4%A0%E5%90%8C%E4%B8%80%E4%B8%AA%E8%BD%A8%E9%81%93"><span class="nav-text">指定所有元素同一个轨道</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8C%E6%97%B6%E7%BB%98%E5%88%B6%E8%83%BD%E5%B8%A6%E6%80%81%E5%AF%86%E5%BA%A6"><span class="nav-text">同时绘制能带态密度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol>
+
+    </div>
+</div>
+        </div>
+    
+</div>
+
+
+
+                
+
+            </div>
+
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2024</span>
+              -
+            
+            2024&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">炫酷老司机</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        共 11 篇文章
+                    </span>
+                    
+                        <span>
+                            共 16.8k 字
+                        </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">访问人数</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">总访问量</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">由 <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a> 驱动</span>
+            <span class="text-sm lg:block">主题&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.6.4</a></span>
+        </div>
+        
+        
+            <div>
+                博客已运行 <span class="odometer" id="runtime_days" ></span> 天 <span class="odometer" id="runtime_hours"></span> 小时 <span class="odometer" id="runtime_minutes"></span> 分钟 <span class="odometer" id="runtime_seconds"></span> 秒
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fa-solid fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa-solid fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa-solid fa-spinner fa-spin-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+</main>
+
+
+    <script src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/libs/Swup.min.js"></script><script src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/libs/SwupSlideTheme.min.js"></script><script src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/libs/SwupScriptsPlugin.min.js"></script><script src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/libs/SwupProgressPlugin.min.js"></script><script src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/libs/SwupScrollPlugin.min.js"></script><script src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/libs/SwupPreloadPlugin.min.js"></script>
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
+
+
+
+
+<script type="module" src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/tools/imageViewer.js"></script><script type="module" src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/utils.js"></script><script type="module" src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/main.js"></script><script type="module" src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/layouts/navbarShrink.js"></script><script type="module" src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/tools/scrollTopBottom.js"></script><script type="module" src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/tools/lightDarkSwitch.js"></script><script type="module" src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/layouts/categoryList.js"></script>
+
+
+    <script type="module" src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/tools/localSearch.js"></script>
+
+
+
+    <script type="module" src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/tools/codeBlock.js"></script>
+
+
+
+
+
+    <script src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/tools/runtime.js"></script>
+    <script src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/libs/odometer.min.js"></script>
+    <link rel="stylesheet" href="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/assets/odometer-theme-minimal.css">
+
+
+
+  <script src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/libs/Typed.min.js"></script>
+  <script type="module" src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/plugins/typed.js"></script>
+
+
+
+    <script src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/libs/mermaid.min.js"></script>
+    <script src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/plugins/mermaid.js"></script>
+
+
+
+
+
+
+<div class="post-scripts" data-swup-reload-script>
+    
+        <script type="module" src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/tools/tocToggle.js"></script><script type="module" src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/layouts/toc.js"></script><script type="module" src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/plugins/tabs.js"></script>
+    
+</div>
+
+
+</body>
+</html>
