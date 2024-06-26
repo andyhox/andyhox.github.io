@@ -51,13 +51,13 @@ global:
     # Chinese fonts
     chinese: 
       enable: false # Whether to enable custom chinese fonts
-      family:  # Font family
-      url:  # Font URL to CSS file
+      family:  Ma Shan Zheng # Font family
+      url:  https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap # Font URL to CSS file
     # English fonts
     english: 
       enable: false # Whether to enable custom english fonts
-      family:  # Font family
-      url:  # Font URL to CSS file
+      family: Varela Round # Font family
+      url:  https://fonts.googleapis.com/css2?family=Varela+Round&display=swap # Font URL to CSS file
   # Content max width
   content_max_width: 1000px
   # Sidebar width
@@ -229,7 +229,7 @@ home:
     enable: true # Whether to enable sidebar
     position: left # Sidebar position. left, right
     first_item: menu # First item in sidebar. menu, info
-    announcement: # Announcement text
+    announcement: 'Email: andyhoo0716@gmail.com' # Announcement text
     show_on_mobile: true # Whether to show sidebar navigation on mobile sheet menu
     links:
       Archives: 
@@ -241,9 +241,12 @@ home:
       Categories: 
         path: /categories 
         icon: fa-regular fa-folder # can be empty
+      Feedback: 
+        path: /feedback 
+        icon: fa-regular fa-comment # can be empty
       # ...... # you can add more
   # Article date format
-  article_date_format: auto # auto, relative, YYYY-MM-DD, YYYY-MM-DD HH:mm:ss etc.
+  article_date_format: YYYY-MM-DD # auto, relative, YYYY-MM-DD, YYYY-MM-DD HH:mm:ss etc.
   # Article categories visibility
   categories:
     enable: true  # Whether to enable
@@ -260,7 +263,7 @@ home:
 articles:
   # Set the styles of the article
   style:
-    font_size: 16px # Font size
+    font_size: 18px # Font size
     line_height: 1.5 # Line height
     image_border_radius: 14px # image border radius
     image_alignment: left # image alignment. left, center
@@ -283,7 +286,7 @@ articles:
   author_label: 
     enable: true # Whether to enable
     auto: false # Whether to automatically add author label, e.g. Lv1, Lv2, Lv3...
-    list: []
+    list: ["Lv99"]
   # Code block settings
   code_block:
     copy: true # Whether to enable code block copy button
