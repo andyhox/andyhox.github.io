@@ -2,6 +2,24 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://andyhox.github.io/2024/06/18/Learn-VASP-from-pymatgen-8/</loc>
+    
+    <lastmod>2024-06-26</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://andyhox.github.io/2024/06/26/toolkit-TOC/</loc>
+    
+    <lastmod>2024-06-26</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://andyhox.github.io/2024/06/20/Learn-VASP-from-pymatgen-TOC/</loc>
     
     <lastmod>2024-06-26</lastmod>
@@ -135,10 +153,24 @@
     <priority>0.2</priority>
   </url>
   
+  <url>
+    <loc>https://andyhox.github.io/tags/toolkit/</loc>
+    <lastmod>2024-06-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
 
   
   <url>
     <loc>https://andyhox.github.io/categories/Learn-VASP-from-pymatgen/</loc>
+    <lastmod>2024-06-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://andyhox.github.io/categories/toolkit/</loc>
     <lastmod>2024-06-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
