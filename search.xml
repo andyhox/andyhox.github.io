@@ -725,4 +725,57 @@
         <tag>Materials Project</tag>
       </tags>
   </entry>
+  <entry>
+    <title>计算小白硬学VASP系列——《Learn VASP from pymatgen》章节目录</title>
+    <url>/2024/06/20/Learn-VASP-from-pymatgen-TOC/</url>
+    <content><![CDATA[<h3 id="《Learn-VASP-from-pymatgen》汇总"><a href="#《Learn-VASP-from-pymatgen》汇总" class="headerlink" title="《Learn VASP from pymatgen》汇总"></a>《Learn VASP from pymatgen》汇总</h3><h4 id="1、前期准备"><a href="#1、前期准备" class="headerlink" title="1、前期准备"></a>1、前期准备</h4><a class="button  regular" href="https://andyhox.github.io/2024/05/30/Learn-VASP-from-pymatgen-2/" title="Click here"><i class="fa-solid fa-play-circle"></i> Click here</a>
+
+<ul>
+<li>编译pymatgen，配置相关环境</li>
+</ul>
+<h3 id="2、学会使用Materials-Project"><a href="#2、学会使用Materials-Project" class="headerlink" title="2、学会使用Materials Project"></a>2、学会使用Materials Project</h3><a class="button  regular" href="https://andyhox.github.io/2024/05/30/Learn-VASP-from-pymatgen-3/" title="Click here"><i class="fa-solid fa-play-circle"></i> Click here</a>
+
+<ul>
+<li>介绍无机结构网站<code>Materials Project</code>下载结构、获取已有性质</li>
+<li>介绍mp_api接口的用法</li>
+</ul>
+<h3 id="3、MPRelaxSet用法"><a href="#3、MPRelaxSet用法" class="headerlink" title="3、MPRelaxSet用法"></a>3、MPRelaxSet用法</h3><a class="button  regular" href="https://andyhox.github.io/2024/06/04/Learn-VASP-from-pymatgen-4/" title="Click here"><i class="fa-solid fa-play-circle"></i> Click here</a>
+
+<ul>
+<li>了解最常用的结构优化模块<code>MPRelaxSet</code>使用</li>
+<li>自定义参数设置（INCAR tags，K点个数）</li>
+</ul>
+<h3 id="4、态密度计算输入自动生成"><a href="#4、态密度计算输入自动生成" class="headerlink" title="4、态密度计算输入自动生成"></a>4、态密度计算输入自动生成</h3><a class="button  regular" href="https://andyhox.github.io/2024/06/11/Learn-VASP-from-pymatgen-5/" title="Click here"><i class="fa-solid fa-play-circle"></i> Click here</a>
+
+<ul>
+<li><code>MPRelaxSet</code>、<code>MPstaticSet</code>、<code>MPNonSCFSet</code>配合使用生成dos计算输入</li>
+</ul>
+<h3 id="5、态密度结果分析"><a href="#5、态密度结果分析" class="headerlink" title="5、态密度结果分析"></a>5、态密度结果分析</h3><a class="button  regular" href="https://andyhox.github.io/2024/06/13/Learn-VASP-from-pymatgen-6/" title="Click here"><i class="fa-solid fa-play-circle"></i> Click here</a>
+
+<ul>
+<li>提起总态密度TDOS</li>
+<li>提取分态密度PDOS</li>
+</ul>
+<h3 id="6、态密度结果绘图"><a href="#6、态密度结果绘图" class="headerlink" title="6、态密度结果绘图"></a>6、态密度结果绘图</h3><a class="button  regular" href="https://andyhox.github.io/2024/06/17/Learn-VASP-from-pymatgen-7/" title="Click here"><i class="fa-solid fa-play-circle"></i> Click here</a>
+
+<ul>
+<li><code>Matplotlib</code>库绘图</li>
+<li><code>Dosplotter</code>模块绘图</li>
+<li>如何平滑处理态密度图，减少毛刺</li>
+</ul>
+
+  <div class="note p-4 mb-4 rounded-small info">
+    <p>To be continued</p>
+
+  </div>
+]]></content>
+      <categories>
+        <category>Learn VASP from pymatgen</category>
+      </categories>
+      <tags>
+        <tag>VASP</tag>
+        <tag>pymatgen</tag>
+        <tag>Materials Project</tag>
+      </tags>
+  </entry>
 </search>
