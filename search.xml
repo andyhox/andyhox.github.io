@@ -742,13 +742,13 @@
 <h3 id="3、MPRelaxSet用法"><a href="#3、MPRelaxSet用法" class="headerlink" title="3、MPRelaxSet用法"></a>3、MPRelaxSet用法</h3><a class="button  regular" href="https://andyhox.github.io/2024/06/04/Learn-VASP-from-pymatgen-4/" title="Click here"><i class="fa-solid fa-play-circle"></i> Click here</a>
 
 <ul>
-<li>了解最常用的结构优化模块<code>MPRelaxSet</code>使用</li>
+<li>了解最常用的结构优化模块<code>MPRelaxSet()</code>使用</li>
 <li>自定义参数设置（INCAR tags，K点个数）</li>
 </ul>
 <h3 id="4、态密度计算输入自动生成"><a href="#4、态密度计算输入自动生成" class="headerlink" title="4、态密度计算输入自动生成"></a>4、态密度计算输入自动生成</h3><a class="button  regular" href="https://andyhox.github.io/2024/06/11/Learn-VASP-from-pymatgen-5/" title="Click here"><i class="fa-solid fa-play-circle"></i> Click here</a>
 
 <ul>
-<li><code>MPRelaxSet</code>、<code>MPstaticSet</code>、<code>MPNonSCFSet</code>配合使用生成dos计算输入</li>
+<li><code>MPRelaxSet()</code>、<code>MPstaticSet()</code>、<code>MPNonSCFSet()</code>配合使用生成dos计算输入</li>
 </ul>
 <h3 id="5、态密度结果分析"><a href="#5、态密度结果分析" class="headerlink" title="5、态密度结果分析"></a>5、态密度结果分析</h3><a class="button  regular" href="https://andyhox.github.io/2024/06/13/Learn-VASP-from-pymatgen-6/" title="Click here"><i class="fa-solid fa-play-circle"></i> Click here</a>
 
@@ -760,19 +760,24 @@
 
 <ul>
 <li><code>Matplotlib</code>库绘图</li>
-<li><code>Dosplotter</code>模块绘图</li>
+<li><code>Dosplotter()</code>模块绘图</li>
 <li>如何平滑处理态密度图，减少毛刺</li>
 </ul>
 <h3 id="7、能带计算"><a href="#7、能带计算" class="headerlink" title="7、能带计算"></a>7、能带计算</h3><a class="button  regular" href="https://andyhox.github.io/2024/06/18/Learn-VASP-from-pymatgen-8/" title="Click here"><i class="fa-solid fa-play-circle"></i> Click here</a>
 
 <ul>
-<li><code>HighSymmKpath</code>方法自动生成高对称路径</li>
+<li><code>HighSymmKpath()</code>方法自动生成高对称路径</li>
 </ul>
 <h3 id="8、能带分析"><a href="#8、能带分析" class="headerlink" title="8、能带分析"></a>8、能带分析</h3><a class="button  regular" href="https://andyhox.github.io/2024/06/27/Learn-VASP-from-pymatgen-9/" title="Click here"><i class="fa-solid fa-play-circle"></i> Click here</a>
 
 <ul>
-<li><code>BandStructure</code>方法提取能带信息</li>
-<li><code>BSPlotter</code>方法自动绘图</li>
+<li><code>BandStructure()</code>方法提取能带信息</li>
+<li><code>BSPlotter()</code>方法自动绘图</li>
+</ul>
+<h3 id="9、能带态密度汇总"><a href="#9、能带态密度汇总" class="headerlink" title="9、能带态密度汇总"></a>9、能带态密度汇总</h3><a class="button  regular" href="https://andyhox.github.io/2024/06/28/Learn-VASP-from-pymatgen-10/" title="Click here"><i class="fa-solid fa-play-circle"></i> Click here</a>
+
+<ul>
+<li><code>BSDOSPlotter()</code>方法同时绘制能带态密度结果</li>
 </ul>
 
   <div class="note p-4 mb-4 rounded-small info">
@@ -1053,6 +1058,63 @@
 <p><img src="/2024/06/27/Learn-VASP-from-pymatgen-9/image-20240628111627113.png" alt="image-20240628111627113"></p>
 <p>现在看上去就顺眼了很多。单独绘制能带图的话，还是推荐使用<code>BSPlotter</code>方法，然后再修改</p>
 <p><code>matplotlib</code>的属性来覆盖<code>get_plot()</code>方法中的默认参数。</p>
+<p><em><strong>¡Muchas gracias!</strong></em></p>
+]]></content>
+      <categories>
+        <category>Learn VASP from pymatgen</category>
+      </categories>
+      <tags>
+        <tag>VASP</tag>
+        <tag>pymatgen</tag>
+        <tag>Materials Project</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Chap.10  计算小白硬学VASP —— 材料性质计算—&gt;能带态密度图汇总</title>
+    <url>/2024/06/28/Learn-VASP-from-pymatgen-10/</url>
+    <content><![CDATA[<p><em><strong>¡Hola a todos!</strong></em></p>
+<p>本章介绍如何把能带态密度画在一起，也就是常见的能带图在左，态密度图垂直在右分布。这里需要调用的模块为<code>BSDOSPlotter()</code>。</p>
+<p>代码如下：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.electronic_structure.plotter <span class="keyword">import</span> BSDOSPlotter</span><br><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.outputs <span class="keyword">import</span> Vasprun</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取dos计算vasprun.xml文件</span></span><br><span class="line">dos_vasprun = Vasprun(<span class="string">&quot;../ZrNiSn_primitive/dos/vasprun.xml&quot;</span>)</span><br><span class="line">dos = dos_vasprun.complete_dos</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取band计算vasprun.xml文件</span></span><br><span class="line">band_vasprun = Vasprun(<span class="string">&quot;../ZrNiSn_primitive/band/vasprun.xml&quot;</span>)</span><br><span class="line">band = band_vasprun.get_band_structure(line_mode=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 实例化BSDOSPlotter类</span></span><br><span class="line">plotter = BSDOSPlotter()</span><br><span class="line"><span class="comment"># 画图</span></span><br><span class="line">plotter.get_plot(bs=band,dos=dos)</span><br></pre></td></tr></table></figure></div>
+
+<p>运行代码：</p>
+<p><img src="/2024/06/28/Learn-VASP-from-pymatgen-10/image-20240628171711926.png" alt="image-20240628171711926"></p>
+<h4 id="绘制元素-轨道投影"><a href="#绘制元素-轨道投影" class="headerlink" title="绘制元素&#x2F;轨道投影"></a>绘制元素&#x2F;轨道投影</h4><p>绘制能带元素投影时，需要在读取<code>vasprun.xml</code>文件时增加提取投影信息的参数：<code>Vasprun(&quot;vasprun.xml&quot;,parse_projected_eigen=True)</code></p>
+<p>修改代码如下：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.electronic_structure.plotter <span class="keyword">import</span> BSDOSPlotter</span><br><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.outputs <span class="keyword">import</span> Vasprun</span><br><span class="line"><span class="keyword">from</span> mp_api.client <span class="keyword">import</span> MPRester</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取dos计算vasprun.xml文件</span></span><br><span class="line">dos_vasprun = Vasprun(<span class="string">&quot;../ZrNiSn_primitive/dos/vasprun.xml&quot;</span>,parse_projected_eigen=<span class="literal">True</span>)</span><br><span class="line">dos = dos_vasprun.complete_dos</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取band计算vasprun.xml文件</span></span><br><span class="line">band_vasprun = Vasprun(<span class="string">&quot;../ZrNiSn_primitive/band/vasprun.xml&quot;</span>,parse_projected_eigen=<span class="literal">True</span>)</span><br><span class="line">band = band_vasprun.get_band_structure(line_mode=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 实例化BSDOSPlotter类</span></span><br><span class="line">plotter = BSDOSPlotter()</span><br><span class="line"><span class="comment"># 画图</span></span><br><span class="line">plotter.get_plot(bs=band,dos=dos)</span><br></pre></td></tr></table></figure></div>
+
+<p>运行代码：</p>
+<p><img src="/2024/06/28/Learn-VASP-from-pymatgen-10/image-20240628172049701.png" alt="image-20240628172049701"></p>
+<p>此时可以看到左边的能带图也对应显示了元素的投影。</p>
+<p>该方法默认为<code>band</code>和<code>dos</code>采用元素投影，初次之外<code>dos</code>还提供了轨道投影选项，需要在实例化<code>BSDOSPlotter()</code>时增加<code>dos_projection=&#39;orbitals&#39;</code>参数：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.electronic_structure.plotter <span class="keyword">import</span> BSDOSPlotter</span><br><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.outputs <span class="keyword">import</span> Vasprun</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取dos计算vasprun.xml文件</span></span><br><span class="line">dos_vasprun = Vasprun(<span class="string">&quot;../ZrNiSn_primitive/dos/vasprun.xml&quot;</span>,parse_projected_eigen=<span class="literal">True</span>)</span><br><span class="line">dos = dos_vasprun.complete_dos</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取band计算vasprun.xml文件</span></span><br><span class="line">band_vasprun = Vasprun(<span class="string">&quot;../ZrNiSn_primitive/band/vasprun.xml&quot;</span>,parse_projected_eigen=<span class="literal">True</span>)</span><br><span class="line">band = band_vasprun.get_band_structure(line_mode=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 实例化BSDOSPlotter类，态密度为轨道投影</span></span><br><span class="line">plotter = BSDOSPlotter(dos_projection=<span class="string">&#x27;orbitals&#x27;</span>)</span><br><span class="line"><span class="comment"># 画图</span></span><br><span class="line">plotter.get_plot(bs=band,dos=dos)</span><br></pre></td></tr></table></figure></div>
+
+<p>运行代码：</p>
+<p><img src="/2024/06/28/Learn-VASP-from-pymatgen-10/image-20240628172755948.png" alt="image-20240628172755948"></p>
+<p>如果只想表现TDOS，则在实例化<code>BSDOSPlotter()</code>时设置<code>dos_projection=&#39;None&#39;</code>和<code>bs_projection=None</code>：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.electronic_structure.plotter <span class="keyword">import</span> BSDOSPlotter</span><br><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.outputs <span class="keyword">import</span> Vasprun</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取dos计算vasprun.xml文件</span></span><br><span class="line">dos_vasprun = Vasprun(<span class="string">&quot;../ZrNiSn_primitive/dos/vasprun.xml&quot;</span>,parse_projected_eigen=<span class="literal">True</span>)</span><br><span class="line">dos = dos_vasprun.complete_dos</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取band计算vasprun.xml文件</span></span><br><span class="line">band_vasprun = Vasprun(<span class="string">&quot;../ZrNiSn_primitive/band/vasprun.xml&quot;</span>,parse_projected_eigen=<span class="literal">True</span>)</span><br><span class="line">band = band_vasprun.get_band_structure(line_mode=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 实例化BSDOSPlotter类</span></span><br><span class="line">plotter = BSDOSPlotter(bs_projection=<span class="literal">None</span>,dos_projection=<span class="literal">None</span>)</span><br><span class="line"><span class="comment"># 画图</span></span><br><span class="line">plotter.get_plot(bs=band,dos=dos)</span><br></pre></td></tr></table></figure></div>
+
+<p>运行代码：</p>
+<p><img src="/2024/06/28/Learn-VASP-from-pymatgen-10/image-20240628173052926.png" alt="image-20240628173052926"></p>
+<p>最后，需要调整y轴范围、线条颜色，字体大小，图例大小等，都可以在实例化<code>BSDOSPlotter()</code>时设置相应的参数：</p>
+<blockquote>
+<ul>
+<li><strong>bs_projection</strong> (<em>‘elements’</em> <em>|</em> <em>None</em>) – Whether to project the bands onto elements.</li>
+<li><strong>dos_projection</strong> (<em>str</em>) – “elements”, “orbitals”, or None</li>
+<li><strong>vb_energy_range</strong> (<em>float</em>) – energy in eV to show of valence bands</li>
+<li><strong>cb_energy_range</strong> (<em>float</em>) – energy in eV to show of conduction bands</li>
+<li><strong>fixed_cb_energy</strong> (<em>bool</em>) – If true, the cb_energy_range will be interpreted as constant (i.e., no gap correction for cb energy)</li>
+<li><strong>egrid_interval</strong> (<em>float</em>) – interval for grid marks</li>
+<li><strong>font</strong> (<em>str</em>) – font family</li>
+<li><strong>axis_fontsize</strong> (<em>float</em>) – font size for axis</li>
+<li><strong>tick_fontsize</strong> (<em>float</em>) – font size for axis tick labels</li>
+<li><strong>legend_fontsize</strong> (<em>float</em>) – font size for legends</li>
+<li><strong>bs_legend</strong> (<em>str</em>) – matplotlib string location for legend or None</li>
+<li><strong>dos_legend</strong> (<em>str</em>) – matplotlib string location for legend or None</li>
+<li><strong>rgb_legend</strong> (<em>bool</em>) – (T&#x2F;F) whether to draw RGB triangle&#x2F;bar for element proj.</li>
+<li><strong>fig_size</strong> (<em>tuple</em>) – dimensions of figure size (width, height)</li>
+</ul>
+</blockquote>
 <p><em><strong>¡Muchas gracias!</strong></em></p>
 ]]></content>
       <categories>
