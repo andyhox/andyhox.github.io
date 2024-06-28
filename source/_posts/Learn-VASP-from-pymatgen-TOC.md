@@ -35,14 +35,14 @@ date: 2024-06-20 00:00:00
 
 {% btn regular :: Click here :: https://andyhox.github.io/2024/06/04/Learn-VASP-from-pymatgen-4/ :: fa-solid fa-play-circle %}
 
-- 了解最常用的结构优化模块`MPRelaxSet`使用
+- 了解最常用的结构优化模块`MPRelaxSet()`使用
 - 自定义参数设置（INCAR tags，K点个数）
 
 ### 4、态密度计算输入自动生成
 
 {% btn regular :: Click here :: https://andyhox.github.io/2024/06/11/Learn-VASP-from-pymatgen-5/ :: fa-solid fa-play-circle %}
 
-- `MPRelaxSet`、`MPstaticSet`、`MPNonSCFSet`配合使用生成dos计算输入
+- `MPRelaxSet()`、`MPstaticSet()`、`MPNonSCFSet()`配合使用生成dos计算输入
 
 ### 5、态密度结果分析
 
@@ -56,21 +56,27 @@ date: 2024-06-20 00:00:00
 {% btn regular :: Click here :: https://andyhox.github.io/2024/06/17/Learn-VASP-from-pymatgen-7/ :: fa-solid fa-play-circle %}
 
 - `Matplotlib`库绘图
-- `Dosplotter`模块绘图
+- `Dosplotter()`模块绘图
 - 如何平滑处理态密度图，减少毛刺
 
 ### 7、能带计算
 
 {% btn regular :: Click here :: https://andyhox.github.io/2024/06/18/Learn-VASP-from-pymatgen-8/ :: fa-solid fa-play-circle %}
 
-- `HighSymmKpath`方法自动生成高对称路径
+- `HighSymmKpath()`方法自动生成高对称路径
 
 ### 8、能带分析
 
 {% btn regular :: Click here :: https://andyhox.github.io/2024/06/27/Learn-VASP-from-pymatgen-9/ :: fa-solid fa-play-circle %}
 
-- `BandStructure`方法提取能带信息
-- `BSPlotter`方法自动绘图
+- `BandStructure()`方法提取能带信息
+- `BSPlotter()`方法自动绘图
+
+### 9、能带态密度汇总
+
+{% btn regular :: Click here :: https://andyhox.github.io/2024/06/28/Learn-VASP-from-pymatgen-10/ :: fa-solid fa-play-circle %}
+
+- `BSDOSPlotter()`方法同时绘制能带态密度结果
 
 {% note info %}
 

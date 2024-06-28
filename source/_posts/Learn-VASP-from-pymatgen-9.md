@@ -1,5 +1,5 @@
 ---
-title: Chap.8  计算小白硬学VASP —— 材料性质计算—>能带分析
+title: Chap.9  计算小白硬学VASP —— 材料性质计算—>能带分析
 tags:
   - VASP
   - pymatgen
