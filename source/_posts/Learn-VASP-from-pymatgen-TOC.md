@@ -18,7 +18,7 @@ date: 2024-06-20 00:00:00
 
 ### 《Learn VASP from pymatgen》汇总
 
-#### 1、前期准备
+### 1、前期准备
 
 {% btn regular :: Click here :: https://andyhox.github.io/2024/05/30/Learn-VASP-from-pymatgen-2/ :: fa-solid fa-play-circle %}
 
@@ -59,7 +59,18 @@ date: 2024-06-20 00:00:00
 - `Dosplotter`模块绘图
 - 如何平滑处理态密度图，减少毛刺
 
+### 7、能带计算
 
+{% btn regular :: Click here :: https://andyhox.github.io/2024/06/18/Learn-VASP-from-pymatgen-8/ :: fa-solid fa-play-circle %}
+
+- `HighSymmKpath`方法自动生成高对称路径
+
+### 8、能带分析
+
+{% btn regular :: Click here :: https://andyhox.github.io/2024/06/27/Learn-VASP-from-pymatgen-9/ :: fa-solid fa-play-circle %}
+
+- `BandStructure`方法提取能带信息
+- `BSPlotter`方法自动绘图
 
 {% note info %}
 
