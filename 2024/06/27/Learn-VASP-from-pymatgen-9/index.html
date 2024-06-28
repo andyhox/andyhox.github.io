@@ -17,28 +17,29 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="https://andyhox.github.io/2024/06/11/learn-vasp-from-pymatgen-5/"/>
+    <link rel="canonical" href="https://andyhox.github.io/2024/06/27/learn-vasp-from-pymatgen-9/"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
     
         <meta name="description" content="Learn VASP from pymatgen">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Chap.5  计算小白硬学VASP —— 材料性质计算—&gt;态密度">
-<meta property="og:url" content="https://andyhox.github.io/2024/06/11/Learn-VASP-from-pymatgen-5/index.html">
+<meta property="og:title" content="Chap.8  计算小白硬学VASP —— 材料性质计算—&gt;能带分析">
+<meta property="og:url" content="https://andyhox.github.io/2024/06/27/Learn-VASP-from-pymatgen-9/index.html">
 <meta property="og:site_name" content="Andy">
 <meta property="og:description" content="Learn VASP from pymatgen">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://andyhox.github.io/2024/06/11/Learn-VASP-from-pymatgen-5/staticVSrelax.png">
-<meta property="og:image" content="https://andyhox.github.io/2024/06/11/Learn-VASP-from-pymatgen-5/dos_default_input.png">
-<meta property="article:published_time" content="2024-06-11T08:00:00.000Z">
-<meta property="article:modified_time" content="2024-06-13T09:25:05.609Z">
+<meta property="og:image" content="https://andyhox.github.io/2024/06/27/Learn-VASP-from-pymatgen-9/image-20240627175623136.png">
+<meta property="og:image" content="https://andyhox.github.io/2024/06/27/Learn-VASP-from-pymatgen-9/image-20240628110447068.png">
+<meta property="og:image" content="https://andyhox.github.io/2024/06/27/Learn-VASP-from-pymatgen-9/image-20240628111627113.png">
+<meta property="article:published_time" content="2024-06-26T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-06-28T03:20:49.104Z">
 <meta property="article:author" content="andyhoo">
 <meta property="article:tag" content="VASP">
 <meta property="article:tag" content="pymatgen">
 <meta property="article:tag" content="Materials Project">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://andyhox.github.io/2024/06/11/Learn-VASP-from-pymatgen-5/staticVSrelax.png">
+<meta name="twitter:image" content="https://andyhox.github.io/2024/06/27/Learn-VASP-from-pymatgen-9/image-20240627175623136.png">
     
     
         <!-- Google tag (gtag.js) -->
@@ -60,7 +61,7 @@
     
     <title>
         
-            Chap.5  计算小白硬学VASP —— 材料性质计算—&gt;态密度 -
+            Chap.8  计算小白硬学VASP —— 材料性质计算—&gt;能带分析 -
         
         A&amp;H
     </title>
@@ -503,10 +504,10 @@
             
                 
                 
-                <img src="/images/wallhaven-gpkd77_3840x2160.png" alt="Chap.5  计算小白硬学VASP —— 材料性质计算—&gt;态密度" class="w-full h-60 sm:h-72 md:h-80 object-cover sm:rounded-t-large dark:brightness-75"/>
+                <img src="/images/wallhaven-gpkd77_3840x2160.png" alt="Chap.8  计算小白硬学VASP —— 材料性质计算—&gt;能带分析" class="w-full h-60 sm:h-72 md:h-80 object-cover sm:rounded-t-large dark:brightness-75"/>
                 
                 <div class="w-full flex items-center absolute bottom-0 justify-start">
-                    <h1 class="article-title-cover text-center mx-6 my-6 text-second-text-color bg-background-color-transparent px-4 py-3 text-3xl sm:text-4xl md:text-5xl font-semibold backdrop-blur-lg rounded-xl border border-border-color ">Chap.5  计算小白硬学VASP —— 材料性质计算—&gt;态密度</h1>
+                    <h1 class="article-title-cover text-center mx-6 my-6 text-second-text-color bg-background-color-transparent px-4 py-3 text-3xl sm:text-4xl md:text-5xl font-semibold backdrop-blur-lg rounded-xl border border-border-color ">Chap.8  计算小白硬学VASP —— 材料性质计算—&gt;能带分析</h1>
                 </div>
             
             </div>
@@ -527,15 +528,15 @@
                         <div class="article-meta-info">
     <span class="article-date article-meta-item">
         <i class="fa-regular fa-pen-fancy"></i>&nbsp;
-        <span class="desktop">2024-06-11 16:00</span>
-        <span class="mobile">2024-06-11 16:00</span>
+        <span class="desktop">2024-06-27</span>
+        <span class="mobile">2024-06-27</span>
         <span class="hover-info">创建</span>
     </span>
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2024-06-13 17:25:05</span>
-            <span class="mobile">2024-06-13 17:25:05</span>
+            <span class="desktop">2024-06-28 11:20:49</span>
+            <span class="mobile">2024-06-28 11:20:49</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -586,7 +587,7 @@
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>6 分钟</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>7 分钟</span>
         </span>
     
     
@@ -606,84 +607,93 @@
 
         <div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
             <p><em><strong>¡Hola a todos!</strong></em></p>
-<p>上一章我们主要分享了结构优化的输入文件的生成，以及自定义输入文件参数；本章简单介绍下，对于Bulk模型来说，各类性质计算的输入文章生成，以及参数设置要点。</p>
-<h4 id="简单自洽计算"><a href="#简单自洽计算" class="headerlink" title="简单自洽计算"></a>简单自洽计算</h4><p>性质计算的前提是进行结构优化得到稳定的结构。对于不同的性质计算，计算的步骤往往需要多步进行，例如态密度计算，需要先进行自洽计算得到电荷、波函数文件，然后再进行一步非自洽计算。</p>
-<p>首先介绍下普通的自洽计算，用于得到电荷、波函数文件。</p>
-<h5 id="调用MPStaticSet"><a href="#调用MPStaticSet" class="headerlink" title="调用MPStaticSet"></a>调用MPStaticSet</h5><p>自洽计算的输入文件生成可以调用<code>MPStaticSet</code>模块，以<code>Si</code>为例，默认生成输入文件如下：</p>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.sets <span class="keyword">import</span> MPStaticSet</span><br><span class="line"></span><br><span class="line">static = MPStaticSet.from_prev_calc(</span><br><span class="line">    <span class="comment"># 上一步优化的文件夹</span></span><br><span class="line">    prev_calc_dir=<span class="string">&#x27;./relax&#x27;</span>,</span><br><span class="line">    user_potcar_functional=<span class="string">&#x27;PBE_54&#x27;</span></span><br><span class="line">	)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">static.write_input(<span class="string">&#x27;./static&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;static_calc is ready!&quot;</span>)</span><br></pre></td></tr></table></figure></div>
+<p>本章介绍如何分析能带计算结果。</p>
+<h3 id="导出gap-CBM-VBM信息"><a href="#导出gap-CBM-VBM信息" class="headerlink" title="导出gap&#x2F;CBM&#x2F;VBM信息"></a>导出gap&#x2F;CBM&#x2F;VBM信息</h3><p>能带计算完后，直接读取<code>vasprun.xml</code>文件，可以最快的得到禁带宽度、CBM&#x2F;VBM的数值，以及半导体种类（直接带隙&#x2F;间接带隙）。代码如下：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.outputs <span class="keyword">import</span> Vasprun</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读vasprun.xml文件</span></span><br><span class="line">vasprun = Vasprun(<span class="string">&quot;../ZrNiSn_primitive/band/vasprun.xml&quot;</span>)</span><br><span class="line"><span class="comment"># 获取gap/vbm/cbm</span></span><br><span class="line">bandgap_dict = vasprun.get_band_structure().get_band_gap()</span><br><span class="line">vbm = vasprun.get_band_structure().get_vbm()[<span class="string">&quot;energy&quot;</span>]</span><br><span class="line">cbm = vasprun.get_band_structure().get_cbm()[<span class="string">&quot;energy&quot;</span>]</span><br><span class="line"><span class="comment"># 添加到数据框中</span></span><br><span class="line">bandgap = pd.DataFrame([bandgap_dict])</span><br><span class="line">bandgap[<span class="string">&quot;VBM&quot;</span>] = vbm</span><br><span class="line">bandgap[<span class="string">&quot;CBM&quot;</span>] = cbm</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(bandgap)</span><br></pre></td></tr></table></figure></div>
 
-<p>从用法上来说<code>MPStaticSet</code>的用法跟<code>MPRelaxSet</code>类似。但是这里细心的可以发现，这里老司机并没有提供结构文件，而是用了<code>from_prev_calc</code>方法，顾名思义就是读取前一步计算的文件进行计算，这里读取的就是之前优化计算的文件夹。</p>
-<p>该方法通用于所有<code>set</code>类的模块，例如之前介绍的<code>MPRelaxSet</code>模块也可以使用，区别就是现在需要提供的是你希望读取的上一步计算的路径。该操作简而言之就是<code>VASP</code>中的续算操作。</p>
-<p>运行上述代码后，可以得到如下<code>static</code>的<code>INCAR</code>：</p>
-<p><img src="/2024/06/11/Learn-VASP-from-pymatgen-5/staticVSrelax.png" alt="staticVSrelax"></p>
-<p>与优化的<code>INCAR</code>对比可以发现，主要是修改了与优化有关的参数：<code>IBRION</code>、<code>NSW</code>；关于<code>ISMEAR</code>参数，<code>VASP</code>提供了比较友好的经验选择方法：</p>
-<blockquote>
-<ul>
-<li><p>If you have no a priori knowledge of your system, for instance, if you do not know whether your system is an insulator, semiconductor or metal then always use Gaussian smearing ISMEAR&#x3D;0 in combination with a small <a class="link" target="_blank" rel="noopener" href="https://www.vasp.at/wiki/index.php/SIGMA">SIGMA <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>&#x3D;0.03-0.05.</p>
-</li>
-<li><p>For semiconductors or insulators, use the tetrahedron method (ISMEAR&#x3D;-5), if the cell is too large (or if you use only a single or two <strong>k</strong> points) use ISMEAR&#x3D;0 in combination with a small <a class="link" target="_blank" rel="noopener" href="https://www.vasp.at/wiki/index.php/SIGMA">SIGMA <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>&#x3D;0.03-0.05.</p>
-</li>
-<li><p>For relaxations <em>in metals</em>, use ISMEAR&#x3D;1 or ISMEAR&#x3D;2 and an appropriate <a class="link" target="_blank" rel="noopener" href="https://www.vasp.at/wiki/index.php/SIGMA">SIGMA <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a> value (the entropy term should be less than 1 meV per atom). For metals a reasonable value is often SIGMA&#x3D; 0.2 (which is the default).</p>
-</li>
-<li><p>For the calculations of the DOS and very accurate total-energy calculations (no relaxation in metals), use the tetrahedron method (ISMEAR&#x3D;-5).</p>
-</li>
-</ul>
-</blockquote>
+<p>运行代码可输出如下表格的信息：</p>
+<table>
+<thead>
+<tr>
+<th align="center">direct</th>
+<th>energy</th>
+<th>transition</th>
+<th>VBM</th>
+<th align="center">CBM</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">False</td>
+<td>0.5059</td>
+<td>GAMMA-X</td>
+<td>8.489</td>
+<td align="center">8.9949</td>
+</tr>
+</tbody></table>
+<p>从左至右分别为：是否为直接带隙、禁带宽度、VBM&#x2F;CBM指向、VBM能量、CBM能量。</p>
+<p>还可以用<code>BandStructure</code>类同样可以得到类似信息：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.outputs <span class="keyword">import</span> Vasprun</span><br><span class="line"><span class="keyword">from</span> pymatgen.electronic_structure.bandstructure <span class="keyword">import</span> BandStructure</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读vasprun.xml文件</span></span><br><span class="line">vasprun = Vasprun(<span class="string">&quot;../ZrNiSn_primitive/band/vasprun.xml&quot;</span>)</span><br><span class="line"></span><br><span class="line">band = BandStructure.from_dict(vasprun.get_band_structure().as_dict())</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(band.get_band_gap())</span><br></pre></td></tr></table></figure></div>
 
-  <div class="note p-4 mb-4 rounded-small info">
-    <p><strong>上述INCAR的设置为MPStaticSet的默认设置，针对具体性质计算，需要调整的词条参数不同</strong></p>
+<h3 id="导出能量本征值"><a href="#导出能量本征值" class="headerlink" title="导出能量本征值"></a>导出能量本征值</h3><p>还可以直接得到每条能带的能量本征值：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.outputs <span class="keyword">import</span> Vasprun</span><br><span class="line"><span class="keyword">from</span> pymatgen.electronic_structure.bandstructure <span class="keyword">import</span> BandStructure</span><br><span class="line"><span class="keyword">from</span> pymatgen.electronic_structure.core <span class="keyword">import</span> Spin, Orbital</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读vasprun.xml文件</span></span><br><span class="line">vasprun = Vasprun(<span class="string">&quot;../ZrNiSn_primitive/band/vasprun.xml&quot;</span>)</span><br><span class="line"></span><br><span class="line">band = BandStructure.from_dict(vasprun.get_band_structure().as_dict())</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出自旋向上能量本征值</span></span><br><span class="line">eigenvalues = pd.DataFrame(band.bands[Spin.up])</span><br><span class="line"><span class="built_in">print</span>(eigenvalues)</span><br><span class="line">eigenvalues.to_csv(<span class="string">&quot;eigenvalues.csv&quot;</span>)</span><br></pre></td></tr></table></figure></div>
 
-  </div>
+<p>得到的数据格式索引符合<code>[band_index, kpoint_index]</code>。</p>
+<h3 id="导出完整的能带数据"><a href="#导出完整的能带数据" class="headerlink" title="导出完整的能带数据"></a>导出完整的能带数据</h3><p>除了一些特殊的需求，最重要的还是想要得到能带图，那么下面提供的代码就可以用来得到源数据用于绘图：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.io.vasp <span class="keyword">import</span> Vasprun</span><br><span class="line"><span class="keyword">from</span> pymatgen.electronic_structure.core <span class="keyword">import</span> Spin</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取 vasprun.xml 文件</span></span><br><span class="line">vasprun = Vasprun(<span class="string">&quot;../ZrNiSn_primitive/band/vasprun.xml&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 提取能带结构</span></span><br><span class="line">band_structure = vasprun.get_band_structure(line_mode=<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># 获取 k 点数据</span></span><br><span class="line">kpoints = band_structure.kpoints</span><br><span class="line"><span class="comment"># 选择自旋通道</span></span><br><span class="line">selected_spin = Spin.up  <span class="comment"># 或者 Spin.down，根据你需要的自旋通道选择</span></span><br><span class="line"><span class="comment"># 获取指定自旋通道的能带数据</span></span><br><span class="line">energies = band_structure.bands[selected_spin]</span><br><span class="line"><span class="comment"># 获取费米能级</span></span><br><span class="line">fermi_level = band_structure.efermi</span><br><span class="line"><span class="comment"># 准备存储数据</span></span><br><span class="line">data = []</span><br><span class="line"></span><br><span class="line"><span class="comment"># 遍历每个能带和 k 点，提取能量信息</span></span><br><span class="line"><span class="keyword">for</span> band_index, band <span class="keyword">in</span> <span class="built_in">enumerate</span>(energies):</span><br><span class="line">    <span class="keyword">for</span> kpoint_index, energy <span class="keyword">in</span> <span class="built_in">enumerate</span>(band):</span><br><span class="line">        <span class="keyword">if</span> kpoint_index &lt; <span class="built_in">len</span>(kpoints):  <span class="comment"># 防止索引超出范围</span></span><br><span class="line">            kpoint_coords = kpoints[kpoint_index].frac_coords  <span class="comment"># 获取 k 点的坐标</span></span><br><span class="line">            kpoint_label = kpoints[kpoint_index].label  <span class="comment"># 获取 k 点的标签（如有）</span></span><br><span class="line">            kpoint_distance = band_structure.distance[kpoint_index]  <span class="comment"># k 点在路径上的距离</span></span><br><span class="line"></span><br><span class="line">            <span class="comment"># 如果 k 点有标签，使用标签；否则使用坐标</span></span><br><span class="line">            <span class="keyword">if</span> kpoint_label:</span><br><span class="line">                kpoint_info = kpoint_label</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                kpoint_info = <span class="string">&#x27;,&#x27;</span>.join(<span class="built_in">map</span>(<span class="built_in">str</span>, kpoint_coords))</span><br><span class="line"></span><br><span class="line">            <span class="comment"># 将数据添加到列表中</span></span><br><span class="line">            data.append(&#123;</span><br><span class="line">                <span class="string">&quot;spin&quot;</span>: selected_spin.name,</span><br><span class="line">                <span class="string">&quot;kpoint&quot;</span>: kpoint_info,</span><br><span class="line">                <span class="string">&quot;kpoint distance&quot;</span>: kpoint_distance,</span><br><span class="line">                <span class="string">&quot;band index&quot;</span>: band_index,</span><br><span class="line">                <span class="string">&quot;energy (eV)&quot;</span>: energy - fermi_level  <span class="comment"># 能量相对费米能级</span></span><br><span class="line">            &#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 转换为 DataFrame</span></span><br><span class="line">df = pd.DataFrame(data)</span><br><span class="line"><span class="comment"># 保存为 CSV 文件</span></span><br><span class="line">csv_filename = <span class="string">f&quot;band_structure_data_spin_<span class="subst">&#123;selected_spin.name&#125;</span>.csv&quot;</span></span><br><span class="line">df.to_csv(csv_filename, index=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure></div>
 
-<h4 id="态密度计算"><a href="#态密度计算" class="headerlink" title="态密度计算"></a>态密度计算</h4><p>态密度计算需要先进行一步自洽计算，然后进行一步非自洽计算得到最终的态密度数据。在第一步的自洽计算我们只需要得到电荷文件<code>CHGCAR</code>和<code>CHG</code>就可以了（<code>WAVECAR</code>文件较大，且态密度非自洽计算可以不读<code>WAVECAR</code>），而上一步<code>MPStaticSet</code>默认输出电荷文件（<code>LCHARG = True</code>)，所以自洽计算的参数不用过多调整。下面主要介绍非自洽计算用到的模块。</p>
-<h5 id="调用MPNonSCFSet"><a href="#调用MPNonSCFSet" class="headerlink" title="调用MPNonSCFSet"></a>调用MPNonSCFSet</h5><p>我们可以先看下<code>MPNonSCFSet</code>模块默认生成的<code>INCAR</code>是什么样的：</p>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.sets <span class="keyword">import</span> MPNonSCFSet</span><br><span class="line"></span><br><span class="line">nonscf_dos = MPNonSCFSet.from_prev_calc(prev_calc_dir=<span class="string">&#x27;./static&#x27;</span>, user_potcar_functional=<span class="string">&#x27;PBE_54&#x27;</span>)</span><br><span class="line"></span><br><span class="line">nonscf_dos.write_input(<span class="string">&#x27;./dos&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;DOS_calc is ready!&quot;</span>)</span><br></pre></td></tr></table></figure></div>
+<p>运行代码可以得到如下格式的csv文件：</p>
+<table>
+<thead>
+<tr>
+<th align="center">spin</th>
+<th align="center">kpoints</th>
+<th align="center">kpoints distance</th>
+<th align="center">band index</th>
+<th align="center">energy(eV)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">up</td>
+<td align="center">GAMMA</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">-63.5333</td>
+</tr>
+<tr>
+<td align="center">up</td>
+<td align="center">…</td>
+<td align="center">…</td>
+<td align="center">…</td>
+<td align="center">…</td>
+</tr>
+<tr>
+<td align="center">up</td>
+<td align="center">…</td>
+<td align="center">…</td>
+<td align="center">…</td>
+<td align="center">…</td>
+</tr>
+</tbody></table>
+<p>从左至右分别为：自旋方向，K点坐标，K点距离，第几条能带，能量本征值。</p>
+<p>绘图时采用第三列为x轴，第五列为y轴，最后对应的横坐标位置标注对应的高对称点即可。</p>
+<h3 id="matplotlib库绘图"><a href="#matplotlib库绘图" class="headerlink" title="matplotlib库绘图"></a>matplotlib库绘图</h3><p>根据上面得到的<code>band_structure_data_spin_up.csv</code>文件，我们可以用<code>matplotlib</code>库进行绘图，代码如下：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取 CSV 文件</span></span><br><span class="line">df = pd.read_csv(<span class="string">&quot;band_structure_data_spin_up.csv&quot;</span>)  <span class="comment"># 替换为你的 CSV 文件路径</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 提取唯一的能带索引</span></span><br><span class="line">band_indices = df[<span class="string">&#x27;band index&#x27;</span>].unique()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建绘图</span></span><br><span class="line">plt.figure(figsize=(<span class="number">10</span>, <span class="number">8</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 遍历每个能带，绘制对应的能带图</span></span><br><span class="line"><span class="keyword">for</span> band_index <span class="keyword">in</span> band_indices:</span><br><span class="line">    band_data = df[df[<span class="string">&#x27;band index&#x27;</span>] == band_index]</span><br><span class="line">    plt.plot(band_data[<span class="string">&#x27;k-point distance&#x27;</span>], band_data[<span class="string">&#x27;energy (eV)&#x27;</span>], color=<span class="string">&#x27;blue&#x27;</span>)  <span class="comment"># 使用相同的颜色</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加图形标签和标题</span></span><br><span class="line">plt.ylabel(<span class="string">&#x27;Energy (eV)&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;Band Structure&#x27;</span>)</span><br><span class="line">plt.axhline(y=<span class="number">0</span>, color=<span class="string">&#x27;r&#x27;</span>, linestyle=<span class="string">&#x27;--&#x27;</span>,)  <span class="comment"># 绘制费米能级线</span></span><br><span class="line">plt.ylim(-<span class="number">10.5</span>,<span class="number">10.5</span>)</span><br><span class="line">plt.xlim(df[<span class="string">&#x27;k-point distance&#x27;</span>].<span class="built_in">min</span>(), df[<span class="string">&#x27;k-point distance&#x27;</span>].<span class="built_in">max</span>())</span><br><span class="line">plt.xticks([])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加高对称点</span></span><br><span class="line">high_symmetry_points = &#123;</span><br><span class="line">    <span class="number">0</span>: <span class="string">&quot;GAMMA&quot;</span>,</span><br><span class="line">    <span class="number">1.0245</span>: <span class="string">&quot;X&quot;</span>,</span><br><span class="line">    <span class="number">1.387</span>: <span class="string">&quot;U|K&quot;</span>,</span><br><span class="line">    <span class="number">2.473</span>: <span class="string">&quot;GAMMA&quot;</span>,</span><br><span class="line">    <span class="number">3.36</span>: <span class="string">&quot;L&quot;</span>,</span><br><span class="line">    <span class="number">4.085</span>: <span class="string">&quot;W&quot;</span>,</span><br><span class="line">    <span class="number">4.597</span>: <span class="string">&quot;X&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 调整文本与坐标轴的间隙</span></span><br><span class="line">gap = -<span class="number">0.5</span>  <span class="comment"># 你可以根据需要调整这个值</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> position, point <span class="keyword">in</span> high_symmetry_points.items():</span><br><span class="line">    plt.axvline(x=position, color=<span class="string">&#x27;black&#x27;</span>)</span><br><span class="line">    plt.text(position, plt.ylim()[<span class="number">0</span>] + gap, point, verticalalignment=<span class="string">&#x27;top&#x27;</span>, horizontalalignment=<span class="string">&#x27;center&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示图形</span></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure></div>
 
 <p>运行代码：</p>
-<p><img src="/2024/06/11/Learn-VASP-from-pymatgen-5/dos_default_input.png" alt="dos_default_input"></p>
-<p>默认的<code>INCAR</code>中增加<code>ICHARG</code>词条，当<code>ICHARG≥10</code>时，计算过程中电荷密度不进行自洽更新，<code>CHGCAR</code>和<code>CHG</code>文件内容不变，即非自洽计算。</p>
-<p>态密度计算仅读<code>CHGCAR</code>即可，即只用复制<code>CHGCAR</code>至态密度计算文件夹。</p>
+<p><img src="/2024/06/27/Learn-VASP-from-pymatgen-9/image-20240627175623136.png" alt="image-20240627175623136"></p>
+<p>该方法相对麻烦，不够自动化，还需要我们手动去提供高对称点参考线的字典，因此这里推荐另一种方法。</p>
+<h3 id="BSPlotter方法绘图"><a href="#BSPlotter方法绘图" class="headerlink" title="BSPlotter方法绘图"></a>BSPlotter方法绘图</h3><p><code>pymatgen</code>有可以直接处理能带计算<code>vasprun.xml</code>文件的模块——<code>pymatgen.electronic_structure.plotter.BSPlotter</code>，直接绘制能带结果图。代码如下：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.electronic_structure.plotter <span class="keyword">import</span> BSPlotter</span><br><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.outputs <span class="keyword">import</span> Vasprun</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取 vasprun.xml 文件</span></span><br><span class="line">vasprun = Vasprun(<span class="string">&quot;../ZrNiSn_primitive/band/vasprun.xml&quot;</span>, parse_projected_eigen=<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># 提取带结构</span></span><br><span class="line">band = vasprun.get_band_structure(line_mode=<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># 创建带结构绘图对象</span></span><br><span class="line">bs_plotter = BSPlotter(band)</span><br><span class="line"><span class="comment"># 绘制带结构</span></span><br><span class="line">bs_plotter.get_plot()</span><br></pre></td></tr></table></figure></div>
 
-  <div class="note p-4 mb-4 rounded-small info">
-    <p><strong>如果使用<code>MPNonSCFSet</code>的<code>from_prev_calc</code>方法，默认会复制上一步自洽计算的<code>CHGCAR</code>文件到当前文件夹；如果只用<code>MPNonSCFSet</code>，则需要指定结构文件<code>struct</code>，以及自行把<code>CHGCAR</code>复制到当前目录。</strong></p>
+<p>运行代码：</p>
+<p><img src="/2024/06/27/Learn-VASP-from-pymatgen-9/image-20240628110447068.png" alt="image-20240628110447068"></p>
+<p><code>BSPlotter</code>使用起来非常方便，只需要读取相应的<code>vasprun.xml</code>文件即可，然而也有不足的地方，默认输出的图片格式不太美观，字体过大。这里我们可以在<code>get_plot()</code>方法之后，修改<code>matplotlib</code>的属性进行覆盖即可，代码如下：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.electronic_structure.plotter <span class="keyword">import</span> BSPlotter</span><br><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.outputs <span class="keyword">import</span> Vasprun</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取 vasprun.xml 文件</span></span><br><span class="line">vasprun = Vasprun(<span class="string">&quot;../ZrNiSn_primitive/band/vasprun.xml&quot;</span>, parse_projected_eigen=<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># 提取带结构</span></span><br><span class="line">band = vasprun.get_band_structure(line_mode=<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># 创建带结构绘图对象</span></span><br><span class="line">bs_plotter = BSPlotter(band)</span><br><span class="line"><span class="comment"># 生成带结构图，获取 Axes 对象</span></span><br><span class="line">ax = bs_plotter.get_plot(ylim=[-<span class="number">2</span>, <span class="number">4</span>], smooth=<span class="literal">True</span>, vbm_cbm_marker=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 覆盖字体大小</span></span><br><span class="line">fontsize = <span class="number">14</span>  <span class="comment"># 你想要设置的字体大小</span></span><br><span class="line"><span class="comment"># 修改 x 和 y 轴标签的字体大小</span></span><br><span class="line">ax.set_xlabel(ax.get_xlabel(), fontsize=fontsize)</span><br><span class="line">ax.set_ylabel(ax.get_ylabel(), fontsize=fontsize)</span><br><span class="line"><span class="comment"># 修改 x 轴和 y 轴刻度标签的字体大小</span></span><br><span class="line">ax.tick_params(axis=<span class="string">&#x27;both&#x27;</span>, labelsize=fontsize)</span><br><span class="line"><span class="comment"># 添加费米能级参考线</span></span><br><span class="line">ax.axhline(y=<span class="number">0</span>, color=<span class="string">&#x27;black&#x27;</span>, linestyle=<span class="string">&#x27;--&#x27;</span>,linewidth=<span class="number">2</span>)</span><br><span class="line"><span class="comment"># 移除图例</span></span><br><span class="line">legend = ax.get_legend()</span><br><span class="line"><span class="keyword">if</span> legend <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">    legend.remove()</span><br><span class="line"><span class="comment"># 移除 x 轴标签</span></span><br><span class="line">ax.set_xlabel(<span class="string">&#x27;&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示图形</span></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure></div>
 
-  </div>
-
-<h5 id="自定义参数设置"><a href="#自定义参数设置" class="headerlink" title="自定义参数设置"></a>自定义参数设置</h5><p>此外，本小节主要介绍<code>DOS</code>计算，默认的INCAR参数中，部分的设置是不太合理的，或者说不利于后续的数据分析。</p>
-
-  <div class="note p-4 mb-4 rounded-small info">
-    <p><strong>前面提到，<code>VASP</code>对许多词条的值有默认值，如果不在<code>INCAR</code>中覆写，计算采用的就是默认值</strong></p>
-
-  </div>
-
-<ul>
-<li><code>EMIN</code>：态密度能量下区间（默认值：<code>lowest KS-eigenvalue - Δ</code>）</li>
-<li><code>EMAX</code>：态密度能量上区间（默认值：<code>lowest KS-eigenvalue - Δ</code>）</li>
-<li><code>NEDOS</code>：态密度的网格点数（默认值：301）</li>
-<li><code>ISPIN</code>：是否考虑电子自旋</li>
-</ul>
-<p>上述的三个参数根据作图需求进行调整，比如态密度图主要是分析费米能级附近的占据情况，实际计算时，默认的能量区间可能非常大，同时<code>NEDOS</code>的数值是确定的，所以会一定程度降低费米能级附近的精度。因此，如果你只需要费米能级附近的信息，可以在<code>INCAR</code>中指定能量区间，如<code>EMIN=-8</code>、<code>EMAX=8</code>，然后选取适当的<code>NEDOS</code>(推荐2001)，这样的话精度是比较合适的，作图也不会因为<code>NEDOS</code>数量过少而出现锯齿线条。<code>ISPIN</code>本身是控制体系是否考虑自旋，一般认为是与磁性计算有关，但是在态密度计算中，是否考虑自旋影响最后输出的数据是否把自旋向上的轨道与自旋向下的轨道区分开。</p>
-<ul>
-<li><code>LORBIT</code>：决定投影轨道的形式（常用设置为10和11）</li>
-</ul>
-<p><code>LORBIT=10</code>时，态密度投影的轨道只包含s&#x2F;p&#x2F;d&#x2F;f轨道；<code>LORBIT=11</code>时，态密度除了输出总的轨道信息，还会投影到分轨道上，如<code>px</code>、<code>py</code>、<code>pz</code>等。</p>
-<p>总的来说，计算前先确定<code>LORBIT</code>的数值来决定是否需要分轨道的数据，然后再确定<code>ISPIN</code>、<code>EMIN</code>、<code>EMAX</code>、<code>NEDOS</code>的数值来考虑作图需求。</p>
-
-  <div class="note p-4 mb-4 rounded-small info">
-    <p>磁性体系必须打开<code>ISPIN</code></p>
-
-  </div>
-
-<h5 id="KPOINTS文件"><a href="#KPOINTS文件" class="headerlink" title="KPOINTS文件"></a>KPOINTS文件</h5><p><code>MPNonSCFSet</code>模块默认生成的<code>KPOINTS</code>文件中的K点写法是<code>line-mode</code>，该方法一般用于能带结构的计算。因此在态密度计算中，我们可以写常规的K点进行覆盖：</p>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.sets <span class="keyword">import</span> MPNonSCFSet</span><br><span class="line"></span><br><span class="line">kpoints = &#123;</span><br><span class="line">    <span class="string">&quot;length&quot;</span>:<span class="number">100</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">nonscf_dos = MPNonSCFSet.from_prev_calc(</span><br><span class="line">    prev_calc_dir=<span class="string">&#x27;./static&#x27;</span>, </span><br><span class="line">    user_potcar_functional=<span class="string">&#x27;PBE_54&#x27;</span>,</span><br><span class="line">    user_kpoints_settings=kpoints,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">nonscf_dos.write_input(<span class="string">&#x27;./dos&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;DOS_calc is ready!&quot;</span>)</span><br></pre></td></tr></table></figure></div>
-
-
-  <div class="note p-4 mb-4 rounded-small info">
-    <p>态密度计算的K网格要足够大才算的准，在普通结构优化的K点个数2倍以上，大体系算不动可适量降低。</p>
-
-  </div>
-
-<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>态密度计算就介绍到这，各位多多练习~~~~</p>
+<p>运行代码：</p>
+<p><img src="/2024/06/27/Learn-VASP-from-pymatgen-9/image-20240628111627113.png" alt="image-20240628111627113"></p>
+<p>现在看上去就顺眼了很多。单独绘制能带图的话，还是推荐使用<code>BSPlotter</code>方法，然后再修改</p>
+<p><code>matplotlib</code>的属性来覆盖<code>get_plot()</code>方法中的默认参数。</p>
 <p><em><strong>¡Muchas gracias!</strong></em></p>
 
         </div>
@@ -692,18 +702,18 @@
             <div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
                 <div class="article-copyright-info-container">
     <ul>
-        <li><strong>标题:</strong> Chap.5  计算小白硬学VASP —— 材料性质计算—&gt;态密度</li>
+        <li><strong>标题:</strong> Chap.8  计算小白硬学VASP —— 材料性质计算—&gt;能带分析</li>
         <li><strong>作者:</strong> 炫酷老司机</li>
         <li><strong>创建于
-                :</strong> 2024-06-11 16:00:00</li>
+                :</strong> 2024-06-27 00:00:00</li>
         
             <li>
                 <strong>更新于
-                    :</strong> 2024-06-13 17:25:05
+                    :</strong> 2024-06-28 11:20:49
             </li>
         
         <li>
-            <strong>链接:</strong> https://andyhox.github.io/2024/06/11/Learn-VASP-from-pymatgen-5/
+            <strong>链接:</strong> https://andyhox.github.io/2024/06/27/Learn-VASP-from-pymatgen-9/
         </li>
         <li>
             <strong>
@@ -744,29 +754,14 @@
         
             <div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
                 
-                    <div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
-                        <a class="prev"
-                        rel="prev"
-                        href="/2024/06/13/Learn-VASP-from-pymatgen-6/"
-                        >
-                            <span class="left arrow-icon flex justify-center items-center">
-                                <i class="fa-solid fa-chevron-left"></i>
-                            </span>
-                            <span class="title flex justify-center items-center">
-                                <span class="post-nav-title-item">Chap.6  计算小白硬学VASP —— 材料性质计算—&gt;态密度分析(1)</span>
-                                <span class="post-nav-item">上一篇</span>
-                            </span>
-                        </a>
-                    </div>
-                
                 
                     <div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
                         <a class="next"
                         rel="next"
-                        href="/2024/06/04/Learn-VASP-from-pymatgen-4/"
+                        href="/2024/06/26/toolkit-TOC/"
                         >
                             <span class="title flex justify-center items-center">
-                                <span class="post-nav-title-item">Chap.4  计算小白硬学VASP —— MPRelaxSet用法</span>
+                                <span class="post-nav-title-item">计算前/后处理工具介绍汇总</span>
                                 <span class="post-nav-item">下一篇</span>
                             </span>
                             <span class="right arrow-icon flex justify-center items-center">
@@ -787,8 +782,8 @@
             <div class="post-toc-wrap">
     <div class="post-toc">
         <div class="toc-title">此页目录</div>
-        <div class="page-title">Chap.5  计算小白硬学VASP —— 材料性质计算—&gt;态密度</div>
-        <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E8%87%AA%E6%B4%BD%E8%AE%A1%E7%AE%97"><span class="nav-text">简单自洽计算</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%B0%83%E7%94%A8MPStaticSet"><span class="nav-text">调用MPStaticSet</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%80%81%E5%AF%86%E5%BA%A6%E8%AE%A1%E7%AE%97"><span class="nav-text">态密度计算</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%B0%83%E7%94%A8MPNonSCFSet"><span class="nav-text">调用MPNonSCFSet</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%8F%82%E6%95%B0%E8%AE%BE%E7%BD%AE"><span class="nav-text">自定义参数设置</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#KPOINTS%E6%96%87%E4%BB%B6"><span class="nav-text">KPOINTS文件</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol>
+        <div class="page-title">Chap.8  计算小白硬学VASP —— 材料性质计算—&gt;能带分析</div>
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%BC%E5%87%BAgap-CBM-VBM%E4%BF%A1%E6%81%AF"><span class="nav-text">导出gap&#x2F;CBM&#x2F;VBM信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%BC%E5%87%BA%E8%83%BD%E9%87%8F%E6%9C%AC%E5%BE%81%E5%80%BC"><span class="nav-text">导出能量本征值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%BC%E5%87%BA%E5%AE%8C%E6%95%B4%E7%9A%84%E8%83%BD%E5%B8%A6%E6%95%B0%E6%8D%AE"><span class="nav-text">导出完整的能带数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#matplotlib%E5%BA%93%E7%BB%98%E5%9B%BE"><span class="nav-text">matplotlib库绘图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BSPlotter%E6%96%B9%E6%B3%95%E7%BB%98%E5%9B%BE"><span class="nav-text">BSPlotter方法绘图</span></a></li></ol>
 
     </div>
 </div>
