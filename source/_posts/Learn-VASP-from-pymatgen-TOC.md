@@ -78,6 +78,12 @@ date: 2024-06-20 00:00:00
 
 - `BSDOSPlotter()`方法同时绘制能带态密度结果
 
+### 10、构建slab模型
+
+{% btn regular :: Click here :: https://andyhox.github.io/2024/08/05/Learn-VASP-from-pymatgen-11/ :: fa-solid fa-play-circle %}
+
+- `SlabGenerator`模块自动生成`slab`结构
+
 {% note info %}
 
 To be continued
