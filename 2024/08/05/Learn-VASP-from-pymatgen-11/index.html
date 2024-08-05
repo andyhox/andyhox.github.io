@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="炫酷老司机">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+        
+        
+        
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="https://andyhox.github.io/2024/08/05/learn-vasp-from-pymatgen-11/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="Learn VASP from pymatgen">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Chap.11  计算小白硬学VASP —— 构建slab模型">
+<meta property="og:url" content="https://andyhox.github.io/2024/08/05/Learn-VASP-from-pymatgen-11/index.html">
+<meta property="og:site_name" content="Andy">
+<meta property="og:description" content="Learn VASP from pymatgen">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://andyhox.github.io/2024/08/05/Learn-VASP-from-pymatgen-11/image-20240805095256547.png">
+<meta property="og:image" content="https://andyhox.github.io/2024/08/05/Learn-VASP-from-pymatgen-11/image-20240805102203787.png">
+<meta property="og:image" content="https://andyhox.github.io/2024/08/05/Learn-VASP-from-pymatgen-11/image-20240805102215172.png">
+<meta property="article:published_time" content="2024-08-04T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-08-05T02:34:12.305Z">
+<meta property="article:author" content="andyhoo">
+<meta property="article:tag" content="VASP">
+<meta property="article:tag" content="pymatgen">
+<meta property="article:tag" content="Materials Project">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://andyhox.github.io/2024/08/05/Learn-VASP-from-pymatgen-11/image-20240805095256547.png">
+    
+    
+        <!-- Google tag (gtag.js) -->
+        <script src="https://www.googletagmanager.com/gtag/js?id=G-XD3VSCSSYQ"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-XD3VSCSSYQ');
+        </script>
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/redefine-favicon.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/redefine-favicon.svg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/images/redefine-favicon.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            Chap.11  计算小白硬学VASP —— 构建slab模型 -
+        
+        A&amp;H
+    </title>
+
+    <link rel="stylesheet" href="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/fonts/Chillax/chillax.css">
+
+    <!--- Inject Part-->
+    
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        <link rel="stylesheet" href="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/assets/build/styles.css">
+    
+
+    <link rel="stylesheet" href="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/fonts/GeistMono/geist-mono.css">
+    <link rel="stylesheet" href="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/fonts/Geist/geist.css">
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    
+        <script src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/libs/anime.min.js"></script>
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"andyhox.github.io","root":"/","language":"zh-CN","path":"search.xml"};
+    window.theme = {"articles":{"style":{"font_size":"18px","line_height":1.5,"image_border_radius":"14px","image_alignment":"left","image_caption":false,"link_icon":true,"title_alignment":"left","headings_top_spacing":{"h1":"5rem","h2":"4rem","h3":"2.8rem","h4":"2.5rem","h5":"2.2rem","h6":"2rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":["Lv99"]},"code_block":{"copy":true,"style":"mac","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":5,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":false,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":"Ma Shan Zheng","url":"https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap"},"english":{"enable":false,"family":"Varela Round","url":"https://fonts.googleapis.com/css2?family=Varela+Round&display=swap"}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":true,"open_graph":true,"google_analytics":{"enable":true,"id":"G-XD3VSCSSYQ"}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-4lky22_1920x1080.png","dark":"/images/wallhaven-1pprk1_1920x1080.png"},"title":[" "],"subtitle":{"text":[" "],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#000000","dark":"#000000"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":true,"style":"default","links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":"andyhoo0716@gmail.com"},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":true,"version":"9.3.0"}},"version":"2.6.4","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"categories":{"path":"/categories","icon":"fa-regular fa-folder"}},"search":{"enable":true,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":"Email: andyhoo0716@gmail.com","show_on_mobile":true,"links":{"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"Tags":{"path":"/tags","icon":"fa-regular fa-tags"},"Categories":{"path":"/categories","icon":"fa-regular fa-folder"},"Feedback":{"path":"/feedback","icon":"fa-regular fa-comment"}}},"article_date_format":"YYYY-MM-DD","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2024/05/29 00:00:00"};
+    window.lang_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    <link rel="stylesheet" href="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/fontawesome/fontawesome.min.css">
+    <link rel="stylesheet" href="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/fontawesome/brands.min.css">
+    <link rel="stylesheet" href="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/fontawesome/solid.min.css">
+    <link rel="stylesheet" href="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/fontawesome/regular.min.css">
+    
+    
+    
+    
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+<!--        <span class="swup-progress-icon">-->
+<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+<!--        </span>-->
+    
+</div>
+
+
+
+    <style>
+    :root {
+        --preloader-background-color: #fff;
+        --preloader-text-color: #000;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --preloader-background-color: #202124;
+            --preloader-text-color: #fff;
+        }
+    }
+
+    @media (prefers-color-scheme: light) {
+        :root {
+            --preloader-background-color: #fff;
+            --preloader-text-color: #000;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .ml13 {
+            font-size: 2.6rem !important; /* Adjust this value as needed */
+        }
+    }
+
+    .preloader {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem; /* Tailwind 'gap-4' is 1rem */
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        padding: 12px;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh; /* 'h-screen' is 100% of the viewport height */
+        background-color: var(--preloader-background-color);
+        z-index: 1100; /* 'z-[1100]' sets the z-index */
+        transition: opacity 0.2s ease-in-out;
+    }
+
+    .ml13 {
+        font-size: 3.2rem;
+        /* text-transform: uppercase; */
+        color: var(--preloader-text-color);
+        letter-spacing: -1px;
+        font-weight: 500;
+        font-family: 'Chillax-Variable', sans-serif;
+        text-align: center;
+    }
+
+    .ml13 .word {
+        display: inline-flex;
+        flex-wrap: wrap;
+        white-space: nowrap;
+    }
+
+    .ml13 .letter {
+        display: inline-block;
+        line-height: 1em;
+    }
+</style>
+
+<div class="preloader">
+    <h2 class="ml13">
+        A&amp;H
+    </h2>
+    <script>
+        var textWrapper = document.querySelector('.ml13');
+        // Split text into words
+        var words = textWrapper.textContent.trim().split(' ');
+
+        // Clear the existing content
+        textWrapper.innerHTML = '';
+
+        // Wrap each word and its letters in spans
+        words.forEach(function(word) {
+            var wordSpan = document.createElement('span');
+            wordSpan.classList.add('word');
+            wordSpan.innerHTML = word.replace(/\S/g, "<span class='letter'>$&</span>");
+            textWrapper.appendChild(wordSpan);
+            textWrapper.appendChild(document.createTextNode(' ')); // Add space between words
+        });
+
+        var animation = anime.timeline({loop: true})
+            .add({
+                targets: '.ml13 .letter',
+                translateY: [40,0],
+                translateZ: 0,
+                opacity: [0,1],
+                filter: ['blur(5px)', 'blur(0px)'], // Starting from blurred to unblurred
+                easing: "easeOutExpo",
+                duration: 1400,
+                delay: (el, i) => 300 + 30 * i,
+            }).add({
+                targets: '.ml13 .letter',
+                translateY: [0,-40],
+                opacity: [1,0],
+                filter: ['blur(0px)', 'blur(5px)'], // Ending from unblurred to blurred
+                easing: "easeInExpo",
+                duration: 1200,
+                delay: (el, i) => 100 + 30 * i,
+                complete: function() {
+                    hidePreloader(); // Call hidePreloader after the animation completes
+                }
+            });
+
+        let themeStatus = JSON.parse(localStorage.getItem('REDEFINE-THEME-STATUS'))?.isDark;
+
+        // If the theme status is not found in local storage, check the preferred color scheme
+        if (themeStatus === undefined || themeStatus === null) {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                themeStatus = 'dark';
+            } else {
+                themeStatus = 'light';
+            }
+        }
+
+        // Now you can use the themeStatus variable in your code
+        if (themeStatus) {
+            document.documentElement.style.setProperty('--preloader-background-color', '#202124');
+            document.documentElement.style.setProperty('--preloader-text-color', '#fff');
+        } else {
+            document.documentElement.style.setProperty('--preloader-background-color', '#fff');
+            document.documentElement.style.setProperty('--preloader-text-color', '#000');
+        }
+
+        window.addEventListener('load', function () {
+            setTimeout(hidePreloader, 5000); // Call hidePreloader after 5000 milliseconds if not already called by animation
+        });
+
+        function hidePreloader() {
+            var preloader = document.querySelector('.preloader');
+            preloader.style.opacity = '0';
+            setTimeout(function () {
+                preloader.style.display = 'none';
+            }, 200);
+        }
+    </script>
+</div>
+
+<main class="page-container" id="swup">
+
+    
+
+    <div class="main-content-container">
+
+
+        <div class="main-content-header">
+            <header class="navbar-container px-6 md:px-12">
+
+    <div class="navbar-content ">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                A&amp;H
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    首页
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/archives"
+                                        >
+                                    <i class="fa-regular fa-archive fa-fw"></i>
+                                    归档
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/categories"
+                                        >
+                                    <i class="fa-regular fa-folder fa-fw"></i>
+                                    分类
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                        <li class="navbar-item search search-popup-trigger">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-screen w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                首页
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/archives"
+                        >
+                            <span>
+                                归档
+                            </span>
+                            
+                                <i class="fa-regular fa-archive fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/categories"
+                        >
+                            <span>
+                                分类
+                            </span>
+                            
+                                <i class="fa-regular fa-folder fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+
+            
+            
+                
+                    
+                    
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
+                           href="/tags"
+                        >
+                            <span>Tags</span>
+                            <i class="fa-regular fa-tags fa-sm fa-fw"></i>
+                        </a>
+                    </li>
+                
+                    
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
+                           href="/categories"
+                        >
+                            <span>Categories</span>
+                            <i class="fa-regular fa-folder fa-sm fa-fw"></i>
+                        </a>
+                    </li>
+                
+                    
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
+                           href="/feedback"
+                        >
+                            <span>Feedback</span>
+                            <i class="fa-regular fa-comment fa-sm fa-fw"></i>
+                        </a>
+                    </li>
+                
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">9</div>
+        <div class="label text-third-text-color text-sm">标签</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">2</div>
+        <div class="label text-third-text-color text-sm">分类</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">14</div>
+        <div class="label text-third-text-color text-sm">文章</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="post-page-container flex relative justify-between box-border w-full h-full">
+    <div class="article-content-container">
+
+        <div class="article-title relative w-full">
+            
+                
+                
+                <img src="/images/wallhaven-gpkd77_3840x2160.png" alt="Chap.11  计算小白硬学VASP —— 构建slab模型" class="w-full h-60 sm:h-72 md:h-80 object-cover sm:rounded-t-large dark:brightness-75"/>
+                
+                <div class="w-full flex items-center absolute bottom-0 justify-start">
+                    <h1 class="article-title-cover text-center mx-6 my-6 text-second-text-color bg-background-color-transparent px-4 py-3 text-3xl sm:text-4xl md:text-5xl font-semibold backdrop-blur-lg rounded-xl border border-border-color ">Chap.11  计算小白硬学VASP —— 构建slab模型</h1>
+                </div>
+            
+            </div>
+
+        
+            <div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+                <div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+                    <img src="/images/avatar.jpg">
+                </div>
+                <div class="info flex flex-col justify-between">
+                    <div class="author flex items-center">
+                        <span class="name text-default-text-color text-lg font-semibold">炫酷老司机</span>
+                        
+                            <span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv99</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2024-08-05</span>
+        <span class="mobile">2024-08-05</span>
+        <span class="hover-info">创建</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2024-08-05 10:34:12</span>
+            <span class="mobile">2024-08-05 10:34:12</span>
+            <span class="hover-info">更新</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/Learn-VASP-from-pymatgen/">Learn VASP from pymatgen</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/VASP/">VASP</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/pymatgen/">pymatgen</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/Materials-Project/">Materials Project</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>2k 字</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>9 分钟</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        
+
+
+        <div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+            <p><em><strong>¡Hola a todos!</strong></em></p>
+<p>本章介绍如何构建<code>slab</code>模型。</p>
+<p>首先切面用到的<code>miller index</code>针对的是<code>bulk</code>模型的惯用胞（<code>conventional cell</code>）而不是原胞（<code>primtive cell</code>），这与之前计算能带是刚好相反的。</p>
+<p>所以，在进行切面操作时，要确保你的<code>bulk</code>模型是惯用胞，可以用<code>pymatgen</code>的功能来帮助实现。</p>
+<ul>
+<li>直接从<code>Materials project</code>下载结构</li>
+</ul>
+<p>如果是从<code>MP</code>上下载结构，我们需要把<code>conventional_cell = True</code>打开：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> mp_api.client <span class="keyword">import</span> MPRester</span><br><span class="line"></span><br><span class="line">api_key = <span class="string">&quot;your key&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> MPRester(api_key) <span class="keyword">as</span> mpr:</span><br><span class="line">    Si = mpr.get_structure_by_material_id(<span class="string">&quot;mp-149&quot;</span>,conventional_unit_cell=<span class="literal">True</span>)</span><br><span class="line">    Si.to(filename=<span class="string">&quot;./Si_conventional.cif&quot;</span>)</span><br></pre></td></tr></table></figure></div>
+
+<p>这样确保你下载的结构是惯用胞。</p>
+<ul>
+<li>原胞转化为惯用胞</li>
+</ul>
+<p>也可以通过转化来确保使用的是惯用胞：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"><span class="keyword">from</span> pymatgen.symmetry.analyzer <span class="keyword">import</span> SpacegroupAnalyzer</span><br><span class="line"></span><br><span class="line">structure = Structure.from_file(<span class="string">&quot;./Si_primtive.cif&quot;</span>)</span><br><span class="line">analyzer = SpacegroupAnalyzer(structure)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;old structure: \n <span class="subst">&#123;structure&#125;</span>&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">new_structure = analyzer.get_conventional_standard_structure()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;new structure: \n <span class="subst">&#123;new_structure&#125;</span>&#x27;</span>)</span><br></pre></td></tr></table></figure></div>
+
+<p><code>new_structure</code>对应的就是惯用胞结构。运行代码：</p>
+<div class="highlight-container" data-rel="Text"><figure class="iseeu highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">old structure: </span><br><span class="line"> Full Formula (Si2)</span><br><span class="line">Reduced Formula: Si</span><br><span class="line">abc   :   3.849278   3.849279   3.849278</span><br><span class="line">angles:  60.000012  60.000003  60.000011</span><br><span class="line">pbc   :       True       True       True</span><br><span class="line">Sites (2)</span><br><span class="line">  #  SP        a      b      c</span><br><span class="line">---  ----  -----  -----  -----</span><br><span class="line">  0  Si    0.875  0.875  0.875</span><br><span class="line">  1  Si    0.125  0.125  0.125</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">new structure: </span><br><span class="line"> Full Formula (Si8)</span><br><span class="line">Reduced Formula: Si</span><br><span class="line">abc   :   5.443702   5.443702   5.443702</span><br><span class="line">angles:  90.000000  90.000000  90.000000</span><br><span class="line">pbc   :       True       True       True</span><br><span class="line">Sites (8)</span><br><span class="line">  #  SP       a     b     c</span><br><span class="line">---  ----  ----  ----  ----</span><br><span class="line">  0  Si    0.75  0.75  0.25</span><br><span class="line">  1  Si    0     0.5   0.5</span><br><span class="line">  2  Si    0.75  0.25  0.75</span><br><span class="line">  3  Si    0     0     0</span><br><span class="line">  4  Si    0.25  0.75  0.75</span><br><span class="line">  5  Si    0.5   0.5   0</span><br><span class="line">  6  Si    0.25  0.25  0.25</span><br><span class="line">  7  Si    0.5   0     0.5</span><br></pre></td></tr></table></figure></div>
+
+<p>或者你不知道自己的结构到底是原胞还是惯用胞，可以无脑直接转换，因为对于本身就是惯用胞的结构，<code>get_conventional_standard_structure()</code>方法不会修改本身的信息：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"><span class="keyword">from</span> pymatgen.symmetry.analyzer <span class="keyword">import</span> SpacegroupAnalyzer</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取本身是惯用胞的结构</span></span><br><span class="line">structure = Structure.from_file(<span class="string">&quot;./Si_conventional.cif&quot;</span>)</span><br><span class="line">analyzer = SpacegroupAnalyzer(structure)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;old structure: \n <span class="subst">&#123;structure&#125;</span>&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">new_structure = analyzer.get_conventional_standard_structure()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;new structure: \n <span class="subst">&#123;new_structure&#125;</span>&#x27;</span>)</span><br></pre></td></tr></table></figure></div>
+
+<p>结果不变，运行代码：</p>
+<div class="highlight-container" data-rel="Txt"><figure class="iseeu highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">old structure: </span><br><span class="line"> Full Formula (Si8)</span><br><span class="line">Reduced Formula: Si</span><br><span class="line">abc   :   5.443702   5.443702   5.443702</span><br><span class="line">angles:  90.000000  90.000000  90.000000</span><br><span class="line">pbc   :       True       True       True</span><br><span class="line">Sites (8)</span><br><span class="line">  #  SP       a     b     c</span><br><span class="line">---  ----  ----  ----  ----</span><br><span class="line">  0  Si    0.75  0.75  0.25</span><br><span class="line">  1  Si    0     0.5   0.5</span><br><span class="line">  2  Si    0.75  0.25  0.75</span><br><span class="line">  3  Si    0     0     0</span><br><span class="line">  4  Si    0.25  0.75  0.75</span><br><span class="line">  5  Si    0.5   0.5   0</span><br><span class="line">  6  Si    0.25  0.25  0.25</span><br><span class="line">  7  Si    0.5   0     0.5</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">new structure: </span><br><span class="line"> Full Formula (Si8)</span><br><span class="line">Reduced Formula: Si</span><br><span class="line">abc   :   5.443702   5.443702   5.443702</span><br><span class="line">angles:  90.000000  90.000000  90.000000</span><br><span class="line">pbc   :       True       True       True</span><br><span class="line">Sites (8)</span><br><span class="line">  #  SP       a     b     c</span><br><span class="line">---  ----  ----  ----  ----</span><br><span class="line">  0  Si    0.25  0.75  0.75</span><br><span class="line">  1  Si    0     0     0</span><br><span class="line">  2  Si    0.25  0.25  0.25</span><br><span class="line">  3  Si    0     0.5   0.5</span><br><span class="line">  4  Si    0.75  0.75  0.25</span><br><span class="line">  5  Si    0.5   0     0.5</span><br><span class="line">  6  Si    0.75  0.25  0.75</span><br><span class="line">  7  Si    0.5   0.5   0</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>Note</strong>：上述方法对于缺陷结构和掺杂结构，由于对称性无法识别可能无法转化。</p>
+<h3 id="SlabGenerator模块"><a href="#SlabGenerator模块" class="headerlink" title="SlabGenerator模块"></a>SlabGenerator模块</h3><p>进入正题，切面主要用到<code>pyamtgen</code>的<code>SlabGenerator</code>模块，首先导入它：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.core.surface <span class="keyword">import</span> SlabGenerator</span><br></pre></td></tr></table></figure></div>
+
+<p>然后需要先实例化<code>SlabGenetator</code>，才能调用里面的切面方法：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.core.surface <span class="keyword">import</span> SlabGenerator</span><br><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"></span><br><span class="line">Si = Structure.from_file(<span class="string">&quot;./Si_conventional.cif&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 实例化</span></span><br><span class="line">slabgen = SlabGenerator(</span><br><span class="line">    initial_structure=Si,		<span class="comment"># 初始结构</span></span><br><span class="line">    miller_index=(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>),		<span class="comment"># 指定晶面</span></span><br><span class="line">    min_slab_size=<span class="number">15</span>,			<span class="comment"># slab厚度</span></span><br><span class="line">    min_vacuum_size=<span class="number">20</span>,			<span class="comment"># 真空层厚度</span></span><br><span class="line">    in_unit_planes=<span class="literal">False</span>,		<span class="comment"># 切换 min_slab_size &amp; min_vacuum_size</span></span><br><span class="line">    center_slab=<span class="literal">True</span>,			<span class="comment"># slab模型居中</span></span><br><span class="line">    primitive=<span class="literal">True</span>,				<span class="comment"># 使用最小切面结构</span></span><br><span class="line">    reorient_lattice=<span class="literal">True</span>,		<span class="comment"># 重定向晶格</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure></div>
+
+<p>这里着重介绍<code>in_unit_planes</code>和<code>primitive</code>参数。</p>
+<ul>
+<li><p><code>in_unit_planes</code>：影响<code>min_slab_size</code>和<code>min_vacuum_size</code>的数值，默认为<code>False</code>。</p>
+<ul>
+<li><p>当为<code>False</code>时，<code>min_slab_size</code>和<code>min_vacuum_size</code>对应的单位为<code>Angstrom </code>，即上述分别表示<code>slab</code>厚度为10埃，真空层厚度为15埃；</p>
+</li>
+<li><p>当为<code>True</code>时，数值为切面的层数，如此时<code>min_slab_size</code>和<code>min_vacuum_size</code>都设置为3，表示slab厚度和真空层厚度为(1,1,1)面最小重复单元乘以3。需要注意的是，此时数字<code>3</code>并不等于原子层数，且不同晶面的最小重复单元的厚度不一样，如<code>Si</code>的(1,1,1)面单层厚度是小于(1,0,0)面的。</p>
+</li>
+</ul>
+</li>
+<li><p><code>primitive</code>：默认为True。该参数跟<code>primitive cell</code>没有关系，在这里是决定<code>slab</code>结构是否选取最小单元。当设置为<code>True</code>时，如1x1x1的<code>Si</code>惯用胞结构和3x3x3超胞的<code>Si</code>惯用胞结构，最后得到的<code>slab</code>结构是一样。</p>
+</li>
+</ul>
+<p><code>SlabGenerator</code>下面有许多切面的方法，下面一一介绍。</p>
+<h4 id="get-slab-方法"><a href="#get-slab-方法" class="headerlink" title="get_slab()方法"></a>get_slab()方法</h4><p><code>get_slab()</code>方法用于生成指定暴露面原子的<code>slab</code>结构，传入<code>shift</code>参数来指定原子。该方法不建议直接使用，前提你需要确定shift的值。对于垂直于坐标轴的切面，<code>shift</code>值对应的分别就是abc的坐标，但是其他晶面情况就需要简单的运算之后才能够得到<code>shift</code>值。代码如下：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.core.surface <span class="keyword">import</span> SlabGenerator</span><br><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"></span><br><span class="line">Si = Structure.from_file(<span class="string">&quot;./Si_conventional.cif&quot;</span>)</span><br><span class="line"></span><br><span class="line">slabgen = SlabGenerator(</span><br><span class="line">    initial_structure=Si,</span><br><span class="line">    miller_index=(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>),</span><br><span class="line">    min_slab_size=<span class="number">15</span>,</span><br><span class="line">    min_vacuum_size=<span class="number">20</span>,</span><br><span class="line">    in_unit_planes=<span class="literal">False</span>,</span><br><span class="line">    center_slab=<span class="literal">True</span>,</span><br><span class="line">    primitive=<span class="literal">True</span>,</span><br><span class="line">    reorient_lattice=<span class="literal">True</span>,</span><br><span class="line">)</span><br><span class="line"><span class="comment"># 生成表面</span></span><br><span class="line">slab = slabgen.get_slab(shift=<span class="number">0</span>)</span><br><span class="line"><span class="comment"># 保存结构</span></span><br><span class="line">slab.to(<span class="string">&quot;./Si_111_getslab.cif&quot;</span>)</span><br></pre></td></tr></table></figure></div>
+
+<p><code>vesta</code>里面查看结构：</p>
+<p><img src="/2024/08/05/Learn-VASP-from-pymatgen-11/image-20240805095256547.png" alt="image-20240805095256547"></p>
+<p><code>slab</code>厚度和真空层厚度可根据上述方法自行调整。</p>
+<h4 id="get-slabs-方法"><a href="#get-slabs-方法" class="headerlink" title="get_slabs()方法"></a>get_slabs()方法</h4><p><code>get_slabs()</code>支持生成所有符合要求的<code>slab</code>，接受传入的参数也要比<code>gen_slab()</code>多，主要有：</p>
+<ul>
+<li><code>bonds</code>：设置成键范围。通俗的讲就是保护指定原子键对，避免断键。如<code>LiFePO4</code>中要保护<code>PO4</code>基团不被切断键，可以设置<code>bonds=&#123;(“P”, “O”): 3&#125;</code>，这样就告诉<code>pymatgen</code>，3埃范围内的<code>P</code>原子和<code>O</code>原子维持成键，切面时就会避开<code>PO4</code>断键了。</li>
+<li><code>max_broken_bonds</code>：自动切表面时，最大断键数，默认为0。建议不要主动设置，对于复杂结构，会导致切出的<code>slabs</code>数量急增。</li>
+<li><code>repair</code>：自动补齐暴露面断键原子，默认<code>False</code>。也建议不要设置，会生成许多不可理的结构。</li>
+</ul>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.core.surface <span class="keyword">import</span> SlabGenerator</span><br><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"></span><br><span class="line">Si = Structure.from_file(<span class="string">&quot;./Si_conventional.cif&quot;</span>)</span><br><span class="line"></span><br><span class="line">slabgen = SlabGenerator(</span><br><span class="line">    initial_structure=Si,</span><br><span class="line">    miller_index=(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>),</span><br><span class="line">    min_slab_size=<span class="number">15</span>,</span><br><span class="line">    min_vacuum_size=<span class="number">20</span>,</span><br><span class="line">    in_unit_planes=<span class="literal">False</span>,</span><br><span class="line">    center_slab=<span class="literal">True</span>,</span><br><span class="line">    primitive=<span class="literal">True</span>,</span><br><span class="line">    reorient_lattice=<span class="literal">True</span>,</span><br><span class="line">)</span><br><span class="line"><span class="comment"># 生成所有表面</span></span><br><span class="line">slabs = slabgen.get_slabs()</span><br><span class="line"><span class="comment"># 打印结构信息</span></span><br><span class="line"><span class="built_in">print</span>([slab <span class="keyword">for</span> slab <span class="keyword">in</span> slabs])</span><br><span class="line"><span class="comment"># 保存结构</span></span><br><span class="line"><span class="keyword">for</span> i, slab <span class="keyword">in</span> <span class="built_in">enumerate</span>(slabs):</span><br><span class="line">    slab.to(<span class="string">f&quot;Si_111_getslabs_<span class="subst">&#123;i&#125;</span>.cif&quot;</span>) </span><br></pre></td></tr></table></figure></div>
+
+<p>运行代码：</p>
+<div class="highlight-container" data-rel="Text"><figure class="iseeu highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">[Structure Summary</span><br><span class="line">Lattice</span><br><span class="line">    abc : 3.8492788605882793 3.8492788605882797 37.715076344492445</span><br><span class="line"> angles : 90.0 90.0 120.00000000000001</span><br><span class="line"> volume : 483.9543213850744</span><br><span class="line">      A : 3.8492788605882793 0.0 2.3570035178225037e-16</span><br><span class="line">      B : -1.9246394302941412 3.333573279519868 2.3570035178225037e-16</span><br><span class="line">      C : 0.0 0.0 37.715076344492445</span><br><span class="line">    pbc : True True True</span><br><span class="line">PeriodicSite: Si (3.368, 0.2778, 12.18) [0.9167, 0.08333, 0.3229]</span><br><span class="line">PeriodicSite: Si (-0.4812, 2.5, 12.96) [0.25, 0.75, 0.3438]</span><br><span class="line">PeriodicSite: Si (-0.4812, 2.5, 15.32) [0.25, 0.75, 0.4063]</span><br><span class="line">PeriodicSite: Si (1.443, 1.389, 16.11) [0.5833, 0.4167, 0.4271]</span><br><span class="line">PeriodicSite: Si (1.443, 1.389, 18.46) [0.5833, 0.4167, 0.4896]</span><br><span class="line">PeriodicSite: Si (3.368, 0.2778, 19.25) [0.9167, 0.08333, 0.5104]</span><br><span class="line">PeriodicSite: Si (3.368, 0.2778, 21.61) [0.9167, 0.08333, 0.5729]</span><br><span class="line">PeriodicSite: Si (-0.4812, 2.5, 22.39) [0.25, 0.75, 0.5938]</span><br><span class="line">PeriodicSite: Si (-0.4812, 2.5, 24.75) [0.25, 0.75, 0.6563]</span><br><span class="line">PeriodicSite: Si (1.443, 1.389, 25.54) [0.5833, 0.4167, 0.6771], </span><br><span class="line"></span><br><span class="line">Structure Summary</span><br><span class="line">Lattice</span><br><span class="line">    abc : 3.8492788605882793 3.8492788605882797 37.715076344492445</span><br><span class="line"> angles : 90.0 90.0 120.00000000000001</span><br><span class="line"> volume : 483.9543213850744</span><br><span class="line">      A : 3.8492788605882793 0.0 2.3570035178225037e-16</span><br><span class="line">      B : -1.9246394302941412 3.333573279519868 2.3570035178225037e-16</span><br><span class="line">      C : 0.0 0.0 37.715076344492445</span><br><span class="line">    pbc : True True True</span><br><span class="line">PeriodicSite: Si (1.443, 1.389, 13.75) [0.5833, 0.4167, 0.3646]</span><br><span class="line">PeriodicSite: Si (1.443, 1.389, 11.39) [0.5833, 0.4167, 0.3021]</span><br><span class="line">PeriodicSite: Si (3.368, 0.2778, 16.89) [0.9167, 0.08333, 0.4479]</span><br><span class="line">PeriodicSite: Si (3.368, 0.2778, 14.54) [0.9167, 0.08333, 0.3854]</span><br><span class="line">PeriodicSite: Si (-0.4812, 2.5, 20.04) [0.25, 0.75, 0.5313]</span><br><span class="line">PeriodicSite: Si (-0.4812, 2.5, 17.68) [0.25, 0.75, 0.4688]</span><br><span class="line">PeriodicSite: Si (1.443, 1.389, 23.18) [0.5833, 0.4167, 0.6146]</span><br><span class="line">PeriodicSite: Si (1.443, 1.389, 20.82) [0.5833, 0.4167, 0.5521]</span><br><span class="line">PeriodicSite: Si (3.368, 0.2778, 26.32) [0.9167, 0.08333, 0.6979]</span><br><span class="line">PeriodicSite: Si (3.368, 0.2778, 23.96) [0.9167, 0.08333, 0.6354]]</span><br></pre></td></tr></table></figure></div>
+
+<p><code>get_slabs()</code>自动切出所有的表面，根据输出信息可以发现根据原子排布不同<code>Si</code>(1,1,1)面有两种暴露面：</p>
+<p><img src="/2024/08/05/Learn-VASP-from-pymatgen-11/image-20240805102203787.png" alt="image-20240805102203787"></p>
+<p><img src="/2024/08/05/Learn-VASP-from-pymatgen-11/image-20240805102215172.png" alt="image-20240805102215172"></p>
+<h4 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h4><p><code>pymatgen</code>切面有时候<code>slab</code>c方向不是正交的，即γ角不为90°。此时可以调用<code>get_orthogonal_c_slab()</code>方法进行矫正即可，用法为直接在<code>slab</code>对象调用即可：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">......</span><br><span class="line"><span class="comment"># SlabGenerator生成表面</span></span><br><span class="line">slab = slabgen.get_slab()</span><br><span class="line"><span class="comment"># 正交转化</span></span><br><span class="line">slab.get_orthogonal_c_slab()</span><br><span class="line"><span class="built_in">print</span>()</span><br></pre></td></tr></table></figure></div>
+
+<p><em><strong>¡Muchas gracias!</strong></em></p>
+
+        </div>
+
+        
+            <div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>标题:</strong> Chap.11  计算小白硬学VASP —— 构建slab模型</li>
+        <li><strong>作者:</strong> 炫酷老司机</li>
+        <li><strong>创建于
+                :</strong> 2024-08-05 00:00:00</li>
+        
+            <li>
+                <strong>更新于
+                    :</strong> 2024-08-05 10:34:12
+            </li>
+        
+        <li>
+            <strong>链接:</strong> https://andyhox.github.io/2024/08/05/Learn-VASP-from-pymatgen-11/
+        </li>
+        <li>
+            <strong>
+                版权声明:
+            </strong>
+            
+
+            
+                欢迎个人转载、使用、转贴等，但请获得作者同意且注明出处！
+            
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+            <ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+                
+                    <li class="tag-item mx-0.5">
+                        <a href="/tags/VASP/">#VASP</a>&nbsp;
+                    </li>
+                
+                    <li class="tag-item mx-0.5">
+                        <a href="/tags/pymatgen/">#pymatgen</a>&nbsp;
+                    </li>
+                
+                    <li class="tag-item mx-0.5">
+                        <a href="/tags/Materials-Project/">#Materials Project</a>&nbsp;
+                    </li>
+                
+            </ul>
+        
+
+        
+
+        
+            <div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+                
+                
+                    <div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+                        <a class="next"
+                        rel="next"
+                        href="/2024/06/28/Learn-VASP-from-pymatgen-10/"
+                        >
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">Chap.10  计算小白硬学VASP —— 材料性质计算—&gt;能带态密度图汇总</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                            <span class="right arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+
+        
+    </div>
+
+    
+        <div class="toc-content-container">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">此页目录</div>
+        <div class="page-title">Chap.11  计算小白硬学VASP —— 构建slab模型</div>
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#SlabGenerator%E6%A8%A1%E5%9D%97"><span class="nav-text">SlabGenerator模块</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#get-slab-%E6%96%B9%E6%B3%95"><span class="nav-text">get_slab()方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#get-slabs-%E6%96%B9%E6%B3%95"><span class="nav-text">get_slabs()方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A1%A5%E5%85%85"><span class="nav-text">补充</span></a></li></ol></li></ol>
+
+    </div>
+</div>
+        </div>
+    
+</div>
+
+
+
+                
+
+            </div>
+
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2024</span>
+              -
+            
+            2024&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">炫酷老司机</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        共 14 篇文章
+                    </span>
+                    
+                        <span>
+                            共 21.1k 字
+                        </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">访问人数</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">总访问量</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">由 <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a> 驱动</span>
+            <span class="text-sm lg:block">主题&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.6.4</a></span>
+        </div>
+        
+        
+            <div>
+                博客已运行 <span class="odometer" id="runtime_days" ></span> 天 <span class="odometer" id="runtime_hours"></span> 小时 <span class="odometer" id="runtime_minutes"></span> 分钟 <span class="odometer" id="runtime_seconds"></span> 秒
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fa-solid fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa-solid fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa-solid fa-spinner fa-spin-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+</main>
+
+
+    <script src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/libs/Swup.min.js"></script><script src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/libs/SwupSlideTheme.min.js"></script><script src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/libs/SwupScriptsPlugin.min.js"></script><script src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/libs/SwupProgressPlugin.min.js"></script><script src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/libs/SwupScrollPlugin.min.js"></script><script src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/libs/SwupPreloadPlugin.min.js"></script>
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
+
+
+
+
+<script type="module" src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/tools/imageViewer.js"></script><script type="module" src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/utils.js"></script><script type="module" src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/main.js"></script><script type="module" src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/layouts/navbarShrink.js"></script><script type="module" src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/tools/scrollTopBottom.js"></script><script type="module" src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/tools/lightDarkSwitch.js"></script><script type="module" src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/layouts/categoryList.js"></script>
+
+
+    <script type="module" src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/tools/localSearch.js"></script>
+
+
+
+    <script type="module" src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/tools/codeBlock.js"></script>
+
+
+
+
+
+    <script src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/tools/runtime.js"></script>
+    <script src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/libs/odometer.min.js"></script>
+    <link rel="stylesheet" href="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/assets/odometer-theme-minimal.css">
+
+
+
+  <script src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/libs/Typed.min.js"></script>
+  <script type="module" src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/plugins/typed.js"></script>
+
+
+
+    <script src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/libs/mermaid.min.js"></script>
+    <script src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/plugins/mermaid.js"></script>
+
+
+
+
+
+
+<div class="post-scripts" data-swup-reload-script>
+    
+        <script type="module" src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/tools/tocToggle.js"></script><script type="module" src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/layouts/toc.js"></script><script type="module" src="https://registry.npmmirror.com/hexo-theme-redefine/2.6.4/files/source/js/plugins/tabs.js"></script>
+    
+</div>
+
+
+</body>
+</html>

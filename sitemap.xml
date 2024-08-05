@@ -4,7 +4,16 @@
   <url>
     <loc>https://andyhox.github.io/2024/06/20/Learn-VASP-from-pymatgen-TOC/</loc>
     
-    <lastmod>2024-06-28</lastmod>
+    <lastmod>2024-08-05</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://andyhox.github.io/2024/08/05/Learn-VASP-from-pymatgen-11/</loc>
+    
+    <lastmod>2024-08-05</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -13,7 +22,7 @@
   <url>
     <loc>https://andyhox.github.io/2024/06/28/Learn-VASP-from-pymatgen-10/</loc>
     
-    <lastmod>2024-06-28</lastmod>
+    <lastmod>2024-07-01</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -23,6 +32,24 @@
     <loc>https://andyhox.github.io/2024/06/27/Learn-VASP-from-pymatgen-9/</loc>
     
     <lastmod>2024-06-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://andyhox.github.io/2024/06/17/Learn-VASP-from-pymatgen-7/</loc>
+    
+    <lastmod>2024-06-27</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://andyhox.github.io/2024/06/20/Pyprocar-tutorial-1/</loc>
+    
+    <lastmod>2024-06-27</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -47,18 +74,9 @@
   </url>
   
   <url>
-    <loc>https://andyhox.github.io/2024/06/20/Pyprocar-tutorial-1/</loc>
+    <loc>https://andyhox.github.io/2024/05/29/Learn-VASP-from-pymatgen-1/</loc>
     
     <lastmod>2024-06-26</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://andyhox.github.io/2024/06/17/Learn-VASP-from-pymatgen-7/</loc>
-    
-    <lastmod>2024-06-18</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -119,15 +137,6 @@
   </url>
   
   <url>
-    <loc>https://andyhox.github.io/2024/05/29/Learn-VASP-from-pymatgen-1/</loc>
-    
-    <lastmod>2024-06-13</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://andyhox.github.io/2024/05/30/Learn-VASP-from-pymatgen-2/</loc>
     
     <lastmod>2024-06-13</lastmod>
@@ -139,7 +148,7 @@
 
   <url>
     <loc>https://andyhox.github.io/</loc>
-    <lastmod>2024-06-28</lastmod>
+    <lastmod>2024-08-05</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -147,63 +156,63 @@
   
   <url>
     <loc>https://andyhox.github.io/tags/VASP/</loc>
-    <lastmod>2024-06-28</lastmod>
+    <lastmod>2024-08-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://andyhox.github.io/tags/pymatgen/</loc>
-    <lastmod>2024-06-28</lastmod>
+    <lastmod>2024-08-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://andyhox.github.io/tags/Materials-Project/</loc>
-    <lastmod>2024-06-28</lastmod>
+    <lastmod>2024-08-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://andyhox.github.io/tags/MPRelaxSet/</loc>
-    <lastmod>2024-06-28</lastmod>
+    <lastmod>2024-08-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://andyhox.github.io/tags/MPScanRelaxSet/</loc>
-    <lastmod>2024-06-28</lastmod>
+    <lastmod>2024-08-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://andyhox.github.io/tags/Pyprocar/</loc>
-    <lastmod>2024-06-28</lastmod>
+    <lastmod>2024-08-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://andyhox.github.io/tags/Band/</loc>
-    <lastmod>2024-06-28</lastmod>
+    <lastmod>2024-08-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://andyhox.github.io/tags/DOS/</loc>
-    <lastmod>2024-06-28</lastmod>
+    <lastmod>2024-08-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://andyhox.github.io/tags/toolkit/</loc>
-    <lastmod>2024-06-28</lastmod>
+    <lastmod>2024-08-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
@@ -212,14 +221,14 @@
   
   <url>
     <loc>https://andyhox.github.io/categories/Learn-VASP-from-pymatgen/</loc>
-    <lastmod>2024-06-28</lastmod>
+    <lastmod>2024-08-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://andyhox.github.io/categories/toolkit/</loc>
-    <lastmod>2024-06-28</lastmod>
+    <lastmod>2024-08-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
