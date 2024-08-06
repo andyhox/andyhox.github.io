@@ -19,90 +19,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Chap.11  计算小白硬学VASP —— 构建slab模型</title>
-    <url>/2024/08/05/Learn-VASP-from-pymatgen-11/</url>
-    <content><![CDATA[<p><em><strong>¡Hola a todos!</strong></em></p>
-<p>本章介绍如何构建<code>slab</code>模型。</p>
-<p>首先切面用到的<code>miller index</code>针对的是<code>bulk</code>模型的惯用胞（<code>conventional cell</code>）而不是原胞（<code>primtive cell</code>），这与之前计算能带是刚好相反的。</p>
-<p>所以，在进行切面操作时，要确保你的<code>bulk</code>模型是惯用胞，可以用<code>pymatgen</code>的功能来帮助实现。</p>
-<ul>
-<li>直接从<code>Materials project</code>下载结构</li>
-</ul>
-<p>如果是从<code>MP</code>上下载结构，我们需要把<code>conventional_cell = True</code>打开：</p>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> mp_api.client <span class="keyword">import</span> MPRester</span><br><span class="line"></span><br><span class="line">api_key = <span class="string">&quot;your key&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> MPRester(api_key) <span class="keyword">as</span> mpr:</span><br><span class="line">    Si = mpr.get_structure_by_material_id(<span class="string">&quot;mp-149&quot;</span>,conventional_unit_cell=<span class="literal">True</span>)</span><br><span class="line">    Si.to(filename=<span class="string">&quot;./Si_conventional.cif&quot;</span>)</span><br></pre></td></tr></table></figure></div>
-
-<p>这样确保你下载的结构是惯用胞。</p>
-<ul>
-<li>原胞转化为惯用胞</li>
-</ul>
-<p>也可以通过转化来确保使用的是惯用胞：</p>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"><span class="keyword">from</span> pymatgen.symmetry.analyzer <span class="keyword">import</span> SpacegroupAnalyzer</span><br><span class="line"></span><br><span class="line">structure = Structure.from_file(<span class="string">&quot;./Si_primtive.cif&quot;</span>)</span><br><span class="line">analyzer = SpacegroupAnalyzer(structure)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;old structure: \n <span class="subst">&#123;structure&#125;</span>&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">new_structure = analyzer.get_conventional_standard_structure()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;new structure: \n <span class="subst">&#123;new_structure&#125;</span>&#x27;</span>)</span><br></pre></td></tr></table></figure></div>
-
-<p><code>new_structure</code>对应的就是惯用胞结构。运行代码：</p>
-<div class="highlight-container" data-rel="Text"><figure class="iseeu highlight text"><table><tr><td class="code"><pre><span class="line">old structure: </span><br><span class="line"> Full Formula (Si2)</span><br><span class="line">Reduced Formula: Si</span><br><span class="line">abc   :   3.849278   3.849279   3.849278</span><br><span class="line">angles:  60.000012  60.000003  60.000011</span><br><span class="line">pbc   :       True       True       True</span><br><span class="line">Sites (2)</span><br><span class="line">  #  SP        a      b      c</span><br><span class="line">---  ----  -----  -----  -----</span><br><span class="line">  0  Si    0.875  0.875  0.875</span><br><span class="line">  1  Si    0.125  0.125  0.125</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">new structure: </span><br><span class="line"> Full Formula (Si8)</span><br><span class="line">Reduced Formula: Si</span><br><span class="line">abc   :   5.443702   5.443702   5.443702</span><br><span class="line">angles:  90.000000  90.000000  90.000000</span><br><span class="line">pbc   :       True       True       True</span><br><span class="line">Sites (8)</span><br><span class="line">  #  SP       a     b     c</span><br><span class="line">---  ----  ----  ----  ----</span><br><span class="line">  0  Si    0.75  0.75  0.25</span><br><span class="line">  1  Si    0     0.5   0.5</span><br><span class="line">  2  Si    0.75  0.25  0.75</span><br><span class="line">  3  Si    0     0     0</span><br><span class="line">  4  Si    0.25  0.75  0.75</span><br><span class="line">  5  Si    0.5   0.5   0</span><br><span class="line">  6  Si    0.25  0.25  0.25</span><br><span class="line">  7  Si    0.5   0     0.5</span><br></pre></td></tr></table></figure></div>
-
-<p>或者你不知道自己的结构到底是原胞还是惯用胞，可以无脑直接转换，因为对于本身就是惯用胞的结构，<code>get_conventional_standard_structure()</code>方法不会修改本身的信息：</p>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"><span class="keyword">from</span> pymatgen.symmetry.analyzer <span class="keyword">import</span> SpacegroupAnalyzer</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取本身是惯用胞的结构</span></span><br><span class="line">structure = Structure.from_file(<span class="string">&quot;./Si_conventional.cif&quot;</span>)</span><br><span class="line">analyzer = SpacegroupAnalyzer(structure)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;old structure: \n <span class="subst">&#123;structure&#125;</span>&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">new_structure = analyzer.get_conventional_standard_structure()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;new structure: \n <span class="subst">&#123;new_structure&#125;</span>&#x27;</span>)</span><br></pre></td></tr></table></figure></div>
-
-<p>结果不变，运行代码：</p>
-<div class="highlight-container" data-rel="Txt"><figure class="iseeu highlight txt"><table><tr><td class="code"><pre><span class="line">old structure: </span><br><span class="line"> Full Formula (Si8)</span><br><span class="line">Reduced Formula: Si</span><br><span class="line">abc   :   5.443702   5.443702   5.443702</span><br><span class="line">angles:  90.000000  90.000000  90.000000</span><br><span class="line">pbc   :       True       True       True</span><br><span class="line">Sites (8)</span><br><span class="line">  #  SP       a     b     c</span><br><span class="line">---  ----  ----  ----  ----</span><br><span class="line">  0  Si    0.75  0.75  0.25</span><br><span class="line">  1  Si    0     0.5   0.5</span><br><span class="line">  2  Si    0.75  0.25  0.75</span><br><span class="line">  3  Si    0     0     0</span><br><span class="line">  4  Si    0.25  0.75  0.75</span><br><span class="line">  5  Si    0.5   0.5   0</span><br><span class="line">  6  Si    0.25  0.25  0.25</span><br><span class="line">  7  Si    0.5   0     0.5</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">new structure: </span><br><span class="line"> Full Formula (Si8)</span><br><span class="line">Reduced Formula: Si</span><br><span class="line">abc   :   5.443702   5.443702   5.443702</span><br><span class="line">angles:  90.000000  90.000000  90.000000</span><br><span class="line">pbc   :       True       True       True</span><br><span class="line">Sites (8)</span><br><span class="line">  #  SP       a     b     c</span><br><span class="line">---  ----  ----  ----  ----</span><br><span class="line">  0  Si    0.25  0.75  0.75</span><br><span class="line">  1  Si    0     0     0</span><br><span class="line">  2  Si    0.25  0.25  0.25</span><br><span class="line">  3  Si    0     0.5   0.5</span><br><span class="line">  4  Si    0.75  0.75  0.25</span><br><span class="line">  5  Si    0.5   0     0.5</span><br><span class="line">  6  Si    0.75  0.25  0.75</span><br><span class="line">  7  Si    0.5   0.5   0</span><br></pre></td></tr></table></figure></div>
-
-<p><strong>Note</strong>：上述方法对于缺陷结构和掺杂结构，由于对称性无法识别可能无法转化。</p>
-<h3 id="SlabGenerator模块"><a href="#SlabGenerator模块" class="headerlink" title="SlabGenerator模块"></a>SlabGenerator模块</h3><p>进入正题，切面主要用到<code>pyamtgen</code>的<code>SlabGenerator</code>模块，首先导入它：</p>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.core.surface <span class="keyword">import</span> SlabGenerator</span><br></pre></td></tr></table></figure></div>
-
-<p>然后需要先实例化<code>SlabGenetator</code>，才能调用里面的切面方法：</p>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.core.surface <span class="keyword">import</span> SlabGenerator</span><br><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"></span><br><span class="line">Si = Structure.from_file(<span class="string">&quot;./Si_conventional.cif&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 实例化</span></span><br><span class="line">slabgen = SlabGenerator(</span><br><span class="line">    initial_structure=Si,		<span class="comment"># 初始结构</span></span><br><span class="line">    miller_index=(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>),		<span class="comment"># 指定晶面</span></span><br><span class="line">    min_slab_size=<span class="number">15</span>,			<span class="comment"># slab厚度</span></span><br><span class="line">    min_vacuum_size=<span class="number">20</span>,			<span class="comment"># 真空层厚度</span></span><br><span class="line">    in_unit_planes=<span class="literal">False</span>,		<span class="comment"># 切换 min_slab_size &amp; min_vacuum_size</span></span><br><span class="line">    center_slab=<span class="literal">True</span>,			<span class="comment"># slab模型居中</span></span><br><span class="line">    primitive=<span class="literal">True</span>,				<span class="comment"># 使用最小切面结构</span></span><br><span class="line">    reorient_lattice=<span class="literal">True</span>,		<span class="comment"># 重定向晶格</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure></div>
-
-<p>这里着重介绍<code>in_unit_planes</code>和<code>primitive</code>参数。</p>
-<ul>
-<li><p><code>in_unit_planes</code>：影响<code>min_slab_size</code>和<code>min_vacuum_size</code>的数值，默认为<code>False</code>。</p>
-<ul>
-<li><p>当为<code>False</code>时，<code>min_slab_size</code>和<code>min_vacuum_size</code>对应的单位为<code>Angstrom </code>，即上述分别表示<code>slab</code>厚度为10埃，真空层厚度为15埃；</p>
-</li>
-<li><p>当为<code>True</code>时，数值为切面的层数，如此时<code>min_slab_size</code>和<code>min_vacuum_size</code>都设置为3，表示slab厚度和真空层厚度为(1,1,1)面最小重复单元乘以3。需要注意的是，此时数字<code>3</code>并不等于原子层数，且不同晶面的最小重复单元的厚度不一样，如<code>Si</code>的(1,1,1)面单层厚度是小于(1,0,0)面的。</p>
-</li>
-</ul>
-</li>
-<li><p><code>primitive</code>：默认为True。该参数跟<code>primitive cell</code>没有关系，在这里是决定<code>slab</code>结构是否选取最小单元。当设置为<code>True</code>时，如1x1x1的<code>Si</code>惯用胞结构和3x3x3超胞的<code>Si</code>惯用胞结构，最后得到的<code>slab</code>结构是一样。</p>
-</li>
-</ul>
-<p><code>SlabGenerator</code>下面有许多切面的方法，下面一一介绍。</p>
-<h4 id="get-slab-方法"><a href="#get-slab-方法" class="headerlink" title="get_slab()方法"></a>get_slab()方法</h4><p><code>get_slab()</code>方法用于生成指定暴露面原子的<code>slab</code>结构，传入<code>shift</code>参数来指定原子。该方法不建议直接使用，前提你需要确定shift的值。对于垂直于坐标轴的切面，<code>shift</code>值对应的分别就是abc的坐标，但是其他晶面情况就需要简单的运算之后才能够得到<code>shift</code>值。代码如下：</p>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.core.surface <span class="keyword">import</span> SlabGenerator</span><br><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"></span><br><span class="line">Si = Structure.from_file(<span class="string">&quot;./Si_conventional.cif&quot;</span>)</span><br><span class="line"></span><br><span class="line">slabgen = SlabGenerator(</span><br><span class="line">    initial_structure=Si,</span><br><span class="line">    miller_index=(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>),</span><br><span class="line">    min_slab_size=<span class="number">15</span>,</span><br><span class="line">    min_vacuum_size=<span class="number">20</span>,</span><br><span class="line">    in_unit_planes=<span class="literal">False</span>,</span><br><span class="line">    center_slab=<span class="literal">True</span>,</span><br><span class="line">    primitive=<span class="literal">True</span>,</span><br><span class="line">    reorient_lattice=<span class="literal">True</span>,</span><br><span class="line">)</span><br><span class="line"><span class="comment"># 生成表面</span></span><br><span class="line">slab = slabgen.get_slab(shift=<span class="number">0</span>)</span><br><span class="line"><span class="comment"># 保存结构</span></span><br><span class="line">slab.to(<span class="string">&quot;./Si_111_getslab.cif&quot;</span>)</span><br></pre></td></tr></table></figure></div>
-
-<p><code>vesta</code>里面查看结构：</p>
-<p><img src="/2024/08/05/Learn-VASP-from-pymatgen-11/image-20240805095256547.png" alt="image-20240805095256547"></p>
-<p><code>slab</code>厚度和真空层厚度可根据上述方法自行调整。</p>
-<h4 id="get-slabs-方法"><a href="#get-slabs-方法" class="headerlink" title="get_slabs()方法"></a>get_slabs()方法</h4><p><code>get_slabs()</code>支持生成所有符合要求的<code>slab</code>，接受传入的参数也要比<code>gen_slab()</code>多，主要有：</p>
-<ul>
-<li><code>bonds</code>：设置成键范围。通俗的讲就是保护指定原子键对，避免断键。如<code>LiFePO4</code>中要保护<code>PO4</code>基团不被切断键，可以设置<code>bonds=&#123;(“P”, “O”): 3&#125;</code>，这样就告诉<code>pymatgen</code>，3埃范围内的<code>P</code>原子和<code>O</code>原子维持成键，切面时就会避开<code>PO4</code>断键了。</li>
-<li><code>max_broken_bonds</code>：自动切表面时，最大断键数，默认为0。建议不要主动设置，对于复杂结构，会导致切出的<code>slabs</code>数量急增。</li>
-<li><code>repair</code>：自动补齐暴露面断键原子，默认<code>False</code>。也建议不要设置，会生成许多不可理的结构。</li>
-</ul>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.core.surface <span class="keyword">import</span> SlabGenerator</span><br><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"></span><br><span class="line">Si = Structure.from_file(<span class="string">&quot;./Si_conventional.cif&quot;</span>)</span><br><span class="line"></span><br><span class="line">slabgen = SlabGenerator(</span><br><span class="line">    initial_structure=Si,</span><br><span class="line">    miller_index=(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>),</span><br><span class="line">    min_slab_size=<span class="number">15</span>,</span><br><span class="line">    min_vacuum_size=<span class="number">20</span>,</span><br><span class="line">    in_unit_planes=<span class="literal">False</span>,</span><br><span class="line">    center_slab=<span class="literal">True</span>,</span><br><span class="line">    primitive=<span class="literal">True</span>,</span><br><span class="line">    reorient_lattice=<span class="literal">True</span>,</span><br><span class="line">)</span><br><span class="line"><span class="comment"># 生成所有表面</span></span><br><span class="line">slabs = slabgen.get_slabs()</span><br><span class="line"><span class="comment"># 打印结构信息</span></span><br><span class="line"><span class="built_in">print</span>([slab <span class="keyword">for</span> slab <span class="keyword">in</span> slabs])</span><br><span class="line"><span class="comment"># 保存结构</span></span><br><span class="line"><span class="keyword">for</span> i, slab <span class="keyword">in</span> <span class="built_in">enumerate</span>(slabs):</span><br><span class="line">    slab.to(<span class="string">f&quot;Si_111_getslabs_<span class="subst">&#123;i&#125;</span>.cif&quot;</span>) </span><br></pre></td></tr></table></figure></div>
-
-<p>运行代码：</p>
-<div class="highlight-container" data-rel="Text"><figure class="iseeu highlight text"><table><tr><td class="code"><pre><span class="line">[Structure Summary</span><br><span class="line">Lattice</span><br><span class="line">    abc : 3.8492788605882793 3.8492788605882797 37.715076344492445</span><br><span class="line"> angles : 90.0 90.0 120.00000000000001</span><br><span class="line"> volume : 483.9543213850744</span><br><span class="line">      A : 3.8492788605882793 0.0 2.3570035178225037e-16</span><br><span class="line">      B : -1.9246394302941412 3.333573279519868 2.3570035178225037e-16</span><br><span class="line">      C : 0.0 0.0 37.715076344492445</span><br><span class="line">    pbc : True True True</span><br><span class="line">PeriodicSite: Si (3.368, 0.2778, 12.18) [0.9167, 0.08333, 0.3229]</span><br><span class="line">PeriodicSite: Si (-0.4812, 2.5, 12.96) [0.25, 0.75, 0.3438]</span><br><span class="line">PeriodicSite: Si (-0.4812, 2.5, 15.32) [0.25, 0.75, 0.4063]</span><br><span class="line">PeriodicSite: Si (1.443, 1.389, 16.11) [0.5833, 0.4167, 0.4271]</span><br><span class="line">PeriodicSite: Si (1.443, 1.389, 18.46) [0.5833, 0.4167, 0.4896]</span><br><span class="line">PeriodicSite: Si (3.368, 0.2778, 19.25) [0.9167, 0.08333, 0.5104]</span><br><span class="line">PeriodicSite: Si (3.368, 0.2778, 21.61) [0.9167, 0.08333, 0.5729]</span><br><span class="line">PeriodicSite: Si (-0.4812, 2.5, 22.39) [0.25, 0.75, 0.5938]</span><br><span class="line">PeriodicSite: Si (-0.4812, 2.5, 24.75) [0.25, 0.75, 0.6563]</span><br><span class="line">PeriodicSite: Si (1.443, 1.389, 25.54) [0.5833, 0.4167, 0.6771], </span><br><span class="line"></span><br><span class="line">Structure Summary</span><br><span class="line">Lattice</span><br><span class="line">    abc : 3.8492788605882793 3.8492788605882797 37.715076344492445</span><br><span class="line"> angles : 90.0 90.0 120.00000000000001</span><br><span class="line"> volume : 483.9543213850744</span><br><span class="line">      A : 3.8492788605882793 0.0 2.3570035178225037e-16</span><br><span class="line">      B : -1.9246394302941412 3.333573279519868 2.3570035178225037e-16</span><br><span class="line">      C : 0.0 0.0 37.715076344492445</span><br><span class="line">    pbc : True True True</span><br><span class="line">PeriodicSite: Si (1.443, 1.389, 13.75) [0.5833, 0.4167, 0.3646]</span><br><span class="line">PeriodicSite: Si (1.443, 1.389, 11.39) [0.5833, 0.4167, 0.3021]</span><br><span class="line">PeriodicSite: Si (3.368, 0.2778, 16.89) [0.9167, 0.08333, 0.4479]</span><br><span class="line">PeriodicSite: Si (3.368, 0.2778, 14.54) [0.9167, 0.08333, 0.3854]</span><br><span class="line">PeriodicSite: Si (-0.4812, 2.5, 20.04) [0.25, 0.75, 0.5313]</span><br><span class="line">PeriodicSite: Si (-0.4812, 2.5, 17.68) [0.25, 0.75, 0.4688]</span><br><span class="line">PeriodicSite: Si (1.443, 1.389, 23.18) [0.5833, 0.4167, 0.6146]</span><br><span class="line">PeriodicSite: Si (1.443, 1.389, 20.82) [0.5833, 0.4167, 0.5521]</span><br><span class="line">PeriodicSite: Si (3.368, 0.2778, 26.32) [0.9167, 0.08333, 0.6979]</span><br><span class="line">PeriodicSite: Si (3.368, 0.2778, 23.96) [0.9167, 0.08333, 0.6354]]</span><br></pre></td></tr></table></figure></div>
-
-<p><code>get_slabs()</code>自动切出所有的表面，根据输出信息可以发现根据原子排布不同<code>Si</code>(1,1,1)面有两种暴露面：</p>
-<p><img src="/2024/08/05/Learn-VASP-from-pymatgen-11/image-20240805102203787.png" alt="image-20240805102203787"></p>
-<p><img src="/2024/08/05/Learn-VASP-from-pymatgen-11/image-20240805102215172.png" alt="image-20240805102215172"></p>
-<h4 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h4><p><code>pymatgen</code>切面有时候<code>slab</code>c方向不是正交的，即γ角不为90°。此时可以调用<code>get_orthogonal_c_slab()</code>方法进行矫正即可，用法为直接在<code>slab</code>对象调用即可：</p>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line">......</span><br><span class="line"><span class="comment"># SlabGenerator生成表面</span></span><br><span class="line">slab = slabgen.get_slab()</span><br><span class="line"><span class="comment"># 正交转化</span></span><br><span class="line">slab.get_orthogonal_c_slab()</span><br><span class="line"><span class="built_in">print</span>()</span><br></pre></td></tr></table></figure></div>
-
-<p><em><strong>¡Muchas gracias!</strong></em></p>
-]]></content>
-      <categories>
-        <category>Learn VASP from pymatgen</category>
-      </categories>
-      <tags>
-        <tag>VASP</tag>
-        <tag>pymatgen</tag>
-        <tag>Materials Project</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Chap.10  计算小白硬学VASP —— 材料性质计算—&gt;能带态密度图汇总</title>
     <url>/2024/06/28/Learn-VASP-from-pymatgen-10/</url>
     <content><![CDATA[<p><em><strong>¡Hola a todos!</strong></em></p>
@@ -231,233 +147,78 @@
       </tags>
   </entry>
   <entry>
-    <title>Chap.4  计算小白硬学VASP —— MPRelaxSet用法</title>
-    <url>/2024/06/04/Learn-VASP-from-pymatgen-4/</url>
+    <title>Chap.11  计算小白硬学VASP —— 构建slab模型</title>
+    <url>/2024/08/05/Learn-VASP-from-pymatgen-11/</url>
     <content><![CDATA[<p><em><strong>¡Hola a todos!</strong></em></p>
-<p>VASP计算运行流程简单示意图：</p>
-<pre class="mermaid">flowchart LR
-    input 
-    vasp(vasp)
-    converged(converged)
-    raw_data(raw_data)
-    
-    subgraph prep_input
-    1([INCAR])-->input
-    2([KPOINTS])-->input
-    3([POSCAR])-->input
-    4([POTCAR])-->input
-    5([sub_job.script])-->input
-    end
-    input-->vasp
-    subgraph vasp_black_box
-    vasp---relax([relax])-->converged
-    vasp---scf_calc([scf_calc])-->converged
-    vasp---nonscf_calc([nonscf_calc])-->converged
-    vasp---ect([......])-->converged
-    end
-    converged-->raw_data
-    subgraph post_processing
-    raw_data-->table([table])
-    raw_data-->gra([graph])
-    raw_data-->animation([animation])
-    
-    end</pre>
-
+<p>本章介绍如何构建<code>slab</code>模型。</p>
+<p>首先切面用到的<code>miller index</code>针对的是<code>bulk</code>模型的惯用胞（<code>conventional cell</code>）而不是原胞（<code>primtive cell</code>），这与之前计算能带是刚好相反的。</p>
+<p>所以，在进行切面操作时，要确保你的<code>bulk</code>模型是惯用胞，可以用<code>pymatgen</code>的功能来帮助实现。</p>
 <ul>
-<li><p>第一步为输入文件的准备，除了准备<code>INCAR KPOINTS POSCAR POTCAR</code>这四个VASP必需的输入文件之外，通常使用超算集群的用户还需要准备任务提交脚本<code>sub_job.script</code>；</p>
-</li>
-<li><p>第二步为提交运行VASP进行计算，这里可以把软件运算过程当成一个黑匣子，作为使用者的角度，我们无需去了解它是如何迭代计算，只需要根据不同的计算内容，我们能够根据不同的依据来判断计算是否完成，也就是是否收敛；</p>
-</li>
-<li><p>第三步为数据后处理过程，VASP输出的输出一般都不能直接转化成为可用的结果，需要我们进一步去分析电荷文件、波函数文件、<code>OUTCAR</code>文件等，从其中得到我们最终可以绘图<code>or</code>制表的数据。</p>
-</li>
+<li>直接从<code>Materials project</code>下载结构</li>
 </ul>
-<h3 id="Why-pymatgen"><a href="#Why-pymatgen" class="headerlink" title="Why pymatgen"></a>Why pymatgen</h3><p>完整的计算流程中除了第二步依赖于软件本身，其余的工作都需要花费大量的人力时间来操作。传统操作来讲，输入文件可能用<code>vim</code>、<code>Notepad++</code>、<code>VScode</code>等手动编辑；计算结果的处理除了用插件得到<code>raw_data</code>还需要用到<code>origin</code>手动作图。</p>
-<p>对于少量计算来说，手动的亲力亲为的效率反而更高，但是遇到大量计算的计算操作，比如高通量计算，人的专注度是有限的，很容易就会出问题，老司机踩过的坑就包括但不仅限于以下：</p>
+<p>如果是从<code>MP</code>上下载结构，我们需要把<code>conventional_cell = True</code>打开：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> mp_api.client <span class="keyword">import</span> MPRester</span><br><span class="line"></span><br><span class="line">api_key = <span class="string">&quot;your key&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> MPRester(api_key) <span class="keyword">as</span> mpr:</span><br><span class="line">    Si = mpr.get_structure_by_material_id(<span class="string">&quot;mp-149&quot;</span>,conventional_unit_cell=<span class="literal">True</span>)</span><br><span class="line">    Si.to(filename=<span class="string">&quot;./Si_conventional.cif&quot;</span>)</span><br></pre></td></tr></table></figure></div>
+
+<p>这样确保你下载的结构是惯用胞。</p>
 <ul>
-<li><p>修改后的<code>POSCAR</code>，忘记对应修改<code>POTCAR</code> </p>
-</li>
-<li><p>磁性体系没开<code>ISPIN</code></p>
-</li>
-<li><p>未收敛的结果继续做自洽计算</p>
-</li>
-<li><p>……</p>
-</li>
+<li>原胞转化为惯用胞</li>
 </ul>
-<p>这些操作看起来非常的离谱，初学VASP的兄弟肯定会说这个太夸张了。相信我，经历过大量计算的老哥们肯定或多或少都踩过类似的坑。</p>
-<p>回到正题，why pymatgen？看看下面的图你就知道：</p>
-<p><img src="/2024/06/04/Learn-VASP-from-pymatgen-4/pmg_chart.png" alt="pmg_chart"></p>
-<p>这个是<code>pymatgen</code>的功能示意图，不难发现，好像<code>pymatgen</code>把我们要干的活都给干了：</p>
+<p>也可以通过转化来确保使用的是惯用胞：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"><span class="keyword">from</span> pymatgen.symmetry.analyzer <span class="keyword">import</span> SpacegroupAnalyzer</span><br><span class="line"></span><br><span class="line">structure = Structure.from_file(<span class="string">&quot;./Si_primtive.cif&quot;</span>)</span><br><span class="line">analyzer = SpacegroupAnalyzer(structure)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;old structure: \n <span class="subst">&#123;structure&#125;</span>&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">new_structure = analyzer.get_conventional_standard_structure()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;new structure: \n <span class="subst">&#123;new_structure&#125;</span>&#x27;</span>)</span><br></pre></td></tr></table></figure></div>
+
+<p><code>new_structure</code>对应的就是惯用胞结构。运行代码：</p>
+<div class="highlight-container" data-rel="Text"><figure class="iseeu highlight text"><table><tr><td class="code"><pre><span class="line">old structure: </span><br><span class="line"> Full Formula (Si2)</span><br><span class="line">Reduced Formula: Si</span><br><span class="line">abc   :   3.849278   3.849279   3.849278</span><br><span class="line">angles:  60.000012  60.000003  60.000011</span><br><span class="line">pbc   :       True       True       True</span><br><span class="line">Sites (2)</span><br><span class="line">  #  SP        a      b      c</span><br><span class="line">---  ----  -----  -----  -----</span><br><span class="line">  0  Si    0.875  0.875  0.875</span><br><span class="line">  1  Si    0.125  0.125  0.125</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">new structure: </span><br><span class="line"> Full Formula (Si8)</span><br><span class="line">Reduced Formula: Si</span><br><span class="line">abc   :   5.443702   5.443702   5.443702</span><br><span class="line">angles:  90.000000  90.000000  90.000000</span><br><span class="line">pbc   :       True       True       True</span><br><span class="line">Sites (8)</span><br><span class="line">  #  SP       a     b     c</span><br><span class="line">---  ----  ----  ----  ----</span><br><span class="line">  0  Si    0.75  0.75  0.25</span><br><span class="line">  1  Si    0     0.5   0.5</span><br><span class="line">  2  Si    0.75  0.25  0.75</span><br><span class="line">  3  Si    0     0     0</span><br><span class="line">  4  Si    0.25  0.75  0.75</span><br><span class="line">  5  Si    0.5   0.5   0</span><br><span class="line">  6  Si    0.25  0.25  0.25</span><br><span class="line">  7  Si    0.5   0     0.5</span><br></pre></td></tr></table></figure></div>
+
+<p>或者你不知道自己的结构到底是原胞还是惯用胞，可以无脑直接转换，因为对于本身就是惯用胞的结构，<code>get_conventional_standard_structure()</code>方法不会修改本身的信息：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"><span class="keyword">from</span> pymatgen.symmetry.analyzer <span class="keyword">import</span> SpacegroupAnalyzer</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取本身是惯用胞的结构</span></span><br><span class="line">structure = Structure.from_file(<span class="string">&quot;./Si_conventional.cif&quot;</span>)</span><br><span class="line">analyzer = SpacegroupAnalyzer(structure)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;old structure: \n <span class="subst">&#123;structure&#125;</span>&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">new_structure = analyzer.get_conventional_standard_structure()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;new structure: \n <span class="subst">&#123;new_structure&#125;</span>&#x27;</span>)</span><br></pre></td></tr></table></figure></div>
+
+<p>结果不变，运行代码：</p>
+<div class="highlight-container" data-rel="Txt"><figure class="iseeu highlight txt"><table><tr><td class="code"><pre><span class="line">old structure: </span><br><span class="line"> Full Formula (Si8)</span><br><span class="line">Reduced Formula: Si</span><br><span class="line">abc   :   5.443702   5.443702   5.443702</span><br><span class="line">angles:  90.000000  90.000000  90.000000</span><br><span class="line">pbc   :       True       True       True</span><br><span class="line">Sites (8)</span><br><span class="line">  #  SP       a     b     c</span><br><span class="line">---  ----  ----  ----  ----</span><br><span class="line">  0  Si    0.75  0.75  0.25</span><br><span class="line">  1  Si    0     0.5   0.5</span><br><span class="line">  2  Si    0.75  0.25  0.75</span><br><span class="line">  3  Si    0     0     0</span><br><span class="line">  4  Si    0.25  0.75  0.75</span><br><span class="line">  5  Si    0.5   0.5   0</span><br><span class="line">  6  Si    0.25  0.25  0.25</span><br><span class="line">  7  Si    0.5   0     0.5</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">new structure: </span><br><span class="line"> Full Formula (Si8)</span><br><span class="line">Reduced Formula: Si</span><br><span class="line">abc   :   5.443702   5.443702   5.443702</span><br><span class="line">angles:  90.000000  90.000000  90.000000</span><br><span class="line">pbc   :       True       True       True</span><br><span class="line">Sites (8)</span><br><span class="line">  #  SP       a     b     c</span><br><span class="line">---  ----  ----  ----  ----</span><br><span class="line">  0  Si    0.25  0.75  0.75</span><br><span class="line">  1  Si    0     0     0</span><br><span class="line">  2  Si    0.25  0.25  0.25</span><br><span class="line">  3  Si    0     0.5   0.5</span><br><span class="line">  4  Si    0.75  0.75  0.25</span><br><span class="line">  5  Si    0.5   0     0.5</span><br><span class="line">  6  Si    0.75  0.25  0.75</span><br><span class="line">  7  Si    0.5   0.5   0</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>Note</strong>：上述方法对于缺陷结构和掺杂结构，由于对称性无法识别可能无法转化。</p>
+<h3 id="SlabGenerator模块"><a href="#SlabGenerator模块" class="headerlink" title="SlabGenerator模块"></a>SlabGenerator模块</h3><p>进入正题，切面主要用到<code>pyamtgen</code>的<code>SlabGenerator</code>模块，首先导入它：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.core.surface <span class="keyword">import</span> SlabGenerator</span><br></pre></td></tr></table></figure></div>
+
+<p>然后需要先实例化<code>SlabGenetator</code>，才能调用里面的切面方法：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.core.surface <span class="keyword">import</span> SlabGenerator</span><br><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"></span><br><span class="line">Si = Structure.from_file(<span class="string">&quot;./Si_conventional.cif&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 实例化</span></span><br><span class="line">slabgen = SlabGenerator(</span><br><span class="line">    initial_structure=Si,		<span class="comment"># 初始结构</span></span><br><span class="line">    miller_index=(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>),		<span class="comment"># 指定晶面</span></span><br><span class="line">    min_slab_size=<span class="number">15</span>,			<span class="comment"># slab厚度</span></span><br><span class="line">    min_vacuum_size=<span class="number">20</span>,			<span class="comment"># 真空层厚度</span></span><br><span class="line">    in_unit_planes=<span class="literal">False</span>,		<span class="comment"># 切换 min_slab_size &amp; min_vacuum_size</span></span><br><span class="line">    center_slab=<span class="literal">True</span>,			<span class="comment"># slab模型居中</span></span><br><span class="line">    primitive=<span class="literal">True</span>,				<span class="comment"># 使用最小切面结构</span></span><br><span class="line">    reorient_lattice=<span class="literal">True</span>,		<span class="comment"># 重定向晶格</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure></div>
+
+<p>这里着重介绍<code>in_unit_planes</code>和<code>primitive</code>参数。</p>
 <ul>
-<li><p>支持根据计算类型生成输入文件</p>
-</li>
-<li><p>支持识别多种格式的结构文件</p>
-</li>
-<li><p>支持分析计算结果</p>
-</li>
-<li><p>……</p>
-</li>
-</ul>
-<p>配合上<code>matplotlib</code>绘图，妥妥的实现整个计算流程脚本自动化：</p>
-<p>代码一年写一次，一次用三年。</p>
-<h3 id="自动生成结构弛豫（优化）输入文件"><a href="#自动生成结构弛豫（优化）输入文件" class="headerlink" title="自动生成结构弛豫（优化）输入文件"></a>自动生成结构弛豫（优化）输入文件</h3><h4 id="MPRelaxSet-or-MPScanRelaxSet：如何选择合适的模块"><a href="#MPRelaxSet-or-MPScanRelaxSet：如何选择合适的模块" class="headerlink" title="MPRelaxSet or MPScanRelaxSet：如何选择合适的模块"></a>MPRelaxSet or MPScanRelaxSet：如何选择合适的模块</h4><p>本小节主要介绍下<code>pymatgen</code>中生成结构优化输入文件的模块的相关功能。看标题老司机给出了两个模块，这两个模块都是用于生成结构优化的输入文件，但是使用场景却有些许差别，需要根据使用场景和个人需求来自主选择。</p>
-<p>总所周知，<code>pymatgen</code>就是由<code>Materials Project</code>的团队开发的，而<code>Materials Project</code>上的结构的相关数据也都是通过<code>pymatgen</code>的生成的输入来进行计算而得到。</p>
-<p>那么问题来了，<code>Materials project</code>2011年就成立了，受限于当时的计算资源，面对如此庞大的高通量计算，当时的计算参数的设置稍显粗糙，放在如今的精度评判标准来看显然是不够的。为此官方也多次在<code>Github</code>的Issue里面提到过网页端的数据目前看来部分是<code>outdated</code>，但是官网也会定期的更新<code>datebase</code>，有兴趣可以看下每个版本都更新了哪些数据 <a class="link" href="https://docs.materialsproject.org/changes/database-versions">link <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>。而已有的数据绝大部分都是基于<code>MPRelaxSet</code>模块优化的结构计算的。</p>
-<p>下面是两个模块分别针对<code>Si</code>单质生成的<code>INCAR</code>词条对比：</p>
-<p><img src="/2024/06/04/Learn-VASP-from-pymatgen-4/Si_oldINCAR-17177292067111.png" alt="Si_oldINCAR">           <img src="/2024/06/04/Learn-VASP-from-pymatgen-4/Si_newINCAR.png" alt="Si_newINCAR"></p>
-<p>不用去管每个词条是什么意思，单看词条数量，俗话说：”一寸长，一寸强“，单从词条的长度就可以大致凭借经验判断，短的可能精度比较低，没错，短的就是<code>MPRelaxSet</code>生成的。</p>
-<p>那么是不是说明<code>MPRelaxSet</code>就不能用了呢？大可不必直接否定。</p>
-<h5 id="MPRelaxSet默认参数适用场景"><a href="#MPRelaxSet默认参数适用场景" class="headerlink" title="MPRelaxSet默认参数适用场景"></a>MPRelaxSet默认参数适用场景</h5><ul>
-<li><p>相图计算</p>
-<p>相图的计算需要设计许多中间相结构的计算，而<code>Materials project</code>作为数据库已经记录了许多结构的标准化输入的能量，这些数据都是可以直接调用的，因此对我们计算相图提供了极大的便利。基于此，我们在补充结构进行计算时，也需要保持<code>Materials project</code>数据的默认设置，所以此时调用<code>MPRelaxSet</code>模块是相对合适的；</p>
-</li>
-<li><p>电化学窗口</p>
-<p>同理电化学窗口的计算也需要计算大量的结构。为此，这类需要调用<code>Materials project</code>上面结构能量数据来节省计算量的，可以使用<code>MPRelaxSet</code>模块；</p>
-</li>
-<li><p>粗收敛</p>
-<p>我们之前说过，好的结构是好结果的关键，那么其中重要的步骤就是优化过程。对于复杂结构：异质结、磁性体系、超大模型等，采用<code>MPRelaxSet</code>模块进行粗收敛来初步判断结构建模以及参数设置是否合理，同时不失为一个节省计算总时长的好办法。</p>
-</li>
-</ul>
-
-  <div class="note p-4 mb-4 rounded-small info">
-    <p>如果需要对应<code>Materials project</code>上的结构数据，势函数的种类选择也要对应，这里先提一下留意一下，后面详细说明。</p>
-
-  </div>
-
-<h5 id="MPScanRelaxSet介绍"><a href="#MPScanRelaxSet介绍" class="headerlink" title="MPScanRelaxSet介绍"></a>MPScanRelaxSet介绍</h5><p><code>MPScanRelaxSet</code>模块的使用条件就比较限制了，软件方面的适用条件：</p>
+<li><p><code>in_unit_planes</code>：影响<code>min_slab_size</code>和<code>min_vacuum_size</code>的数值，默认为<code>False</code>。</p>
 <ul>
-<li><p><code>VASP</code>版本6.0.0及以上</p>
+<li><p>当为<code>False</code>时，<code>min_slab_size</code>和<code>min_vacuum_size</code>对应的单位为<code>Angstrom </code>，即上述分别表示<code>slab</code>厚度为10埃，真空层厚度为15埃；</p>
 </li>
-<li><p>默认引入了更准确的<code>METAGGA = r2SCAN</code>方法，此方法要求<code>VASP</code>版本6.2及以上</p>
-</li>
-<li><p><code>METAGGA</code>要求势函数包含<code>kinetic energy density of the core-electrons</code>，也就是势函数必须要用<code>PBE_52</code>及以上版本</p>
-<p>看到这里是否有点不知道在讲什么，其实老司机也只是把文档的内容汉化成以上三点，平常我也是使用的<code>MPRelaxSet</code>模块，因为目前我使用的VASP版本还是5.4.4 <code>QAQ</code></p>
+<li><p>当为<code>True</code>时，数值为切面的层数，如此时<code>min_slab_size</code>和<code>min_vacuum_size</code>都设置为3，表示slab厚度和真空层厚度为(1,1,1)面最小重复单元乘以3。需要注意的是，此时数字<code>3</code>并不等于原子层数，且不同晶面的最小重复单元的厚度不一样，如<code>Si</code>的(1,1,1)面单层厚度是小于(1,0,0)面的。</p>
 </li>
 </ul>
-<h5 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h5><p>这里，老司机建议先使用<code>MPRelaxSet</code>模块就足够了，对于目前大部分<code>pymatgen</code>的用户来说，<code>MPRelaxSet</code>模块的使用还是占主要的。而且也不必担心计算精度问题，既然模块有默认参数，那么在使用过程中我们也可以根据需求进行调整精度。后续的计算也是基于<code>VASP_v5.4.4</code>，用<code>MPRelaxSet</code>模块实例。</p>
-<p><em><strong>PS：</strong></em>其实就是老司机使用的服务器没有<code>VASP_v6.0+</code>版本，不然高低也得详细对比测一下，给出更详细的使用建议。</p>
-<h4 id="MPRelaxSet使用实例"><a href="#MPRelaxSet使用实例" class="headerlink" title="MPRelaxSet使用实例"></a>MPRelaxSet使用实例</h4><h5 id="实例1：生成Si单质结构优化输入文件"><a href="#实例1：生成Si单质结构优化输入文件" class="headerlink" title="实例1：生成Si单质结构优化输入文件"></a>实例1：生成Si单质结构优化输入文件</h5><p><code>MPRelaxSet</code>模块调用命令是：</p>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.sets <span class="keyword">import</span> MPRelaxSet</span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p><code>primitive</code>：默认为True。该参数跟<code>primitive cell</code>没有关系，在这里是决定<code>slab</code>结构是否选取最小单元。当设置为<code>True</code>时，如1x1x1的<code>Si</code>惯用胞结构和3x3x3超胞的<code>Si</code>惯用胞结构，最后得到的<code>slab</code>结构是一样。</p>
+</li>
+</ul>
+<p><code>SlabGenerator</code>下面有许多切面的方法，下面一一介绍。</p>
+<h4 id="get-slab-方法"><a href="#get-slab-方法" class="headerlink" title="get_slab()方法"></a>get_slab()方法</h4><p><code>get_slab()</code>方法用于生成指定暴露面原子的<code>slab</code>结构，传入<code>shift</code>参数来指定原子。该方法不建议直接使用，前提你需要确定shift的值。对于垂直于坐标轴的切面，<code>shift</code>值对应的分别就是abc的坐标，但是其他晶面情况就需要简单的运算之后才能够得到<code>shift</code>值。代码如下：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.core.surface <span class="keyword">import</span> SlabGenerator</span><br><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"></span><br><span class="line">Si = Structure.from_file(<span class="string">&quot;./Si_conventional.cif&quot;</span>)</span><br><span class="line"></span><br><span class="line">slabgen = SlabGenerator(</span><br><span class="line">    initial_structure=Si,</span><br><span class="line">    miller_index=(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>),</span><br><span class="line">    min_slab_size=<span class="number">15</span>,</span><br><span class="line">    min_vacuum_size=<span class="number">20</span>,</span><br><span class="line">    in_unit_planes=<span class="literal">False</span>,</span><br><span class="line">    center_slab=<span class="literal">True</span>,</span><br><span class="line">    primitive=<span class="literal">True</span>,</span><br><span class="line">    reorient_lattice=<span class="literal">True</span>,</span><br><span class="line">)</span><br><span class="line"><span class="comment"># 生成表面</span></span><br><span class="line">slab = slabgen.get_slab(shift=<span class="number">0</span>)</span><br><span class="line"><span class="comment"># 保存结构</span></span><br><span class="line">slab.to(<span class="string">&quot;./Si_111_getslab.cif&quot;</span>)</span><br></pre></td></tr></table></figure></div>
 
-<p><code>sets</code>里还包含其他模块，除上面的<code>MPScanRelaxSet</code>，还有<code>LobsterSet</code>、<code>MPAbsorptionSet</code>、<code>MPHSEBSSet</code>等等，后续有需要会一一介绍。</p>
-<p>导入模块之后，我们必须提供的只有结构信息，而读取结构信息还需要用到的模块是<code>Structure</code>，同样也需要导入：</p>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br></pre></td></tr></table></figure></div>
-
-<h6 id="输入结构信息"><a href="#输入结构信息" class="headerlink" title="输入结构信息"></a>输入结构信息</h6><p><code>Structure</code>支持的结构信息类型非常多可以自己写，也可以只提供提供文件路径供识别：</p>
+<p><code>vesta</code>里面查看结构：</p>
+<p><img src="/2024/08/05/Learn-VASP-from-pymatgen-11/image-20240805095256547.png" alt="image-20240805095256547"></p>
+<p><code>slab</code>厚度和真空层厚度可根据上述方法自行调整。</p>
+<h4 id="get-slabs-方法"><a href="#get-slabs-方法" class="headerlink" title="get_slabs()方法"></a>get_slabs()方法</h4><p><code>get_slabs()</code>支持生成所有符合要求的<code>slab</code>，接受传入的参数也要比<code>gen_slab()</code>多，主要有：</p>
 <ul>
-<li>手写晶格常数，元素种类，原子坐标</li>
+<li><code>bonds</code>：设置成键范围。通俗的讲就是保护指定原子键对，避免断键。如<code>LiFePO4</code>中要保护<code>PO4</code>基团不被切断键，可以设置<code>bonds=&#123;(“P”, “O”): 3&#125;</code>，这样就告诉<code>pymatgen</code>，3埃范围内的<code>P</code>原子和<code>O</code>原子维持成键，切面时就会避开<code>PO4</code>断键了。</li>
+<li><code>max_broken_bonds</code>：自动切表面时，最大断键数，默认为0。建议不要主动设置，对于复杂结构，会导致切出的<code>slabs</code>数量急增。</li>
+<li><code>repair</code>：自动补齐暴露面断键原子，默认<code>False</code>。也建议不要设置，会生成许多不可理的结构。</li>
 </ul>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.core <span class="keyword">import</span> Lattice</span><br><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"></span><br><span class="line"><span class="comment"># 晶格常数</span></span><br><span class="line">lattice = Lattice([[<span class="number">4.2</span>, <span class="number">0.0</span>, <span class="number">0.0</span>], [<span class="number">0.0</span>, <span class="number">4.2</span>, <span class="number">0.0</span>], [<span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">4.2</span>]])</span><br><span class="line"></span><br><span class="line"><span class="comment">#原子种类</span></span><br><span class="line">species = [<span class="string">&quot;Si&quot;</span>, <span class="string">&quot;Si&quot;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">#原子坐标</span></span><br><span class="line">coords = [[<span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>], [<span class="number">0.25</span>, <span class="number">0.25</span>, <span class="number">0.25</span>]]</span><br><span class="line"></span><br><span class="line"><span class="comment">#创建Si结构</span></span><br><span class="line">struct = Structure(lattice, species, coords)</span><br></pre></td></tr></table></figure></div>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.core.surface <span class="keyword">import</span> SlabGenerator</span><br><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"></span><br><span class="line">Si = Structure.from_file(<span class="string">&quot;./Si_conventional.cif&quot;</span>)</span><br><span class="line"></span><br><span class="line">slabgen = SlabGenerator(</span><br><span class="line">    initial_structure=Si,</span><br><span class="line">    miller_index=(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>),</span><br><span class="line">    min_slab_size=<span class="number">15</span>,</span><br><span class="line">    min_vacuum_size=<span class="number">20</span>,</span><br><span class="line">    in_unit_planes=<span class="literal">False</span>,</span><br><span class="line">    center_slab=<span class="literal">True</span>,</span><br><span class="line">    primitive=<span class="literal">True</span>,</span><br><span class="line">    reorient_lattice=<span class="literal">True</span>,</span><br><span class="line">)</span><br><span class="line"><span class="comment"># 生成所有表面</span></span><br><span class="line">slabs = slabgen.get_slabs()</span><br><span class="line"><span class="comment"># 打印结构信息</span></span><br><span class="line"><span class="built_in">print</span>([slab <span class="keyword">for</span> slab <span class="keyword">in</span> slabs])</span><br><span class="line"><span class="comment"># 保存结构</span></span><br><span class="line"><span class="keyword">for</span> i, slab <span class="keyword">in</span> <span class="built_in">enumerate</span>(slabs):</span><br><span class="line">    slab.to(<span class="string">f&quot;Si_111_getslabs_<span class="subst">&#123;i&#125;</span>.cif&quot;</span>) </span><br></pre></td></tr></table></figure></div>
 
-<p>但是该方法极不推荐，why，因为很麻烦，而且复杂结构的原子坐标根本写不出来，但是对于单原子的结构建模，还是可以使用。</p>
-<ul>
-<li>提供现成结构文件，目前可以识别的格式有：</li>
-</ul>
-<ol>
-<li><p>Crystallographic Information Format file (.cif文件)</p>
-</li>
-<li><p>VASP输入输出中包含结构信息的文件：POSCAR、CONTCAR、CHGCAR、LOCPOT、vasprun.xml</p>
-</li>
-<li><p>CSSR、Netcdf、pymatgen结构JSON文件</p>
-</li>
-</ol>
-<p>前两种的结构文件是比较常见的，也是常用的：</p>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"></span><br><span class="line"><span class="comment"># 结构文件路径</span></span><br><span class="line">poscar = <span class="string">&quot;./POSCAR&quot;</span>		<span class="comment">#当前文件夹下有POSCAR文件</span></span><br><span class="line"></span><br><span class="line">struct = Structure.from_file(poscar)	<span class="comment">#from_file用法是固定的，用于读取该路径下的结构文件</span></span><br></pre></td></tr></table></figure></div>
+<p>运行代码：</p>
+<div class="highlight-container" data-rel="Text"><figure class="iseeu highlight text"><table><tr><td class="code"><pre><span class="line">[Structure Summary</span><br><span class="line">Lattice</span><br><span class="line">    abc : 3.8492788605882793 3.8492788605882797 37.715076344492445</span><br><span class="line"> angles : 90.0 90.0 120.00000000000001</span><br><span class="line"> volume : 483.9543213850744</span><br><span class="line">      A : 3.8492788605882793 0.0 2.3570035178225037e-16</span><br><span class="line">      B : -1.9246394302941412 3.333573279519868 2.3570035178225037e-16</span><br><span class="line">      C : 0.0 0.0 37.715076344492445</span><br><span class="line">    pbc : True True True</span><br><span class="line">PeriodicSite: Si (3.368, 0.2778, 12.18) [0.9167, 0.08333, 0.3229]</span><br><span class="line">PeriodicSite: Si (-0.4812, 2.5, 12.96) [0.25, 0.75, 0.3438]</span><br><span class="line">PeriodicSite: Si (-0.4812, 2.5, 15.32) [0.25, 0.75, 0.4063]</span><br><span class="line">PeriodicSite: Si (1.443, 1.389, 16.11) [0.5833, 0.4167, 0.4271]</span><br><span class="line">PeriodicSite: Si (1.443, 1.389, 18.46) [0.5833, 0.4167, 0.4896]</span><br><span class="line">PeriodicSite: Si (3.368, 0.2778, 19.25) [0.9167, 0.08333, 0.5104]</span><br><span class="line">PeriodicSite: Si (3.368, 0.2778, 21.61) [0.9167, 0.08333, 0.5729]</span><br><span class="line">PeriodicSite: Si (-0.4812, 2.5, 22.39) [0.25, 0.75, 0.5938]</span><br><span class="line">PeriodicSite: Si (-0.4812, 2.5, 24.75) [0.25, 0.75, 0.6563]</span><br><span class="line">PeriodicSite: Si (1.443, 1.389, 25.54) [0.5833, 0.4167, 0.6771], </span><br><span class="line"></span><br><span class="line">Structure Summary</span><br><span class="line">Lattice</span><br><span class="line">    abc : 3.8492788605882793 3.8492788605882797 37.715076344492445</span><br><span class="line"> angles : 90.0 90.0 120.00000000000001</span><br><span class="line"> volume : 483.9543213850744</span><br><span class="line">      A : 3.8492788605882793 0.0 2.3570035178225037e-16</span><br><span class="line">      B : -1.9246394302941412 3.333573279519868 2.3570035178225037e-16</span><br><span class="line">      C : 0.0 0.0 37.715076344492445</span><br><span class="line">    pbc : True True True</span><br><span class="line">PeriodicSite: Si (1.443, 1.389, 13.75) [0.5833, 0.4167, 0.3646]</span><br><span class="line">PeriodicSite: Si (1.443, 1.389, 11.39) [0.5833, 0.4167, 0.3021]</span><br><span class="line">PeriodicSite: Si (3.368, 0.2778, 16.89) [0.9167, 0.08333, 0.4479]</span><br><span class="line">PeriodicSite: Si (3.368, 0.2778, 14.54) [0.9167, 0.08333, 0.3854]</span><br><span class="line">PeriodicSite: Si (-0.4812, 2.5, 20.04) [0.25, 0.75, 0.5313]</span><br><span class="line">PeriodicSite: Si (-0.4812, 2.5, 17.68) [0.25, 0.75, 0.4688]</span><br><span class="line">PeriodicSite: Si (1.443, 1.389, 23.18) [0.5833, 0.4167, 0.6146]</span><br><span class="line">PeriodicSite: Si (1.443, 1.389, 20.82) [0.5833, 0.4167, 0.5521]</span><br><span class="line">PeriodicSite: Si (3.368, 0.2778, 26.32) [0.9167, 0.08333, 0.6979]</span><br><span class="line">PeriodicSite: Si (3.368, 0.2778, 23.96) [0.9167, 0.08333, 0.6354]]</span><br></pre></td></tr></table></figure></div>
 
-<ul>
-<li>MP-API获取结构：</li>
-</ul>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">with</span> MPRester(api_key) <span class="keyword">as</span> mpr:</span><br><span class="line">    struct = mpr.get_structure_by_material_id(<span class="string">&quot;mp-149&quot;</span>) <span class="comment"># Si的MP编号</span></span><br></pre></td></tr></table></figure></div>
+<p><code>get_slabs()</code>自动切出所有的表面，根据输出信息可以发现根据原子排布不同<code>Si</code>(1,1,1)面有两种暴露面：</p>
+<p><img src="/2024/08/05/Learn-VASP-from-pymatgen-11/image-20240805102203787.png" alt="image-20240805102203787"></p>
+<p><img src="/2024/08/05/Learn-VASP-from-pymatgen-11/image-20240805102215172.png" alt="image-20240805102215172"></p>
+<h4 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h4><p><code>pymatgen</code>切面有时候<code>slab</code>c方向不是正交的，即γ角不为90°。此时可以调用<code>get_orthogonal_c_slab()</code>方法进行矫正即可，用法为直接在<code>slab</code>对象调用即可：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line">......</span><br><span class="line"><span class="comment"># SlabGenerator生成表面</span></span><br><span class="line">slab = slabgen.get_slab()</span><br><span class="line"><span class="comment"># 正交转化</span></span><br><span class="line">slab.get_orthogonal_c_slab()</span><br><span class="line"><span class="built_in">print</span>()</span><br></pre></td></tr></table></figure></div>
 
-<p>这里Si的结构信息就被储存到<code>structure</code>变量了</p>
-<h6 id="MPRelaxSet生成并导出输入文件"><a href="#MPRelaxSet生成并导出输入文件" class="headerlink" title="MPRelaxSet生成并导出输入文件"></a>MPRelaxSet生成并导出输入文件</h6><p>结构准备好了之后，就可以直接生成输入文件了，下面是完整代码：</p>
-<details class="yellow" data-header-exclude><summary><i class="fa-solid fa-chevron-right"></i>参考代码 </summary>
-              <div class="content">
-              <div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.sets <span class="keyword">import</span> MPRelaxSet</span><br><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"><span class="keyword">from</span> pymatgen.core <span class="keyword">import</span> Lattice</span><br><span class="line"><span class="keyword">from</span> mp_api.client <span class="keyword">import</span> MPRester</span><br><span class="line"></span><br><span class="line"><span class="comment">## 方法1</span></span><br><span class="line"><span class="comment"># 晶格常数</span></span><br><span class="line">lattice = Lattice([[<span class="number">4.2</span>, <span class="number">0.0</span>, <span class="number">0.0</span>], [<span class="number">0.0</span>, <span class="number">4.2</span>, <span class="number">0.0</span>], [<span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">4.2</span>]])</span><br><span class="line"><span class="comment">#原子种类</span></span><br><span class="line">species = [<span class="string">&quot;Si&quot;</span>, <span class="string">&quot;Si&quot;</span>]</span><br><span class="line"><span class="comment">#原子坐标</span></span><br><span class="line">coords = [[<span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>], [<span class="number">0.25</span>, <span class="number">0.25</span>, <span class="number">0.25</span>]]</span><br><span class="line"><span class="comment">#创建Si结构</span></span><br><span class="line">struct1 = Structure(lattice, species, coords)</span><br><span class="line"><span class="comment">#调用MPRelaxSet</span></span><br><span class="line">relax1 = MPRelaxSet(struct1)</span><br><span class="line"><span class="comment">#导出文件</span></span><br><span class="line">relax1.write_input(<span class="string">&#x27;./1&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;文件成功保存到1&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">##方法2</span></span><br><span class="line"><span class="comment"># 结构文件路径</span></span><br><span class="line">Si_poscar = <span class="string">&quot;./POSCAR&quot;</span>		<span class="comment">#当前文件夹下准备Si的POSCAR文件</span></span><br><span class="line">struct2 = Structure.from_file(Si_poscar)</span><br><span class="line"><span class="comment">#调用MPRelaxSet</span></span><br><span class="line">relax2 = MPRelaxSet(struct2)</span><br><span class="line"><span class="comment">#导出文件</span></span><br><span class="line">relax2.write_input(<span class="string">&#x27;./2&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;文件成功保存到2&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">##方法3</span></span><br><span class="line">api_key = <span class="string">&quot;aaaaabbbbb&quot;</span>	<span class="comment">#换成你的key</span></span><br><span class="line"><span class="keyword">with</span> MPRester(api_key) <span class="keyword">as</span> mpr:</span><br><span class="line">    struct3 = mpr.get_structure_by_material_id(<span class="string">&quot;mp-149&quot;</span>)</span><br><span class="line">    relax3 = MPRelaxSet(struct3)</span><br><span class="line">    <span class="comment">#导出文件</span></span><br><span class="line">	relax3.write_input(<span class="string">&#x27;./3&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;文件成功保存到3&quot;</span>)</span><br></pre></td></tr></table></figure></div>
-              </div>
-            </details>
-
-<p>运行</p>
-<p><img src="/2024/06/04/Learn-VASP-from-pymatgen-4/Sirelax_input.png" alt="Sirelax_input"></p>
-<p>当前路径生成三个文件夹，每个文件夹对于不同方法生成的输入文件，可以发现其中的<code>INCAR</code>几乎是一样的，除了方法3中<code>INCAR</code>的原子初始磁矩<code>MAGMOM</code>都设置成0了，这是因为方法3是直接读取的<code>Materials project</code>的数据，直接包含了磁矩信息，覆盖了默认设置。</p>
-<p><img src="/2024/06/04/Learn-VASP-from-pymatgen-4/Si_incar_compare.png" alt="Si_incar_compare"></p>
-<h5 id="实例2：自定义输入参数（进阶设置）"><a href="#实例2：自定义输入参数（进阶设置）" class="headerlink" title="实例2：自定义输入参数（进阶设置）"></a>实例2：自定义输入参数（进阶设置）</h5><p>前面我们讲了<code>MPRelaxSet</code>的默认参数精度是比较低的，正常来说，默认计算后得到的结构和能量数据都不建议使用。但是，不用担心，我们可以自定义输入参数，包括截断能、收敛标准，优化步数等等。</p>
-<p>虽然前面讲过不需要去学习参数词条就可以学会VASP计算。严格来说实例1学会之后，任何结构你都可以生成输入去用VASP算一下看看结果。</p>
-<p>本实例也可以说是进阶内容，主要是利于针对每个人自己对应的研究体系，能够设置相对合理的参数，需要对基本的<code>INCAR</code>词条有一定了解。</p>
-<p>所以对该部分不感兴趣的可以直接跳过本小节，后面再看也可以。</p>
-<h6 id="user-incar-settings"><a href="#user-incar-settings" class="headerlink" title="user_incar_settings"></a>user_incar_settings</h6><p>之前的代码中，<code>MPRelaxSet</code>中我们只提供了结构，如果是用于自定义INCAR参数，还可以继续添加<code>user_incar_settings</code>来覆盖默认的设置，这里不需要写完整的所有INCAR设置，只需要写你想要改变的词条。</p>
-
-  <div class="note p-4 mb-4 rounded-small info">
-    <p><code>INCAR</code>词条有默认的设置，即使不写入<code>INCAR</code>里面也会在计算中采用默认的设置，详情默认设置的值以及解释见[VASP官网](<a class="link" href="https://www.vasp.at/wiki/index.php/The_VASP_Manual">The VASP Manual - VASP Wiki <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>)</p>
-
-  </div>
-
-<p>语法如下：</p>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.sets <span class="keyword">import</span> MPRelaxSet</span><br><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"></span><br><span class="line">Si_poscar = <span class="string">&quot;./POSCAR&quot;</span></span><br><span class="line">struct = Structure.from_file(Si_poscar)</span><br><span class="line">relax_old = MPRelaxSet(struct2)</span><br><span class="line">relax_new = MPRelaxSet(</span><br><span class="line">    struct2,</span><br><span class="line">    user_incar_settings=&#123;<span class="string">&#x27;EDIFFG&#x27;</span>:-<span class="number">0.01</span>&#125;</span><br><span class="line">)</span><br><span class="line">relax_old.write_input(<span class="string">&#x27;./old&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Default settings have been written&quot;</span>)</span><br><span class="line">relax_new.write_input(<span class="string">&#x27;./new&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;New settings have been added&quot;</span>)</span><br></pre></td></tr></table></figure></div>
-
-<p>运行后对比<code>new</code>和<code>old</code>文件夹里的<code>INCAR</code></p>
-<p><img src="/2024/06/04/Learn-VASP-from-pymatgen-4/add_EDIFFG.png" alt="add_EDIFFG"></p>
-<p>成功添加了<code>EDIFFG</code>词条，此时控制结构收敛的标准从能量收敛变成了更为严格靠谱的力收敛。</p>
-<p>如果想修改更多的词条，我们也只需要在<code>user_incar_settings</code>对应的字典后面逐个添加即可：</p>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line">user_incar_settings=&#123;</span><br><span class="line">    <span class="string">&#x27;EDIFFG&#x27;</span>:-<span class="number">0.01</span>,</span><br><span class="line">    <span class="string">&#x27;ENCUT&#x27;</span>:<span class="number">400</span>,</span><br><span class="line">    <span class="string">&#x27;NSW&#x27;</span>:<span class="number">200</span>,</span><br><span class="line">    <span class="string">&#x27;ISPIN&#x27;</span>:<span class="number">1</span>,</span><br><span class="line">    <span class="string">&#x27;ALGO&#x27;</span>:<span class="string">&#x27;Normal&#x27;</span></span><br><span class="line">    ......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
-
-<h6 id="user-kpoints-settings"><a href="#user-kpoints-settings" class="headerlink" title="user_kpoints_settings"></a>user_kpoints_settings</h6><p>说完了<code>INCAR</code>的自定义设置，<code>KPOINTS</code>的自定义设置也类似。</p>
-<ul>
-<li>调用<code>Kpoints</code>模块来生成</li>
-</ul>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line">......</span><br><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.inputs <span class="keyword">import</span> Kpoints</span><br><span class="line"></span><br><span class="line">......</span><br><span class="line"><span class="comment"># 1.指定K点</span></span><br><span class="line">kpoints = Kpoints(kpts=[(<span class="number">3</span>,<span class="number">3</span>,<span class="number">3</span>)])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2.全自动K空间网格</span></span><br><span class="line">kpoints = Kpoints.automatic(<span class="number">50</span>)	<span class="comment"># 50表示倒格子空间向量长度与分隔的K点的乘积</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 3.根据K点密度自动生成</span></span><br><span class="line">kpoints = Kpoints.automatic_density(struct, <span class="number">1000</span>) <span class="comment"># 1000表示K空间里整个K点的数量</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 4.与2类似，指定每条向量</span></span><br><span class="line">kpoints = Kpoints.automatic_density_by_lengths(struct, [<span class="number">50</span>,<span class="number">50</span>,<span class="number">10</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 5.根据体积平均生成K点</span></span><br><span class="line">kpoints = Kpoints.automatic_density_by_vol(struct,<span class="number">500</span>)</span><br><span class="line"></span><br><span class="line">relax_new = MPRelaxSet(</span><br><span class="line">    struct,</span><br><span class="line">    user_incar_settings=&#123;<span class="string">&#x27;EDIFFG&#x27;</span>:-<span class="number">0.01</span>&#125;,</span><br><span class="line">    user_kpoints_settings=kpoints</span><br><span class="line">)</span><br></pre></td></tr></table></figure></div>
-
-
-  <div class="note p-4 mb-4 rounded-small info">
-    <p>强烈推荐1和2方法</p>
-
-  </div>
-
-<ul>
-<li><p>修改<code>MPRelaxSet</code>默认KPOINTS设置</p>
-<p>在之前的代码中，我们并没有进行K点的相关设置，但是生成的输入文件中也给我们生成了<code>KPOINTS</code>文件。查阅官网文档内容可以发现，实际上K点的设置是已经给我们设置了默认的参数：<code>&#123;&#39;reciprocal_density&#39;: 64&#125;</code>，此外还有其他的设置方式：</p>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line">......</span><br><span class="line"><span class="comment"># 倒格子密度</span></span><br><span class="line">kpoints = &#123;<span class="string">&#x27;reciprocal_density&#x27;</span>: <span class="number">64</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 网格密度</span></span><br><span class="line">kpoints = &#123;<span class="string">&#x27;grid_density&#x27;</span>: <span class="number">500</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 全自动K点</span></span><br><span class="line">kpoints = &#123;<span class="string">&#x27;length&#x27;</span>:<span class="number">30</span>&#125;</span><br><span class="line"></span><br><span class="line">relax_new = MPRelaxSet(</span><br><span class="line">    struct,</span><br><span class="line">    user_incar_settings=&#123;<span class="string">&#x27;EDIFFG&#x27;</span>:-<span class="number">0.01</span>&#125;,</span><br><span class="line">    user_kpoints_settings=kpoints</span><br><span class="line">)</span><br></pre></td></tr></table></figure></div>
-
-<p>除上述外，官方支持的全部格式如下：</p>
-<ol>
-<li><p><code>&#39;grid_density&#39;</code> for Kpoints.automatic_density generation </p>
-</li>
-<li><p><code>&#39;reciprocal_density&#39;</code> for KPoints.automatic_density_by_vol generation</p>
-</li>
-<li><p><code>&#39;length&#39;</code> for Kpoints.automatic generation</p>
-</li>
-<li><p><code>&#39;line_density&#39;</code> for line mode generation</p>
-</li>
-<li><p><code>&#39;added_kpoints&#39;</code> for specific k-points to include</p>
-</li>
-<li><p><code>&#39;zero_weighted_reciprocal_density&#39;</code> for a zero weighted uniform mesh</p>
-</li>
-<li><p><code>&#39;zero_weighted_line_density&#39;</code> for a zero weighted line mode mesh</p>
-</li>
-</ol>
-</li>
-</ul>
-<h6 id="user-potcar-settings"><a href="#user-potcar-settings" class="headerlink" title="user_potcar_settings"></a>user_potcar_settings</h6><p><code>POTCAR</code>的自定义设定主要是用于指定元素的势函数种类，语法如下：</p>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line">......</span><br><span class="line"><span class="comment"># pymatgen默认指定Li元素用Li_sv势，Na元素用Na_pv势，根据个人需求可改成调用普通的势</span></span><br><span class="line">potcar = &#123;</span><br><span class="line">    <span class="string">&#x27;Li&#x27;</span>:<span class="string">&#x27;Li&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Na&#x27;</span>：<span class="string">&#x27;Na&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">relax_new = MPRelaxSet(</span><br><span class="line">    struct,</span><br><span class="line">    user_incar_settings=&#123;<span class="string">&#x27;EDIFFG&#x27;</span>:-<span class="number">0.01</span>&#125;,</span><br><span class="line">    user_potcar_settings=potcar</span><br><span class="line">)</span><br><span class="line">......</span><br></pre></td></tr></table></figure></div>
-
-<h6 id="user-potcar-functional"><a href="#user-potcar-functional" class="headerlink" title="user_potcar_functional"></a>user_potcar_functional</h6><p><code>MPRelaxSet</code>默认的函数指定的是<code>&#39;PBE&#39;</code>，前面说到，<code>MPRelaxSet</code>的相关设置都是比较落后的，在势函数上默认的选择也是比较老的<code>&#39;PBE&#39;</code>，尤其是目前vasp版本已经更新到了6.4了，势函数也更新到了<code>&#39;PBE_64&#39;</code>。</p>
-<p>在上面的实操过程中，如果你的<code>&lt;PMG_VASP_PSP_DIR&gt;</code>路径下没有<code>&#39;PBE&#39;</code>势函数，可能会报错且没有文件生成：</p>
-<p><code>You do not have the right POTCAR with functional=&#39;PBE&#39; and symbol=&#39;Si&#39; in your PMG_VASP_PSP_DIR</code></p>
-<p>注意：这个并不是说咱的操作有问题，只是<code>MPRelaxSet</code>函数默认读取<code>&#39;PBE&#39;</code>，且<code>&#39;PBE&#39;</code>目前来说已经过时了。</p>
-<p>因此在使用的时候，我们需要加上<code>user_potcar_functional</code>参数来指定我们使用的势函数，这里我用的是<code>&#39;PBE_54&#39;</code>:</p>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line">......</span><br><span class="line">relax_new = MPRelaxSet(</span><br><span class="line">    struct,</span><br><span class="line">    user_incar_settings=&#123;<span class="string">&#x27;EDIFFG&#x27;</span>:-<span class="number">0.01</span>&#125;,</span><br><span class="line">    user_potcar_functional=<span class="string">&#x27;PBE_54&#x27;</span>,</span><br><span class="line">)</span><br><span class="line">......</span><br></pre></td></tr></table></figure></div>
-
-<p>再次运行，可正常生成输入文件。</p>
-<p>还没完！！！</p>
-<p>运行完上述的命令，输入文件可以正常生成了，但是又有新的Warning：</p>
-<blockquote>
-<p><strong>BadInputSetWarning:</strong> Overriding the POTCAR functional is generally not recommended  as it significantly affect the results of calculations and compatibility with other calculations done with the same input set. Note that some POTCAR symbols specified in the configuration file may not be available in the selected functional.</p>
-</blockquote>
-<blockquote>
-<p><strong>BadInputSetWarning:</strong> POTCAR data with symbol Si is not known by pymatgen to correspond with the selected user_potcar_functional&#x3D;’PBE_54’. This POTCAR is known to correspond with functionals [‘PBE_52_W_HASH’, ‘PBE_54_W_HASH’, ‘PBE_64’]. Please verify that you are using the right POTCARs!  warnings.warn(</p>
-</blockquote>
-<p><code>VASP</code>计算中有句话：Warning不算报错，能算就继续算。</p>
-<p>这里也是一样，这个Warning并不表示你的参数设置有问题，而是<code>VASP</code>官方会随着版本更新，相应的也会更新势函数的版本，同样地，<code>pymatgen</code>在更新的时候的时候也会同步把新版的势函数的<code>hash</code>值加入进来以便识别。简而言之，这个warning就是提醒你目前推荐的势函数版本是什么，比如这里推荐的是<code>&#39;PBE_64&#39;</code>。当然并不是说明<code>&#39;PBE_54&#39;</code>的势函数就是错的。官方<code>Github</code>的<code>Issue</code>里面有很多类似的讨论，这个Warning主要就是要提醒用户，了解自己在做什么。</p>
-<h4 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h4><p><code>MPRelaxSet</code>的用法就介绍到这，本章干货满满，各位多多练习~~~~</p>
 <p><em><strong>¡Muchas gracias!</strong></em></p>
 ]]></content>
       <categories>
@@ -467,8 +228,85 @@
         <tag>VASP</tag>
         <tag>pymatgen</tag>
         <tag>Materials Project</tag>
-        <tag>MPRelaxSet</tag>
-        <tag>MPScanRelaxSet</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Chap.12  计算小白硬学VASP —— 构建异质结模型</title>
+    <url>/2024/08/06/Learn-VASP-from-pymatgen-12/</url>
+    <content><![CDATA[<p><em><strong>¡Hola a todos!</strong></em></p>
+<p>本章介绍如何自动构建异质结模型。</p>
+<h3 id="CoherentInterfaceBuilder-ZSLGenerator"><a href="#CoherentInterfaceBuilder-ZSLGenerator" class="headerlink" title="CoherentInterfaceBuilder &amp; ZSLGenerator"></a>CoherentInterfaceBuilder &amp; ZSLGenerator</h3><p><code>pymatgen</code>中自动构建异质结模型需要调用<code>CoherentInterfaceBuilder</code>和<code>ZSLGenerator</code>。其中前者是用于生成<code>interfaces</code>，而后者主要是用于定义晶面的匹配度。导入方法为：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.analysis.interfaces.coherent_interfaces <span class="keyword">import</span> CoherentInterfaceBuilder</span><br><span class="line"><span class="keyword">from</span> pymatgen.analysis.interfaces.zsl <span class="keyword">import</span> ZSLGenerator</span><br></pre></td></tr></table></figure></div>
+
+<p>首先介绍<code>ZSLGenerator</code>，原理见：<a class="link" href="https://doi.org/10.1063/1.333084">Lattice match: An application to heteroepitaxy <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>。</p>
+<p><code>ZSLGenetator</code>接受四个参数传入：</p>
+<ul>
+<li><code>max_area_ratio_tol</code>：上下表面面积最大公差，默认为0.09；</li>
+<li><code>max_area</code>：最大表面面积，默认为400$Å^2$；</li>
+<li><code>max_length_tol</code>：超晶格最大公差，默认0.03；</li>
+<li><code>max_angle_tol</code>：上下表面基矢角度最大公差，默认0.01；</li>
+</ul>
+<p><code>CoherentInterfaceBuilder</code>接受五个参数传入：</p>
+<ul>
+<li><code>substrate_structure</code>：基底结构；</li>
+<li><code>film_structure</code>：表层结构；</li>
+<li><code>film_miller</code>：表层结构米勒指数；</li>
+<li><code>substrate_miller</code>：基地结构米勒指数；</li>
+<li><code>zslgen</code>：<code>ZSLGenerator</code></li>
+</ul>
+<p>以<code>Si</code>与<code>Li</code>为例，构建异质结模型。下载对应结构：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"><span class="keyword">from</span> mp_api.client <span class="keyword">import</span> MPRester</span><br><span class="line"></span><br><span class="line">api_key = <span class="string">&quot;your key&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> MPRester(api_key) <span class="keyword">as</span> mpr:</span><br><span class="line">    Si = mpr.get_structure_by_material_id(<span class="string">&quot;mp-149&quot;</span>, conventional_unit_cell=<span class="literal">True</span>)</span><br><span class="line">    Li = mpr.get_structure_by_material_id(<span class="string">&quot;mp-135&quot;</span>, conventional_unit_cell=<span class="literal">True</span>)</span><br><span class="line">    Si.to(filename=<span class="string">&quot;./Si_convention.cif&quot;</span>)</span><br><span class="line">    Li.to(filename=<span class="string">&quot;./Li_convention.cif&quot;</span>)</span><br></pre></td></tr></table></figure></div>
+
+<p>生成<code>Si(100)/Li(100)</code>异质结：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.analysis.interfaces.coherent_interfaces <span class="keyword">import</span> CoherentInterfaceBuilder</span><br><span class="line"><span class="keyword">from</span> pymatgen.analysis.interfaces.zsl <span class="keyword">import</span> ZSLGenerator</span><br><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"></span><br><span class="line"><span class="comment"># 结构</span></span><br><span class="line">substratrate_Si = Structure.from_file(<span class="string">&quot;./Si_conventional.cif&quot;</span>)</span><br><span class="line">film_Li = Structure.from_file(<span class="string">&quot;./Li_convention.cif&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 实例化</span></span><br><span class="line">cib = CoherentInterfaceBuilder(</span><br><span class="line">    substrate_structure=substratrate_Si,</span><br><span class="line">    film_structure=film_Li,</span><br><span class="line">    film_miller=([<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>]),</span><br><span class="line">    substrate_miller=([<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>]),</span><br><span class="line">    zslgen=ZSLGenerator(),</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成表面</span></span><br><span class="line">interfaces = cib.get_interfaces(</span><br><span class="line">    termination=cib.terminations[<span class="number">0</span>], 	<span class="comment"># 上下层结构暴露面</span></span><br><span class="line">    gap=<span class="number">2.0</span>, 							<span class="comment"># 异质结间距</span></span><br><span class="line">    vacuum_over_film=<span class="number">20.0</span>, 				<span class="comment"># 真空层厚度</span></span><br><span class="line">    film_thickness=<span class="number">2</span>, 					<span class="comment"># 表层结构厚度</span></span><br><span class="line">    substrate_thickness=<span class="number">4</span>, 				<span class="comment"># 基底结构厚度</span></span><br><span class="line">    in_layers=<span class="literal">True</span>						</span><br><span class="line">)</span><br></pre></td></tr></table></figure></div>
+
+<p>这里在实例化<code>CoherentInterfaceBuilder</code>之后调用<code>get_interfaces()</code>生成所有符合条件的异质结结构。<code>get_interfaces()</code>接受六个传入参数：</p>
+<ul>
+<li><p><code>termination</code>：上下表面的端面。注意该参数有固定写法，可以调用<code>cib.terminations</code>查看<code>Si(100)/Li(100)</code>端面种类</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line">......</span><br><span class="line"><span class="built_in">print</span>(cib.terminations)</span><br></pre></td></tr></table></figure></div>
+
+<blockquote>
+<p>运行代码输出端面的列表<code>[(&#39;Li_P4/mmm_1&#39;, &#39;Si_P4/mmm_1&#39;)]</code></p>
+</blockquote>
+<p><strong>Note</strong>：<code>get_interfaces()</code>中<code>termination</code>支持的数据格式为元素，所以这里用<code>cib.terminations[0]</code>来进行调用，或者直接写<code>termination=(&#39;Li_P4/mmm_1&#39;, &#39;Si_P4/mmm_1&#39;)</code>。</p>
+</li>
+<li><p><code>gap</code>：异质结上下表面间距；</p>
+</li>
+<li><p><code>vacuum_over_film</code>：真空层厚度，这里指上下表面之间的真空层；</p>
+</li>
+<li><p><code>film_thickness</code>&amp;<code>substrate_thickness</code>：上下<code>slab</code>厚度；</p>
+</li>
+<li><p><code>in_layers</code>：<code>slab</code>厚度用晶面厚度为单位，默认为<code>True</code></p>
+</li>
+</ul>
+<p>继续，得到所有的结构：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.analysis.interfaces.coherent_interfaces <span class="keyword">import</span> CoherentInterfaceBuilder</span><br><span class="line"><span class="keyword">from</span> pymatgen.analysis.interfaces.zsl <span class="keyword">import</span> ZSLGenerator</span><br><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"></span><br><span class="line"><span class="comment"># 结构</span></span><br><span class="line">substratrate_Si = Structure.from_file(<span class="string">&quot;./Si_conventional.cif&quot;</span>)</span><br><span class="line">film_Li = Structure.from_file(<span class="string">&quot;./Li_convention.cif&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 实例化</span></span><br><span class="line">cib = CoherentInterfaceBuilder(</span><br><span class="line">    substrate_structure=substratrate_Si,</span><br><span class="line">    film_structure=film_Li,</span><br><span class="line">    film_miller=([<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>]),</span><br><span class="line">    substrate_miller=([<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>]),</span><br><span class="line">    zslgen=ZSLGenerator(),</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成表面</span></span><br><span class="line">interfaces = cib.get_interfaces(</span><br><span class="line">    termination=cib.terminations[<span class="number">0</span>], 	<span class="comment"># 上下层结构暴露面</span></span><br><span class="line">    gap=<span class="number">2.0</span>, 							<span class="comment"># 异质结间距</span></span><br><span class="line">    vacuum_over_film=<span class="number">20.0</span>, 				<span class="comment"># 真空层厚度</span></span><br><span class="line">    film_thickness=<span class="number">2</span>, 					<span class="comment"># 表层结构厚度</span></span><br><span class="line">    substrate_thickness=<span class="number">4</span>, 				<span class="comment"># 基底结构厚度</span></span><br><span class="line">    in_layers=<span class="literal">True</span>						</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">count = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> i, interface <span class="keyword">in</span> <span class="built_in">enumerate</span>(interfaces):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Interface <span class="subst">&#123;i&#125;</span>:&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(interface)</span><br><span class="line">    count += <span class="number">1</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;Total number of interfaces: <span class="subst">&#123;count&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure></div>
+
+<p>运行代码：</p>
+<div class="highlight-container" data-rel="Txt"><figure class="iseeu highlight txt"><table><tr><td class="code"><pre><span class="line">Interface 0:</span><br><span class="line">Full Formula (Li10 Si16)</span><br><span class="line">Reduced Formula: Li5Si8</span><br><span class="line">abc   :   7.698558   7.698558  27.802433</span><br><span class="line">angles:  90.000000  90.000000  90.000000</span><br><span class="line">pbc   :       True       True       True</span><br><span class="line">Sites (26)</span><br><span class="line">  #  SP       a     b         c    bulk_equivalent  bulk_wyckoff    interface_label</span><br><span class="line">---  ----  ----  ----  --------  -----------------  --------------  -----------------</span><br><span class="line">  0  Li    0     0     0.577558                  0  a               film</span><br><span class="line">  1  Li    0.4   0.2   0.577558                  0  a               film</span><br><span class="line">  2  Li    0.2   0.6   0.577558                  0  a               film</span><br><span class="line">  3  Li    0.8   0.4   0.577558                  0  a               film</span><br><span class="line">  4  Li    0.6   0.8   0.577558                  0  a               film</span><br><span class="line">  5  Li    0.1   0.3   0.639411                  0  a               film</span><br><span class="line">  6  Li    0.5   0.5   0.639411                  0  a               film</span><br><span class="line">  7  Li    0.3   0.9   0.639411                  0  a               film</span><br><span class="line">  8  Li    0.9   0.7   0.639411                  0  a               film</span><br><span class="line">  9  Li    0.7   0.1   0.639411                  0  a               film</span><br><span class="line"> 10  Si    0     0.25  0.407722                  0  a               substrate</span><br><span class="line"> 11  Si    0     0.75  0.407722                  0  a               substrate</span><br><span class="line"> 12  Si    0.5   0.25  0.407722                  0  a               substrate</span><br><span class="line"> 13  Si    0.5   0.75  0.407722                  0  a               substrate</span><br><span class="line"> 14  Si    0     0.5   0.358772                  0  a               substrate</span><br><span class="line"> 15  Si    0     0     0.358772                  0  a               substrate</span><br><span class="line"> 16  Si    0.5   0.5   0.358772                  0  a               substrate</span><br><span class="line"> 17  Si    0.5   0     0.358772                  0  a               substrate</span><br><span class="line"> 18  Si    0.25  0.5   0.505622                  0  a               substrate</span><br><span class="line"> 19  Si    0.25  0     0.505622                  0  a               substrate</span><br><span class="line"> 20  Si    0.75  0.5   0.505622                  0  a               substrate</span><br><span class="line"> 21  Si    0.75  1     0.505622                  0  a               substrate</span><br><span class="line"> 22  Si    0.25  0.25  0.456672                  0  a               substrate</span><br><span class="line"> 23  Si    0.25  0.75  0.456672                  0  a               substrate</span><br><span class="line"> 24  Si    0.75  0.25  0.456672                  0  a               substrate</span><br><span class="line"> 25  Si    0.75  0.75  0.456672                  0  a               substrate</span><br><span class="line"> ......</span><br><span class="line"> ......</span><br><span class="line"> Total number of interfaces: 191</span><br></pre></td></tr></table></figure></div>
+
+<p>符合要求的<code>interfaces</code>总共有191个。<code>interfaces</code>的类型是一个迭代器，不能直接调用输出其中的结果，但是可以先转化成<code>list</code>，然后可以导出第一个结构看下结果：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line">......</span><br><span class="line"><span class="comment"># 转化成列表</span></span><br><span class="line">Interfaces = <span class="built_in">list</span>(interfaces)</span><br><span class="line"><span class="comment"># 输出第一个结构</span></span><br><span class="line">Interfaces[<span class="number">0</span>].to(<span class="string">&quot;./Heter_1.cif&quot;</span>)</span><br></pre></td></tr></table></figure></div>
+
+<p><code>VESTA</code>打开：</p>
+<p><img src="/2024/08/06/Learn-VASP-from-pymatgen-12/image-20240806094616702.png" alt="image-20240806094616702"></p>
+<p>可以再输出最后一个结构对比一下：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line">......</span><br><span class="line"><span class="comment"># 转化成列表</span></span><br><span class="line">Interfaces = <span class="built_in">list</span>(interfaces)</span><br><span class="line"><span class="comment"># 输出第一个结构</span></span><br><span class="line">Interfaces[<span class="number">190</span>].to(<span class="string">&quot;./Heter_191.cif&quot;</span>)</span><br></pre></td></tr></table></figure></div>
+
+<p><code>VESTA</code>打开：</p>
+<p><img src="/2024/08/06/Learn-VASP-from-pymatgen-12/image-20240806094820632.png" alt="image-20240806094820632"></p>
+<p>可以发现同样的情况下，最后一个结构整体结构要大很多，相对更复杂。</p>
+<p>这是因为<code>Interfaces</code>里储存的结构是根据结构从简单到复杂进行排列，这里的”复杂”对应的是程序为了搜索匹配的超晶格表面，会自动进行晶格重定向或晶格基矢转变来进行匹配。</p>
+<p>实际使用时，为了节省计算时间，推荐选取最靠前的几个结构进行计算即可。</p>
+<p><em><strong>¡Muchas gracias!</strong></em></p>
+]]></content>
+      <categories>
+        <category>Learn VASP from pymatgen</category>
+      </categories>
+      <tags>
+        <tag>VASP</tag>
+        <tag>pymatgen</tag>
+        <tag>Materials Project</tag>
       </tags>
   </entry>
   <entry>
@@ -736,6 +574,299 @@
       </tags>
   </entry>
   <entry>
+    <title>Chap.4  计算小白硬学VASP —— MPRelaxSet用法</title>
+    <url>/2024/06/04/Learn-VASP-from-pymatgen-4/</url>
+    <content><![CDATA[<p><em><strong>¡Hola a todos!</strong></em></p>
+<p>VASP计算运行流程简单示意图：</p>
+<pre class="mermaid">flowchart LR
+    input 
+    vasp(vasp)
+    converged(converged)
+    raw_data(raw_data)
+    
+    subgraph prep_input
+    1([INCAR])-->input
+    2([KPOINTS])-->input
+    3([POSCAR])-->input
+    4([POTCAR])-->input
+    5([sub_job.script])-->input
+    end
+    input-->vasp
+    subgraph vasp_black_box
+    vasp---relax([relax])-->converged
+    vasp---scf_calc([scf_calc])-->converged
+    vasp---nonscf_calc([nonscf_calc])-->converged
+    vasp---ect([......])-->converged
+    end
+    converged-->raw_data
+    subgraph post_processing
+    raw_data-->table([table])
+    raw_data-->gra([graph])
+    raw_data-->animation([animation])
+    
+    end</pre>
+
+<ul>
+<li><p>第一步为输入文件的准备，除了准备<code>INCAR KPOINTS POSCAR POTCAR</code>这四个VASP必需的输入文件之外，通常使用超算集群的用户还需要准备任务提交脚本<code>sub_job.script</code>；</p>
+</li>
+<li><p>第二步为提交运行VASP进行计算，这里可以把软件运算过程当成一个黑匣子，作为使用者的角度，我们无需去了解它是如何迭代计算，只需要根据不同的计算内容，我们能够根据不同的依据来判断计算是否完成，也就是是否收敛；</p>
+</li>
+<li><p>第三步为数据后处理过程，VASP输出的输出一般都不能直接转化成为可用的结果，需要我们进一步去分析电荷文件、波函数文件、<code>OUTCAR</code>文件等，从其中得到我们最终可以绘图<code>or</code>制表的数据。</p>
+</li>
+</ul>
+<h3 id="Why-pymatgen"><a href="#Why-pymatgen" class="headerlink" title="Why pymatgen"></a>Why pymatgen</h3><p>完整的计算流程中除了第二步依赖于软件本身，其余的工作都需要花费大量的人力时间来操作。传统操作来讲，输入文件可能用<code>vim</code>、<code>Notepad++</code>、<code>VScode</code>等手动编辑；计算结果的处理除了用插件得到<code>raw_data</code>还需要用到<code>origin</code>手动作图。</p>
+<p>对于少量计算来说，手动的亲力亲为的效率反而更高，但是遇到大量计算的计算操作，比如高通量计算，人的专注度是有限的，很容易就会出问题，老司机踩过的坑就包括但不仅限于以下：</p>
+<ul>
+<li><p>修改后的<code>POSCAR</code>，忘记对应修改<code>POTCAR</code> </p>
+</li>
+<li><p>磁性体系没开<code>ISPIN</code></p>
+</li>
+<li><p>未收敛的结果继续做自洽计算</p>
+</li>
+<li><p>……</p>
+</li>
+</ul>
+<p>这些操作看起来非常的离谱，初学VASP的兄弟肯定会说这个太夸张了。相信我，经历过大量计算的老哥们肯定或多或少都踩过类似的坑。</p>
+<p>回到正题，why pymatgen？看看下面的图你就知道：</p>
+<p><img src="/2024/06/04/Learn-VASP-from-pymatgen-4/pmg_chart.png" alt="pmg_chart"></p>
+<p>这个是<code>pymatgen</code>的功能示意图，不难发现，好像<code>pymatgen</code>把我们要干的活都给干了：</p>
+<ul>
+<li><p>支持根据计算类型生成输入文件</p>
+</li>
+<li><p>支持识别多种格式的结构文件</p>
+</li>
+<li><p>支持分析计算结果</p>
+</li>
+<li><p>……</p>
+</li>
+</ul>
+<p>配合上<code>matplotlib</code>绘图，妥妥的实现整个计算流程脚本自动化：</p>
+<p>代码一年写一次，一次用三年。</p>
+<h3 id="自动生成结构弛豫（优化）输入文件"><a href="#自动生成结构弛豫（优化）输入文件" class="headerlink" title="自动生成结构弛豫（优化）输入文件"></a>自动生成结构弛豫（优化）输入文件</h3><h4 id="MPRelaxSet-or-MPScanRelaxSet：如何选择合适的模块"><a href="#MPRelaxSet-or-MPScanRelaxSet：如何选择合适的模块" class="headerlink" title="MPRelaxSet or MPScanRelaxSet：如何选择合适的模块"></a>MPRelaxSet or MPScanRelaxSet：如何选择合适的模块</h4><p>本小节主要介绍下<code>pymatgen</code>中生成结构优化输入文件的模块的相关功能。看标题老司机给出了两个模块，这两个模块都是用于生成结构优化的输入文件，但是使用场景却有些许差别，需要根据使用场景和个人需求来自主选择。</p>
+<p>总所周知，<code>pymatgen</code>就是由<code>Materials Project</code>的团队开发的，而<code>Materials Project</code>上的结构的相关数据也都是通过<code>pymatgen</code>的生成的输入来进行计算而得到。</p>
+<p>那么问题来了，<code>Materials project</code>2011年就成立了，受限于当时的计算资源，面对如此庞大的高通量计算，当时的计算参数的设置稍显粗糙，放在如今的精度评判标准来看显然是不够的。为此官方也多次在<code>Github</code>的Issue里面提到过网页端的数据目前看来部分是<code>outdated</code>，但是官网也会定期的更新<code>datebase</code>，有兴趣可以看下每个版本都更新了哪些数据 <a class="link" href="https://docs.materialsproject.org/changes/database-versions">link <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>。而已有的数据绝大部分都是基于<code>MPRelaxSet</code>模块优化的结构计算的。</p>
+<p>下面是两个模块分别针对<code>Si</code>单质生成的<code>INCAR</code>词条对比：</p>
+<p><img src="/2024/06/04/Learn-VASP-from-pymatgen-4/Si_oldINCAR-17177292067111.png" alt="Si_oldINCAR">           <img src="/2024/06/04/Learn-VASP-from-pymatgen-4/Si_newINCAR.png" alt="Si_newINCAR"></p>
+<p>不用去管每个词条是什么意思，单看词条数量，俗话说：”一寸长，一寸强“，单从词条的长度就可以大致凭借经验判断，短的可能精度比较低，没错，短的就是<code>MPRelaxSet</code>生成的。</p>
+<p>那么是不是说明<code>MPRelaxSet</code>就不能用了呢？大可不必直接否定。</p>
+<h5 id="MPRelaxSet默认参数适用场景"><a href="#MPRelaxSet默认参数适用场景" class="headerlink" title="MPRelaxSet默认参数适用场景"></a>MPRelaxSet默认参数适用场景</h5><ul>
+<li><p>相图计算</p>
+<p>相图的计算需要设计许多中间相结构的计算，而<code>Materials project</code>作为数据库已经记录了许多结构的标准化输入的能量，这些数据都是可以直接调用的，因此对我们计算相图提供了极大的便利。基于此，我们在补充结构进行计算时，也需要保持<code>Materials project</code>数据的默认设置，所以此时调用<code>MPRelaxSet</code>模块是相对合适的；</p>
+</li>
+<li><p>电化学窗口</p>
+<p>同理电化学窗口的计算也需要计算大量的结构。为此，这类需要调用<code>Materials project</code>上面结构能量数据来节省计算量的，可以使用<code>MPRelaxSet</code>模块；</p>
+</li>
+<li><p>粗收敛</p>
+<p>我们之前说过，好的结构是好结果的关键，那么其中重要的步骤就是优化过程。对于复杂结构：异质结、磁性体系、超大模型等，采用<code>MPRelaxSet</code>模块进行粗收敛来初步判断结构建模以及参数设置是否合理，同时不失为一个节省计算总时长的好办法。</p>
+</li>
+</ul>
+
+  <div class="note p-4 mb-4 rounded-small info">
+    <p>如果需要对应<code>Materials project</code>上的结构数据，势函数的种类选择也要对应，这里先提一下留意一下，后面详细说明。</p>
+
+  </div>
+
+<h5 id="MPScanRelaxSet介绍"><a href="#MPScanRelaxSet介绍" class="headerlink" title="MPScanRelaxSet介绍"></a>MPScanRelaxSet介绍</h5><p><code>MPScanRelaxSet</code>模块的使用条件就比较限制了，软件方面的适用条件：</p>
+<ul>
+<li><p><code>VASP</code>版本6.0.0及以上</p>
+</li>
+<li><p>默认引入了更准确的<code>METAGGA = r2SCAN</code>方法，此方法要求<code>VASP</code>版本6.2及以上</p>
+</li>
+<li><p><code>METAGGA</code>要求势函数包含<code>kinetic energy density of the core-electrons</code>，也就是势函数必须要用<code>PBE_52</code>及以上版本</p>
+<p>看到这里是否有点不知道在讲什么，其实老司机也只是把文档的内容汉化成以上三点，平常我也是使用的<code>MPRelaxSet</code>模块，因为目前我使用的VASP版本还是5.4.4 <code>QAQ</code></p>
+</li>
+</ul>
+<h5 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h5><p>这里，老司机建议先使用<code>MPRelaxSet</code>模块就足够了，对于目前大部分<code>pymatgen</code>的用户来说，<code>MPRelaxSet</code>模块的使用还是占主要的。而且也不必担心计算精度问题，既然模块有默认参数，那么在使用过程中我们也可以根据需求进行调整精度。后续的计算也是基于<code>VASP_v5.4.4</code>，用<code>MPRelaxSet</code>模块实例。</p>
+<p><em><strong>PS：</strong></em>其实就是老司机使用的服务器没有<code>VASP_v6.0+</code>版本，不然高低也得详细对比测一下，给出更详细的使用建议。</p>
+<h4 id="MPRelaxSet使用实例"><a href="#MPRelaxSet使用实例" class="headerlink" title="MPRelaxSet使用实例"></a>MPRelaxSet使用实例</h4><h5 id="实例1：生成Si单质结构优化输入文件"><a href="#实例1：生成Si单质结构优化输入文件" class="headerlink" title="实例1：生成Si单质结构优化输入文件"></a>实例1：生成Si单质结构优化输入文件</h5><p><code>MPRelaxSet</code>模块调用命令是：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.sets <span class="keyword">import</span> MPRelaxSet</span><br></pre></td></tr></table></figure></div>
+
+<p><code>sets</code>里还包含其他模块，除上面的<code>MPScanRelaxSet</code>，还有<code>LobsterSet</code>、<code>MPAbsorptionSet</code>、<code>MPHSEBSSet</code>等等，后续有需要会一一介绍。</p>
+<p>导入模块之后，我们必须提供的只有结构信息，而读取结构信息还需要用到的模块是<code>Structure</code>，同样也需要导入：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br></pre></td></tr></table></figure></div>
+
+<h6 id="输入结构信息"><a href="#输入结构信息" class="headerlink" title="输入结构信息"></a>输入结构信息</h6><p><code>Structure</code>支持的结构信息类型非常多可以自己写，也可以只提供提供文件路径供识别：</p>
+<ul>
+<li>手写晶格常数，元素种类，原子坐标</li>
+</ul>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.core <span class="keyword">import</span> Lattice</span><br><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"></span><br><span class="line"><span class="comment"># 晶格常数</span></span><br><span class="line">lattice = Lattice([[<span class="number">4.2</span>, <span class="number">0.0</span>, <span class="number">0.0</span>], [<span class="number">0.0</span>, <span class="number">4.2</span>, <span class="number">0.0</span>], [<span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">4.2</span>]])</span><br><span class="line"></span><br><span class="line"><span class="comment">#原子种类</span></span><br><span class="line">species = [<span class="string">&quot;Si&quot;</span>, <span class="string">&quot;Si&quot;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">#原子坐标</span></span><br><span class="line">coords = [[<span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>], [<span class="number">0.25</span>, <span class="number">0.25</span>, <span class="number">0.25</span>]]</span><br><span class="line"></span><br><span class="line"><span class="comment">#创建Si结构</span></span><br><span class="line">struct = Structure(lattice, species, coords)</span><br></pre></td></tr></table></figure></div>
+
+<p>但是该方法极不推荐，why，因为很麻烦，而且复杂结构的原子坐标根本写不出来，但是对于单原子的结构建模，还是可以使用。</p>
+<ul>
+<li>提供现成结构文件，目前可以识别的格式有：</li>
+</ul>
+<ol>
+<li><p>Crystallographic Information Format file (.cif文件)</p>
+</li>
+<li><p>VASP输入输出中包含结构信息的文件：POSCAR、CONTCAR、CHGCAR、LOCPOT、vasprun.xml</p>
+</li>
+<li><p>CSSR、Netcdf、pymatgen结构JSON文件</p>
+</li>
+</ol>
+<p>前两种的结构文件是比较常见的，也是常用的：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"></span><br><span class="line"><span class="comment"># 结构文件路径</span></span><br><span class="line">poscar = <span class="string">&quot;./POSCAR&quot;</span>		<span class="comment">#当前文件夹下有POSCAR文件</span></span><br><span class="line"></span><br><span class="line">struct = Structure.from_file(poscar)	<span class="comment">#from_file用法是固定的，用于读取该路径下的结构文件</span></span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>MP-API获取结构：</li>
+</ul>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">with</span> MPRester(api_key) <span class="keyword">as</span> mpr:</span><br><span class="line">    struct = mpr.get_structure_by_material_id(<span class="string">&quot;mp-149&quot;</span>) <span class="comment"># Si的MP编号</span></span><br></pre></td></tr></table></figure></div>
+
+<p>这里Si的结构信息就被储存到<code>structure</code>变量了</p>
+<h6 id="MPRelaxSet生成并导出输入文件"><a href="#MPRelaxSet生成并导出输入文件" class="headerlink" title="MPRelaxSet生成并导出输入文件"></a>MPRelaxSet生成并导出输入文件</h6><p>结构准备好了之后，就可以直接生成输入文件了，下面是完整代码：</p>
+<details class="yellow" data-header-exclude><summary><i class="fa-solid fa-chevron-right"></i>参考代码 </summary>
+              <div class="content">
+              <div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.sets <span class="keyword">import</span> MPRelaxSet</span><br><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"><span class="keyword">from</span> pymatgen.core <span class="keyword">import</span> Lattice</span><br><span class="line"><span class="keyword">from</span> mp_api.client <span class="keyword">import</span> MPRester</span><br><span class="line"></span><br><span class="line"><span class="comment">## 方法1</span></span><br><span class="line"><span class="comment"># 晶格常数</span></span><br><span class="line">lattice = Lattice([[<span class="number">4.2</span>, <span class="number">0.0</span>, <span class="number">0.0</span>], [<span class="number">0.0</span>, <span class="number">4.2</span>, <span class="number">0.0</span>], [<span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">4.2</span>]])</span><br><span class="line"><span class="comment">#原子种类</span></span><br><span class="line">species = [<span class="string">&quot;Si&quot;</span>, <span class="string">&quot;Si&quot;</span>]</span><br><span class="line"><span class="comment">#原子坐标</span></span><br><span class="line">coords = [[<span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>], [<span class="number">0.25</span>, <span class="number">0.25</span>, <span class="number">0.25</span>]]</span><br><span class="line"><span class="comment">#创建Si结构</span></span><br><span class="line">struct1 = Structure(lattice, species, coords)</span><br><span class="line"><span class="comment">#调用MPRelaxSet</span></span><br><span class="line">relax1 = MPRelaxSet(struct1)</span><br><span class="line"><span class="comment">#导出文件</span></span><br><span class="line">relax1.write_input(<span class="string">&#x27;./1&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;文件成功保存到1&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">##方法2</span></span><br><span class="line"><span class="comment"># 结构文件路径</span></span><br><span class="line">Si_poscar = <span class="string">&quot;./POSCAR&quot;</span>		<span class="comment">#当前文件夹下准备Si的POSCAR文件</span></span><br><span class="line">struct2 = Structure.from_file(Si_poscar)</span><br><span class="line"><span class="comment">#调用MPRelaxSet</span></span><br><span class="line">relax2 = MPRelaxSet(struct2)</span><br><span class="line"><span class="comment">#导出文件</span></span><br><span class="line">relax2.write_input(<span class="string">&#x27;./2&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;文件成功保存到2&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">##方法3</span></span><br><span class="line">api_key = <span class="string">&quot;aaaaabbbbb&quot;</span>	<span class="comment">#换成你的key</span></span><br><span class="line"><span class="keyword">with</span> MPRester(api_key) <span class="keyword">as</span> mpr:</span><br><span class="line">    struct3 = mpr.get_structure_by_material_id(<span class="string">&quot;mp-149&quot;</span>)</span><br><span class="line">    relax3 = MPRelaxSet(struct3)</span><br><span class="line">    <span class="comment">#导出文件</span></span><br><span class="line">	relax3.write_input(<span class="string">&#x27;./3&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;文件成功保存到3&quot;</span>)</span><br></pre></td></tr></table></figure></div>
+              </div>
+            </details>
+
+<p>运行</p>
+<p><img src="/2024/06/04/Learn-VASP-from-pymatgen-4/Sirelax_input.png" alt="Sirelax_input"></p>
+<p>当前路径生成三个文件夹，每个文件夹对于不同方法生成的输入文件，可以发现其中的<code>INCAR</code>几乎是一样的，除了方法3中<code>INCAR</code>的原子初始磁矩<code>MAGMOM</code>都设置成0了，这是因为方法3是直接读取的<code>Materials project</code>的数据，直接包含了磁矩信息，覆盖了默认设置。</p>
+<p><img src="/2024/06/04/Learn-VASP-from-pymatgen-4/Si_incar_compare.png" alt="Si_incar_compare"></p>
+<h5 id="实例2：自定义输入参数（进阶设置）"><a href="#实例2：自定义输入参数（进阶设置）" class="headerlink" title="实例2：自定义输入参数（进阶设置）"></a>实例2：自定义输入参数（进阶设置）</h5><p>前面我们讲了<code>MPRelaxSet</code>的默认参数精度是比较低的，正常来说，默认计算后得到的结构和能量数据都不建议使用。但是，不用担心，我们可以自定义输入参数，包括截断能、收敛标准，优化步数等等。</p>
+<p>虽然前面讲过不需要去学习参数词条就可以学会VASP计算。严格来说实例1学会之后，任何结构你都可以生成输入去用VASP算一下看看结果。</p>
+<p>本实例也可以说是进阶内容，主要是利于针对每个人自己对应的研究体系，能够设置相对合理的参数，需要对基本的<code>INCAR</code>词条有一定了解。</p>
+<p>所以对该部分不感兴趣的可以直接跳过本小节，后面再看也可以。</p>
+<h6 id="user-incar-settings"><a href="#user-incar-settings" class="headerlink" title="user_incar_settings"></a>user_incar_settings</h6><p>之前的代码中，<code>MPRelaxSet</code>中我们只提供了结构，如果是用于自定义INCAR参数，还可以继续添加<code>user_incar_settings</code>来覆盖默认的设置，这里不需要写完整的所有INCAR设置，只需要写你想要改变的词条。</p>
+
+  <div class="note p-4 mb-4 rounded-small info">
+    <p><code>INCAR</code>词条有默认的设置，即使不写入<code>INCAR</code>里面也会在计算中采用默认的设置，详情默认设置的值以及解释见[VASP官网](<a class="link" href="https://www.vasp.at/wiki/index.php/The_VASP_Manual">The VASP Manual - VASP Wiki <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>)</p>
+
+  </div>
+
+<p>语法如下：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.sets <span class="keyword">import</span> MPRelaxSet</span><br><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"></span><br><span class="line">Si_poscar = <span class="string">&quot;./POSCAR&quot;</span></span><br><span class="line">struct = Structure.from_file(Si_poscar)</span><br><span class="line">relax_old = MPRelaxSet(struct2)</span><br><span class="line">relax_new = MPRelaxSet(</span><br><span class="line">    struct2,</span><br><span class="line">    user_incar_settings=&#123;<span class="string">&#x27;EDIFFG&#x27;</span>:-<span class="number">0.01</span>&#125;</span><br><span class="line">)</span><br><span class="line">relax_old.write_input(<span class="string">&#x27;./old&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Default settings have been written&quot;</span>)</span><br><span class="line">relax_new.write_input(<span class="string">&#x27;./new&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;New settings have been added&quot;</span>)</span><br></pre></td></tr></table></figure></div>
+
+<p>运行后对比<code>new</code>和<code>old</code>文件夹里的<code>INCAR</code></p>
+<p><img src="/2024/06/04/Learn-VASP-from-pymatgen-4/add_EDIFFG.png" alt="add_EDIFFG"></p>
+<p>成功添加了<code>EDIFFG</code>词条，此时控制结构收敛的标准从能量收敛变成了更为严格靠谱的力收敛。</p>
+<p>如果想修改更多的词条，我们也只需要在<code>user_incar_settings</code>对应的字典后面逐个添加即可：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line">user_incar_settings=&#123;</span><br><span class="line">    <span class="string">&#x27;EDIFFG&#x27;</span>:-<span class="number">0.01</span>,</span><br><span class="line">    <span class="string">&#x27;ENCUT&#x27;</span>:<span class="number">400</span>,</span><br><span class="line">    <span class="string">&#x27;NSW&#x27;</span>:<span class="number">200</span>,</span><br><span class="line">    <span class="string">&#x27;ISPIN&#x27;</span>:<span class="number">1</span>,</span><br><span class="line">    <span class="string">&#x27;ALGO&#x27;</span>:<span class="string">&#x27;Normal&#x27;</span></span><br><span class="line">    ......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h6 id="user-kpoints-settings"><a href="#user-kpoints-settings" class="headerlink" title="user_kpoints_settings"></a>user_kpoints_settings</h6><p>说完了<code>INCAR</code>的自定义设置，<code>KPOINTS</code>的自定义设置也类似。</p>
+<ul>
+<li>调用<code>Kpoints</code>模块来生成</li>
+</ul>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line">......</span><br><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.inputs <span class="keyword">import</span> Kpoints</span><br><span class="line"></span><br><span class="line">......</span><br><span class="line"><span class="comment"># 1.指定K点</span></span><br><span class="line">kpoints = Kpoints(kpts=[(<span class="number">3</span>,<span class="number">3</span>,<span class="number">3</span>)])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2.全自动K空间网格</span></span><br><span class="line">kpoints = Kpoints.automatic(<span class="number">50</span>)	<span class="comment"># 50表示倒格子空间向量长度与分隔的K点的乘积</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 3.根据K点密度自动生成</span></span><br><span class="line">kpoints = Kpoints.automatic_density(struct, <span class="number">1000</span>) <span class="comment"># 1000表示K空间里整个K点的数量</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 4.与2类似，指定每条向量</span></span><br><span class="line">kpoints = Kpoints.automatic_density_by_lengths(struct, [<span class="number">50</span>,<span class="number">50</span>,<span class="number">10</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 5.根据体积平均生成K点</span></span><br><span class="line">kpoints = Kpoints.automatic_density_by_vol(struct,<span class="number">500</span>)</span><br><span class="line"></span><br><span class="line">relax_new = MPRelaxSet(</span><br><span class="line">    struct,</span><br><span class="line">    user_incar_settings=&#123;<span class="string">&#x27;EDIFFG&#x27;</span>:-<span class="number">0.01</span>&#125;,</span><br><span class="line">    user_kpoints_settings=kpoints</span><br><span class="line">)</span><br></pre></td></tr></table></figure></div>
+
+
+  <div class="note p-4 mb-4 rounded-small info">
+    <p>强烈推荐1和2方法</p>
+
+  </div>
+
+<ul>
+<li><p>修改<code>MPRelaxSet</code>默认KPOINTS设置</p>
+<p>在之前的代码中，我们并没有进行K点的相关设置，但是生成的输入文件中也给我们生成了<code>KPOINTS</code>文件。查阅官网文档内容可以发现，实际上K点的设置是已经给我们设置了默认的参数：<code>&#123;&#39;reciprocal_density&#39;: 64&#125;</code>，此外还有其他的设置方式：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line">......</span><br><span class="line"><span class="comment"># 倒格子密度</span></span><br><span class="line">kpoints = &#123;<span class="string">&#x27;reciprocal_density&#x27;</span>: <span class="number">64</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 网格密度</span></span><br><span class="line">kpoints = &#123;<span class="string">&#x27;grid_density&#x27;</span>: <span class="number">500</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 全自动K点</span></span><br><span class="line">kpoints = &#123;<span class="string">&#x27;length&#x27;</span>:<span class="number">30</span>&#125;</span><br><span class="line"></span><br><span class="line">relax_new = MPRelaxSet(</span><br><span class="line">    struct,</span><br><span class="line">    user_incar_settings=&#123;<span class="string">&#x27;EDIFFG&#x27;</span>:-<span class="number">0.01</span>&#125;,</span><br><span class="line">    user_kpoints_settings=kpoints</span><br><span class="line">)</span><br></pre></td></tr></table></figure></div>
+
+<p>除上述外，官方支持的全部格式如下：</p>
+<ol>
+<li><p><code>&#39;grid_density&#39;</code> for Kpoints.automatic_density generation </p>
+</li>
+<li><p><code>&#39;reciprocal_density&#39;</code> for KPoints.automatic_density_by_vol generation</p>
+</li>
+<li><p><code>&#39;length&#39;</code> for Kpoints.automatic generation</p>
+</li>
+<li><p><code>&#39;line_density&#39;</code> for line mode generation</p>
+</li>
+<li><p><code>&#39;added_kpoints&#39;</code> for specific k-points to include</p>
+</li>
+<li><p><code>&#39;zero_weighted_reciprocal_density&#39;</code> for a zero weighted uniform mesh</p>
+</li>
+<li><p><code>&#39;zero_weighted_line_density&#39;</code> for a zero weighted line mode mesh</p>
+</li>
+</ol>
+</li>
+</ul>
+<h6 id="user-potcar-settings"><a href="#user-potcar-settings" class="headerlink" title="user_potcar_settings"></a>user_potcar_settings</h6><p><code>POTCAR</code>的自定义设定主要是用于指定元素的势函数种类，语法如下：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line">......</span><br><span class="line"><span class="comment"># pymatgen默认指定Li元素用Li_sv势，Na元素用Na_pv势，根据个人需求可改成调用普通的势</span></span><br><span class="line">potcar = &#123;</span><br><span class="line">    <span class="string">&#x27;Li&#x27;</span>:<span class="string">&#x27;Li&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Na&#x27;</span>：<span class="string">&#x27;Na&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">relax_new = MPRelaxSet(</span><br><span class="line">    struct,</span><br><span class="line">    user_incar_settings=&#123;<span class="string">&#x27;EDIFFG&#x27;</span>:-<span class="number">0.01</span>&#125;,</span><br><span class="line">    user_potcar_settings=potcar</span><br><span class="line">)</span><br><span class="line">......</span><br></pre></td></tr></table></figure></div>
+
+<h6 id="user-potcar-functional"><a href="#user-potcar-functional" class="headerlink" title="user_potcar_functional"></a>user_potcar_functional</h6><p><code>MPRelaxSet</code>默认的函数指定的是<code>&#39;PBE&#39;</code>，前面说到，<code>MPRelaxSet</code>的相关设置都是比较落后的，在势函数上默认的选择也是比较老的<code>&#39;PBE&#39;</code>，尤其是目前vasp版本已经更新到了6.4了，势函数也更新到了<code>&#39;PBE_64&#39;</code>。</p>
+<p>在上面的实操过程中，如果你的<code>&lt;PMG_VASP_PSP_DIR&gt;</code>路径下没有<code>&#39;PBE&#39;</code>势函数，可能会报错且没有文件生成：</p>
+<p><code>You do not have the right POTCAR with functional=&#39;PBE&#39; and symbol=&#39;Si&#39; in your PMG_VASP_PSP_DIR</code></p>
+<p>注意：这个并不是说咱的操作有问题，只是<code>MPRelaxSet</code>函数默认读取<code>&#39;PBE&#39;</code>，且<code>&#39;PBE&#39;</code>目前来说已经过时了。</p>
+<p>因此在使用的时候，我们需要加上<code>user_potcar_functional</code>参数来指定我们使用的势函数，这里我用的是<code>&#39;PBE_54&#39;</code>:</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line">......</span><br><span class="line">relax_new = MPRelaxSet(</span><br><span class="line">    struct,</span><br><span class="line">    user_incar_settings=&#123;<span class="string">&#x27;EDIFFG&#x27;</span>:-<span class="number">0.01</span>&#125;,</span><br><span class="line">    user_potcar_functional=<span class="string">&#x27;PBE_54&#x27;</span>,</span><br><span class="line">)</span><br><span class="line">......</span><br></pre></td></tr></table></figure></div>
+
+<p>再次运行，可正常生成输入文件。</p>
+<p>还没完！！！</p>
+<p>运行完上述的命令，输入文件可以正常生成了，但是又有新的Warning：</p>
+<blockquote>
+<p><strong>BadInputSetWarning:</strong> Overriding the POTCAR functional is generally not recommended  as it significantly affect the results of calculations and compatibility with other calculations done with the same input set. Note that some POTCAR symbols specified in the configuration file may not be available in the selected functional.</p>
+</blockquote>
+<blockquote>
+<p><strong>BadInputSetWarning:</strong> POTCAR data with symbol Si is not known by pymatgen to correspond with the selected user_potcar_functional&#x3D;’PBE_54’. This POTCAR is known to correspond with functionals [‘PBE_52_W_HASH’, ‘PBE_54_W_HASH’, ‘PBE_64’]. Please verify that you are using the right POTCARs!  warnings.warn(</p>
+</blockquote>
+<p><code>VASP</code>计算中有句话：Warning不算报错，能算就继续算。</p>
+<p>这里也是一样，这个Warning并不表示你的参数设置有问题，而是<code>VASP</code>官方会随着版本更新，相应的也会更新势函数的版本，同样地，<code>pymatgen</code>在更新的时候的时候也会同步把新版的势函数的<code>hash</code>值加入进来以便识别。简而言之，这个warning就是提醒你目前推荐的势函数版本是什么，比如这里推荐的是<code>&#39;PBE_64&#39;</code>。当然并不是说明<code>&#39;PBE_54&#39;</code>的势函数就是错的。官方<code>Github</code>的<code>Issue</code>里面有很多类似的讨论，这个Warning主要就是要提醒用户，了解自己在做什么。</p>
+<h4 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h4><p><code>MPRelaxSet</code>的用法就介绍到这，本章干货满满，各位多多练习~~~~</p>
+<p><em><strong>¡Muchas gracias!</strong></em></p>
+]]></content>
+      <categories>
+        <category>Learn VASP from pymatgen</category>
+      </categories>
+      <tags>
+        <tag>VASP</tag>
+        <tag>pymatgen</tag>
+        <tag>Materials Project</tag>
+        <tag>MPRelaxSet</tag>
+        <tag>MPScanRelaxSet</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Chap.7  计算小白硬学VASP —— 材料性质计算—&gt;态密度分析（2）</title>
+    <url>/2024/06/17/Learn-VASP-from-pymatgen-7/</url>
+    <content><![CDATA[<p><em><strong>¡Hola a todos!</strong></em></p>
+<p>本章主要介绍态密度画图的两种的方法。</p>
+<h5 id="常规方法——Matplotlib"><a href="#常规方法——Matplotlib" class="headerlink" title="常规方法——Matplotlib"></a>常规方法——Matplotlib</h5><p>上一章介绍了如何分析dos计算的结果，并根据需求把态密度轨道数据保存为csv文件。在此基础上常规绘图方法就是采用<code>matpltolib</code>库的<code>pyplot</code>模块。代码如下：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line"><span class="comment"># csv文件</span></span><br><span class="line"><span class="comment"># 以Si的分轨道为例</span></span><br><span class="line">csv_file = <span class="string">&#x27;./Si_sp_dos.csv&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取csv文件</span></span><br><span class="line">df = pd.read_csv(csv_file)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 取出需要的数据</span></span><br><span class="line">energy = df[<span class="string">&#x27;Energy&#x27;</span>]</span><br><span class="line">s_orbital = df[<span class="string">&#x27;Si_s&#x27;</span>]</span><br><span class="line">p_orbital = df[<span class="string">&#x27;Si_p&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 画图</span></span><br><span class="line">plt.plot(energy, s_orbital, label=<span class="string">&#x27;s&#x27;</span>)</span><br><span class="line">plt.plot(energy, p_orbital, label=<span class="string">&#x27;p&#x27;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.xlabel(<span class="string">&#x27;Energy (eV)&#x27;</span>)</span><br><span class="line">plt.xlim(-<span class="number">5</span>,<span class="number">5</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;Density of States (states/eV)&#x27;</span>)</span><br><span class="line">plt.ylim(<span class="number">0</span>,<span class="number">1.5</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure></div>
+
+<p>运行代码：</p>
+<p><img src="/2024/06/17/Learn-VASP-from-pymatgen-7/image-20240618092517244.png" alt="image-20240618092517244"></p>
+<p>这里可以看到态密度画出来，毛刺非常多，原因可以分为两个部分：</p>
+<p>- 在设置<code>INCAR</code>时，NEDOS的数量较大或<code>EMIN</code>,<code>ENMAX</code>的区间过小，导致取点非常密集；</p>
+<p>- 主要原因还是在<code>INCAR</code>中，<code>ISMEAR = -5</code>时，<code>sigma</code>为0，费米狄拉克分布，不会有展宽（见下左图），这就导致相邻的态是直接过渡的，没有考虑平滑处理，所以画出来的dos图普遍毛刺比较多。这也是为什么也有很多人在算态密度的时候选择<code>ISMEAR = 0</code>，出图放文章里面会好看一点。</p>
+<p><img src="/2024/06/17/Learn-VASP-from-pymatgen-7/dirac.png" alt="dirac"></p>
+<h5 id="手动平滑处理——scipy-ndimage-gaussian-filter1d"><a href="#手动平滑处理——scipy-ndimage-gaussian-filter1d" class="headerlink" title="手动平滑处理——scipy.ndimage.gaussian_filter1d"></a>手动平滑处理——scipy.ndimage.gaussian_filter1d</h5><p>当然，<code>python</code>有许许多多其他的库可以用来平滑处理，这样就避免了我们重新设置参数进行计算。这里采用<code>scipy.ndimage.gaussian_filter1d</code>模块进行平滑处理，代码如下：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> scipy.ndimage <span class="keyword">import</span> gaussian_filter1d</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line"><span class="comment"># csv文件</span></span><br><span class="line"><span class="comment"># 以Si的分轨道为例</span></span><br><span class="line">csv_file = <span class="string">&#x27;./Si_sp_dos.csv&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取csv文件</span></span><br><span class="line">df = pd.read_csv(csv_file)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 取出需要的数据</span></span><br><span class="line">energy = df[<span class="string">&#x27;Energy&#x27;</span>]</span><br><span class="line"><span class="comment"># 平滑处理</span></span><br><span class="line">s_orbital = gaussian_filter1d(df[<span class="string">&#x27;Si_s&#x27;</span>], sigma=<span class="number">3</span>)</span><br><span class="line">p_orbital = gaussian_filter1d(df[<span class="string">&#x27;Si_p&#x27;</span>], sigma=<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 画图</span></span><br><span class="line">plt.plot(energy, s_orbital, label=<span class="string">&#x27;s&#x27;</span>)</span><br><span class="line">plt.plot(energy, p_orbital, label=<span class="string">&#x27;p&#x27;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.xlabel(<span class="string">&#x27;Energy (eV)&#x27;</span>)</span><br><span class="line">plt.xlim(-<span class="number">5</span>,<span class="number">5</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;Density of States (states/eV)&#x27;</span>)</span><br><span class="line">plt.ylim(<span class="number">0</span>,<span class="number">1.5</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure></div>
+
+<p>运行代码：</p>
+<p><img src="/2024/06/17/Learn-VASP-from-pymatgen-7/image-20240618093500328.png" alt="image-20240618093500328"></p>
+<p>也可以得到相对客观的结果。这里平滑度由<code>sigma</code>参数控制，根据需求需自行调整。</p>
+<h5 id="pymatgen自带模块——DosPlotter"><a href="#pymatgen自带模块——DosPlotter" class="headerlink" title="pymatgen自带模块——DosPlotter"></a>pymatgen自带模块——DosPlotter</h5><p>DosPlotter是专门用于绘制态密度图的类，可以直接从VASP计算的输出文件中读取数据并绘制，并且绘图结果默认把费米能级平移至0eV，方便比较。</p>
+<p>代码如下：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.outputs <span class="keyword">import</span> Vasprun</span><br><span class="line"><span class="keyword">from</span> pymatgen.electronic_structure.plotter <span class="keyword">import</span> DosPlotter</span><br><span class="line"><span class="keyword">from</span> pymatgen.electronic_structure.core <span class="keyword">import</span> OrbitalType, Spin</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取 vasprun.xml 文件</span></span><br><span class="line">dos_vasprun = Vasprun(<span class="string">&#x27;./dos/vasprun.xml&#x27;</span>)</span><br><span class="line">complete_dos = dos_vasprun.complete_dos</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义一个字典，用于存储 PDOS</span></span><br><span class="line">pdos_dict = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义一个字典，用于存储元素和对应的轨道列表</span></span><br><span class="line">element_orbitals = &#123;</span><br><span class="line">    <span class="string">&#x27;Si&#x27;</span>: [OrbitalType.s, OrbitalType.p],</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 遍历元素和对应的轨道列表</span></span><br><span class="line"><span class="keyword">for</span> element, orbitals <span class="keyword">in</span> element_orbitals.items():  </span><br><span class="line">    <span class="comment"># 创建一个空字典储存当前元素的所有轨道列表</span></span><br><span class="line">    pdos_dict[element] = &#123;&#125;         </span><br><span class="line">    <span class="comment"># 遍历当前元素的轨道列表</span></span><br><span class="line">    <span class="keyword">for</span> orbital <span class="keyword">in</span> orbitals:        </span><br><span class="line">    <span class="comment"># 对于当前元素的当前轨道，将 PDOS 存储在 pdos_dict 字典中   </span></span><br><span class="line">        pdos_dict[element][<span class="built_in">str</span>(orbital)] = complete_dos.get_element_spd_dos(element)[orbital]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 实例化 DosPlotter 对象</span></span><br><span class="line">dos_plotter = DosPlotter()</span><br><span class="line"><span class="comment"># 添加 PDOS</span></span><br><span class="line"><span class="keyword">for</span> element, orbitals <span class="keyword">in</span> pdos_dict.items():</span><br><span class="line">    <span class="comment"># 此行遍历当前元素的 PDOS 字典，其中每个键是轨道的名称，对应的值是该轨道的 PDOS</span></span><br><span class="line">    <span class="keyword">for</span> orbital, pdos <span class="keyword">in</span> orbitals.items():      </span><br><span class="line">        pdos_data = dos_plotter.add_dos(<span class="string">f&#x27;<span class="subst">&#123;element&#125;</span>(<span class="subst">&#123;orbital&#125;</span>)&#x27;</span>,pdos)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 绘制 PDOS</span></span><br><span class="line">dos_plotter.get_plot(xlim=(-<span class="number">5</span>,<span class="number">5</span>),ylim=(<span class="number">0</span>,<span class="number">1.5</span>))</span><br><span class="line">plt.title(<span class="string">&#x27;Si pdos&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure></div>
+
+<p>运行代码：</p>
+<p><img src="/2024/06/17/Learn-VASP-from-pymatgen-7/image-20240618092704087.png" alt="image-20240618092704087"></p>
+<p>直接使用<code>DosPlotter</code>也可以绘制出类似的结果，然而<code>DosPlotter</code>绘制的结果会自动标出费米能级参考线，即<code>x=0</code>参考线，同时自身还提供了平滑曲线的功能，<code>DosPlotter</code>可以接受的参数有：</p>
+<p>- <code>zero_at_efermi</code>：布尔值，是否将费米能级作为零点，默认值为<code>True</code>；</p>
+<p>- <code>stack</code>：布尔值，是否绘制成面积图，默认值为<code>False</code>；</p>
+<p>- <code>sigma</code>：浮点数，平滑曲线的标准差，值越大，曲线约平滑。</p>
+<p>这里重新修改下，增加<code>sigma</code>参数使得曲线平滑一点：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line">......</span><br><span class="line"></span><br><span class="line"><span class="comment"># 实例化 DosPlotter 对象</span></span><br><span class="line">dos_plotter = DosPlotter(sigma=<span class="number">0.05</span>)</span><br><span class="line"></span><br><span class="line">......</span><br></pre></td></tr></table></figure></div>
+
+<p>再次运行代码：</p>
+<p><img src="/2024/06/17/Learn-VASP-from-pymatgen-7/image-20240618092835225.png" alt="image-20240618092835225"></p>
+<p>曲线平滑了非常多，但是具体使用过程中，<code>sigma</code>参数的选择还是很重要的，如果过于平滑，可能会失去重要的性质，所以实际使用时，需要根据实际情况进行调整。</p>
+<h5 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h5><p>既然第二种方法可以直接画，那为啥还要费老鼻子劲输出csv文件呢，是否多此一举。</p>
+<p>实际上，上一步输出csv文件跟这一步画图的操作并不冲突，输出csv文件是为了保存绘图源数据，<code>vasprun.xml</code>文件虽然包含了计算的所有数据，但是动辄几百兆的大小也不太适合作为长期保存的文件。</p>
+<p>推荐的做法是，无论怎么画图，都最好导出相关的数据保存为csv文件。小规模的计算结果的处理，两者差异不大；但是对于高通量来说，如果需要批量处理画图，直接读取csv文件绘图要快得多。例如上面两种方法，直接读csv绘图运行时间只要<code>0.1s</code>；第二种方法读<code>vasprun.xml</code>文件绘图，运行时间可能需要<code>4.3s</code>,这个差距就比较明显了。</p>
+<p>话虽如此，但是在高通量计算过程中，主要是的时间消耗还是在计算上，绘图上面的时间差在<code>VASP</code>计算的时间上可以忽略不计~~~~~~</p>
+<p>简而言之就是，记得保存数据，画图爱用啥用啥，都一样，无非就是代码不一样，<code>DosPlotter</code>预设了一些格式，而直接用<code>matplotlib</code>就自行设置一下格式（字体、字号、排版）就好了。</p>
+<p><em><strong>¡Muchas gracias!</strong></em></p>
+]]></content>
+      <categories>
+        <category>Learn VASP from pymatgen</category>
+      </categories>
+      <tags>
+        <tag>VASP</tag>
+        <tag>pymatgen</tag>
+        <tag>Materials Project</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Chap.6  计算小白硬学VASP —— 材料性质计算—&gt;态密度分析(1)</title>
     <url>/2024/06/13/Learn-VASP-from-pymatgen-6/</url>
     <content><![CDATA[<p><em><strong>¡Hola a todos!</strong></em></p>
@@ -815,46 +946,18 @@
       </tags>
   </entry>
   <entry>
-    <title>Chap.7  计算小白硬学VASP —— 材料性质计算—&gt;态密度分析（2）</title>
-    <url>/2024/06/17/Learn-VASP-from-pymatgen-7/</url>
+    <title>Chap.8  计算小白硬学VASP —— 材料性质计算—&gt;能带计算</title>
+    <url>/2024/06/18/Learn-VASP-from-pymatgen-8/</url>
     <content><![CDATA[<p><em><strong>¡Hola a todos!</strong></em></p>
-<p>本章主要介绍态密度画图的两种的方法。</p>
-<h5 id="常规方法——Matplotlib"><a href="#常规方法——Matplotlib" class="headerlink" title="常规方法——Matplotlib"></a>常规方法——Matplotlib</h5><p>上一章介绍了如何分析dos计算的结果，并根据需求把态密度轨道数据保存为csv文件。在此基础上常规绘图方法就是采用<code>matpltolib</code>库的<code>pyplot</code>模块。代码如下：</p>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line"><span class="comment"># csv文件</span></span><br><span class="line"><span class="comment"># 以Si的分轨道为例</span></span><br><span class="line">csv_file = <span class="string">&#x27;./Si_sp_dos.csv&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取csv文件</span></span><br><span class="line">df = pd.read_csv(csv_file)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 取出需要的数据</span></span><br><span class="line">energy = df[<span class="string">&#x27;Energy&#x27;</span>]</span><br><span class="line">s_orbital = df[<span class="string">&#x27;Si_s&#x27;</span>]</span><br><span class="line">p_orbital = df[<span class="string">&#x27;Si_p&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 画图</span></span><br><span class="line">plt.plot(energy, s_orbital, label=<span class="string">&#x27;s&#x27;</span>)</span><br><span class="line">plt.plot(energy, p_orbital, label=<span class="string">&#x27;p&#x27;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.xlabel(<span class="string">&#x27;Energy (eV)&#x27;</span>)</span><br><span class="line">plt.xlim(-<span class="number">5</span>,<span class="number">5</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;Density of States (states/eV)&#x27;</span>)</span><br><span class="line">plt.ylim(<span class="number">0</span>,<span class="number">1.5</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure></div>
+<p>本章介绍如何计算能带结构，VASP计算流程代码如下：</p>
+<div class="tabs" id="tab-primtive_cell"><ul class="nav-tabs"><li class="tab active"><a class="#primtive_cell-1">下载结构</a></li><li class="tab"><a class="#primtive_cell-2">结构优化</a></li><li class="tab"><a class="#primtive_cell-3">自洽计算</a></li><li class="tab"><a class="#primtive_cell-4">能带计算</a></li></ul><div class="tab-content"><div class="tab-pane active" id="primtive_cell-1"><div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> mp_api.client <span class="keyword">import</span> MPRester</span><br><span class="line"></span><br><span class="line">api_key = <span class="string">&#x27;your key&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> MPRester(api_key) <span class="keyword">as</span> mpr:</span><br><span class="line">    <span class="comment"># 获取结构</span></span><br><span class="line">    structure = mpr.get_structure_by_material_id(<span class="string">&#x27;mp-924129&#x27;</span>)</span><br><span class="line">    <span class="comment"># 转化成原胞</span></span><br><span class="line">    primtive_structure = structure.get_primitive_structure()</span><br><span class="line">    <span class="comment"># 保存结构</span></span><br><span class="line">    primtive_structure.to(filename=<span class="string">&#x27;ZrNiSn_primitive.cif&#x27;</span>)</span><br></pre></td></tr></table></figure></div></div><div class="tab-pane" id="primtive_cell-2"><div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.sets <span class="keyword">import</span> MPRelaxSet</span><br><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.inputs <span class="keyword">import</span> Kpoints</span><br><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="comment"># 结构路径</span></span><br><span class="line">primtive_cell = <span class="string">&#x27;./ZrNiSn_primitive.cif&#x27;</span></span><br><span class="line"><span class="comment">#自定义INCAR</span></span><br><span class="line">incar = &#123;</span><br><span class="line">    <span class="string">&quot;ENCUT&quot;</span>:<span class="number">400</span>,</span><br><span class="line">    <span class="string">&quot;EDIFF&quot;</span>:<span class="number">1E-4</span>,</span><br><span class="line">    <span class="string">&quot;EDIFG&quot;</span>:-<span class="number">0.05</span>,</span><br><span class="line">    <span class="string">&quot;ISPIN&quot;</span>:<span class="number">1</span>,</span><br><span class="line">    <span class="string">&quot;LORBIT&quot;</span>:<span class="number">12</span>, </span><br><span class="line">&#125;</span><br><span class="line"><span class="comment"># 读取结构</span></span><br><span class="line">struct = Structure.from_file(primtive_cell)</span><br><span class="line"><span class="comment"># 生成relax输入</span></span><br><span class="line">primtive_relax = MPRelaxSet(struct, user_incar_settings=incar, user_potcar_functional=<span class="string">&#x27;PBE_54&#x27;</span>)</span><br><span class="line"><span class="comment"># 保存</span></span><br><span class="line">primtive_relax.write_input(<span class="string">&#x27;./ZrNiSn_primitive/relax&#x27;</span>)</span><br></pre></td></tr></table></figure></div></div><div class="tab-pane" id="primtive_cell-3"><div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.sets <span class="keyword">import</span> MPStaticSet</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="comment"># 结构优化文件路径</span></span><br><span class="line">relax_dir = <span class="string">&#x27;./ZrNiSn_primitive/relax&#x27;</span></span><br><span class="line"><span class="comment"># 自定义INCAR</span></span><br><span class="line">static_incar = &#123;</span><br><span class="line">    <span class="string">&quot;EDIFF&quot;</span>:<span class="number">1E-6</span>,</span><br><span class="line">    <span class="string">&quot;ISMEAR&quot;</span>:<span class="number">0</span>,</span><br><span class="line">    <span class="string">&quot;LORBIT&quot;</span>:<span class="number">12</span>,</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment"># 生成自洽计算输入</span></span><br><span class="line">primtive_static = MPStaticSet.from_prev_calc(prev_calc_dir=relax_dir,user_incar_settings=static_incar, user_potcar_functional=<span class="string">&#x27;PBE_54&#x27;</span>)</span><br><span class="line"><span class="comment"># 保存</span></span><br><span class="line">prim_static.write_input(<span class="string">&#x27;./ZrNiSn_primitive/static&#x27;</span>)</span><br></pre></td></tr></table></figure></div></div><div class="tab-pane" id="primtive_cell-4"><div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.sets <span class="keyword">import</span> MPNonSCFSet</span><br><span class="line"><span class="keyword">from</span> pymatgen.symmetry.bandstructure <span class="keyword">import</span> HighSymmKpath</span><br><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.inputs <span class="keyword">import</span> Kpoints</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="comment"># 自洽计算路径</span></span><br><span class="line">static_dir = <span class="string">&#x27;./ZrNiSn_primitive/static&#x27;</span></span><br><span class="line"><span class="comment"># 读取结构</span></span><br><span class="line">structure = Structure.from_file(os.path.join(static_dir, <span class="string">&#x27;POSCAR&#x27;</span>))</span><br><span class="line"><span class="comment"># 生成高对称路径</span></span><br><span class="line">kpath = HighSymmKpath(structure=structure,path_type=<span class="string">&#x27;hinuma&#x27;</span>)</span><br><span class="line"><span class="comment"># 自动根据高对称路径生成K点</span></span><br><span class="line">kpoints = Kpoints.automatic_linemode(divisions=<span class="number">10</span>,ibz=kpath)</span><br><span class="line"><span class="comment"># 自定义INCAR</span></span><br><span class="line">band_incar = &#123;</span><br><span class="line">    <span class="string">&quot;EDIFF&quot;</span>:<span class="number">1E-6</span>,</span><br><span class="line">    <span class="string">&quot;ISMEAR&quot;</span>:<span class="number">0</span>,</span><br><span class="line">    <span class="string">&quot;LORBIT&quot;</span>:<span class="number">12</span>,</span><br><span class="line">    <span class="string">&quot;NBANDS&quot;</span>:<span class="number">64</span>,</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment"># 生成band输入</span></span><br><span class="line">band = MPNonSCFSet.from_prev_calc(prev_calc_dir=static_dir,user_incar_settings=band_incar,user_kpoints_settings=kpoints,user_potcar_functional=<span class="string">&#x27;PBE_54&#x27;</span>)</span><br><span class="line"><span class="comment"># 保存</span></span><br><span class="line">band.write_input(<span class="string">&#x27;./ZrNiSn_primitive/band&#x27;</span>)</span><br></pre></td></tr></table></figure></div></div></div></div>
 
-<p>运行代码：</p>
-<p><img src="/2024/06/17/Learn-VASP-from-pymatgen-7/image-20240618092517244.png" alt="image-20240618092517244"></p>
-<p>这里可以看到态密度画出来，毛刺非常多，原因可以分为两个部分：</p>
-<p>- 在设置<code>INCAR</code>时，NEDOS的数量较大或<code>EMIN</code>,<code>ENMAX</code>的区间过小，导致取点非常密集；</p>
-<p>- 主要原因还是在<code>INCAR</code>中，<code>ISMEAR = -5</code>时，<code>sigma</code>为0，费米狄拉克分布，不会有展宽（见下左图），这就导致相邻的态是直接过渡的，没有考虑平滑处理，所以画出来的dos图普遍毛刺比较多。这也是为什么也有很多人在算态密度的时候选择<code>ISMEAR = 0</code>，出图放文章里面会好看一点。</p>
-<p><img src="/2024/06/17/Learn-VASP-from-pymatgen-7/dirac.png" alt="dirac"></p>
-<h5 id="手动平滑处理——scipy-ndimage-gaussian-filter1d"><a href="#手动平滑处理——scipy-ndimage-gaussian-filter1d" class="headerlink" title="手动平滑处理——scipy.ndimage.gaussian_filter1d"></a>手动平滑处理——scipy.ndimage.gaussian_filter1d</h5><p>当然，<code>python</code>有许许多多其他的库可以用来平滑处理，这样就避免了我们重新设置参数进行计算。这里采用<code>scipy.ndimage.gaussian_filter1d</code>模块进行平滑处理，代码如下：</p>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> scipy.ndimage <span class="keyword">import</span> gaussian_filter1d</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line"><span class="comment"># csv文件</span></span><br><span class="line"><span class="comment"># 以Si的分轨道为例</span></span><br><span class="line">csv_file = <span class="string">&#x27;./Si_sp_dos.csv&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取csv文件</span></span><br><span class="line">df = pd.read_csv(csv_file)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 取出需要的数据</span></span><br><span class="line">energy = df[<span class="string">&#x27;Energy&#x27;</span>]</span><br><span class="line"><span class="comment"># 平滑处理</span></span><br><span class="line">s_orbital = gaussian_filter1d(df[<span class="string">&#x27;Si_s&#x27;</span>], sigma=<span class="number">3</span>)</span><br><span class="line">p_orbital = gaussian_filter1d(df[<span class="string">&#x27;Si_p&#x27;</span>], sigma=<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 画图</span></span><br><span class="line">plt.plot(energy, s_orbital, label=<span class="string">&#x27;s&#x27;</span>)</span><br><span class="line">plt.plot(energy, p_orbital, label=<span class="string">&#x27;p&#x27;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.xlabel(<span class="string">&#x27;Energy (eV)&#x27;</span>)</span><br><span class="line">plt.xlim(-<span class="number">5</span>,<span class="number">5</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;Density of States (states/eV)&#x27;</span>)</span><br><span class="line">plt.ylim(<span class="number">0</span>,<span class="number">1.5</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure></div>
-
-<p>运行代码：</p>
-<p><img src="/2024/06/17/Learn-VASP-from-pymatgen-7/image-20240618093500328.png" alt="image-20240618093500328"></p>
-<p>也可以得到相对客观的结果。这里平滑度由<code>sigma</code>参数控制，根据需求需自行调整。</p>
-<h5 id="pymatgen自带模块——DosPlotter"><a href="#pymatgen自带模块——DosPlotter" class="headerlink" title="pymatgen自带模块——DosPlotter"></a>pymatgen自带模块——DosPlotter</h5><p>DosPlotter是专门用于绘制态密度图的类，可以直接从VASP计算的输出文件中读取数据并绘制，并且绘图结果默认把费米能级平移至0eV，方便比较。</p>
-<p>代码如下：</p>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.outputs <span class="keyword">import</span> Vasprun</span><br><span class="line"><span class="keyword">from</span> pymatgen.electronic_structure.plotter <span class="keyword">import</span> DosPlotter</span><br><span class="line"><span class="keyword">from</span> pymatgen.electronic_structure.core <span class="keyword">import</span> OrbitalType, Spin</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取 vasprun.xml 文件</span></span><br><span class="line">dos_vasprun = Vasprun(<span class="string">&#x27;./dos/vasprun.xml&#x27;</span>)</span><br><span class="line">complete_dos = dos_vasprun.complete_dos</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义一个字典，用于存储 PDOS</span></span><br><span class="line">pdos_dict = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义一个字典，用于存储元素和对应的轨道列表</span></span><br><span class="line">element_orbitals = &#123;</span><br><span class="line">    <span class="string">&#x27;Si&#x27;</span>: [OrbitalType.s, OrbitalType.p],</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 遍历元素和对应的轨道列表</span></span><br><span class="line"><span class="keyword">for</span> element, orbitals <span class="keyword">in</span> element_orbitals.items():  </span><br><span class="line">    <span class="comment"># 创建一个空字典储存当前元素的所有轨道列表</span></span><br><span class="line">    pdos_dict[element] = &#123;&#125;         </span><br><span class="line">    <span class="comment"># 遍历当前元素的轨道列表</span></span><br><span class="line">    <span class="keyword">for</span> orbital <span class="keyword">in</span> orbitals:        </span><br><span class="line">    <span class="comment"># 对于当前元素的当前轨道，将 PDOS 存储在 pdos_dict 字典中   </span></span><br><span class="line">        pdos_dict[element][<span class="built_in">str</span>(orbital)] = complete_dos.get_element_spd_dos(element)[orbital]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 实例化 DosPlotter 对象</span></span><br><span class="line">dos_plotter = DosPlotter()</span><br><span class="line"><span class="comment"># 添加 PDOS</span></span><br><span class="line"><span class="keyword">for</span> element, orbitals <span class="keyword">in</span> pdos_dict.items():</span><br><span class="line">    <span class="comment"># 此行遍历当前元素的 PDOS 字典，其中每个键是轨道的名称，对应的值是该轨道的 PDOS</span></span><br><span class="line">    <span class="keyword">for</span> orbital, pdos <span class="keyword">in</span> orbitals.items():      </span><br><span class="line">        pdos_data = dos_plotter.add_dos(<span class="string">f&#x27;<span class="subst">&#123;element&#125;</span>(<span class="subst">&#123;orbital&#125;</span>)&#x27;</span>,pdos)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 绘制 PDOS</span></span><br><span class="line">dos_plotter.get_plot(xlim=(-<span class="number">5</span>,<span class="number">5</span>),ylim=(<span class="number">0</span>,<span class="number">1.5</span>))</span><br><span class="line">plt.title(<span class="string">&#x27;Si pdos&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure></div>
-
-<p>运行代码：</p>
-<p><img src="/2024/06/17/Learn-VASP-from-pymatgen-7/image-20240618092704087.png" alt="image-20240618092704087"></p>
-<p>直接使用<code>DosPlotter</code>也可以绘制出类似的结果，然而<code>DosPlotter</code>绘制的结果会自动标出费米能级参考线，即<code>x=0</code>参考线，同时自身还提供了平滑曲线的功能，<code>DosPlotter</code>可以接受的参数有：</p>
-<p>- <code>zero_at_efermi</code>：布尔值，是否将费米能级作为零点，默认值为<code>True</code>；</p>
-<p>- <code>stack</code>：布尔值，是否绘制成面积图，默认值为<code>False</code>；</p>
-<p>- <code>sigma</code>：浮点数，平滑曲线的标准差，值越大，曲线约平滑。</p>
-<p>这里重新修改下，增加<code>sigma</code>参数使得曲线平滑一点：</p>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line">......</span><br><span class="line"></span><br><span class="line"><span class="comment"># 实例化 DosPlotter 对象</span></span><br><span class="line">dos_plotter = DosPlotter(sigma=<span class="number">0.05</span>)</span><br><span class="line"></span><br><span class="line">......</span><br></pre></td></tr></table></figure></div>
-
-<p>再次运行代码：</p>
-<p><img src="/2024/06/17/Learn-VASP-from-pymatgen-7/image-20240618092835225.png" alt="image-20240618092835225"></p>
-<p>曲线平滑了非常多，但是具体使用过程中，<code>sigma</code>参数的选择还是很重要的，如果过于平滑，可能会失去重要的性质，所以实际使用时，需要根据实际情况进行调整。</p>
-<h5 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h5><p>既然第二种方法可以直接画，那为啥还要费老鼻子劲输出csv文件呢，是否多此一举。</p>
-<p>实际上，上一步输出csv文件跟这一步画图的操作并不冲突，输出csv文件是为了保存绘图源数据，<code>vasprun.xml</code>文件虽然包含了计算的所有数据，但是动辄几百兆的大小也不太适合作为长期保存的文件。</p>
-<p>推荐的做法是，无论怎么画图，都最好导出相关的数据保存为csv文件。小规模的计算结果的处理，两者差异不大；但是对于高通量来说，如果需要批量处理画图，直接读取csv文件绘图要快得多。例如上面两种方法，直接读csv绘图运行时间只要<code>0.1s</code>；第二种方法读<code>vasprun.xml</code>文件绘图，运行时间可能需要<code>4.3s</code>,这个差距就比较明显了。</p>
-<p>话虽如此，但是在高通量计算过程中，主要是的时间消耗还是在计算上，绘图上面的时间差在<code>VASP</code>计算的时间上可以忽略不计~~~~~~</p>
-<p>简而言之就是，记得保存数据，画图爱用啥用啥，都一样，无非就是代码不一样，<code>DosPlotter</code>预设了一些格式，而直接用<code>matplotlib</code>就自行设置一下格式（字体、字号、排版）就好了。</p>
+<p>INCAR中有几点设置需要注意：</p>
+<ul>
+<li><code>ISPIN</code>开关需要根据自己的体系来决定是否考虑自旋；</li>
+<li><code>LORBIT</code>建议全程设置为12，方便后面分析轨道投影能带&#x2F;态密度。</li>
+</ul>
+<p>能带计算中这里我们采用<code>HighSymmKpath</code>方法自动针对结构生成高对称路径，需要注意的是，这里的结构必须是<code>primtive_cell</code>。</p>
 <p><em><strong>¡Muchas gracias!</strong></em></p>
 ]]></content>
       <categories>
@@ -966,122 +1069,6 @@
         <tag>VASP</tag>
         <tag>pymatgen</tag>
         <tag>Materials Project</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Chap.8  计算小白硬学VASP —— 材料性质计算—&gt;能带计算</title>
-    <url>/2024/06/18/Learn-VASP-from-pymatgen-8/</url>
-    <content><![CDATA[<p><em><strong>¡Hola a todos!</strong></em></p>
-<p>本章介绍如何计算能带结构，VASP计算流程代码如下：</p>
-<div class="tabs" id="tab-primtive_cell"><ul class="nav-tabs"><li class="tab active"><a class="#primtive_cell-1">下载结构</a></li><li class="tab"><a class="#primtive_cell-2">结构优化</a></li><li class="tab"><a class="#primtive_cell-3">自洽计算</a></li><li class="tab"><a class="#primtive_cell-4">能带计算</a></li></ul><div class="tab-content"><div class="tab-pane active" id="primtive_cell-1"><div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> mp_api.client <span class="keyword">import</span> MPRester</span><br><span class="line"></span><br><span class="line">api_key = <span class="string">&#x27;your key&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> MPRester(api_key) <span class="keyword">as</span> mpr:</span><br><span class="line">    <span class="comment"># 获取结构</span></span><br><span class="line">    structure = mpr.get_structure_by_material_id(<span class="string">&#x27;mp-924129&#x27;</span>)</span><br><span class="line">    <span class="comment"># 转化成原胞</span></span><br><span class="line">    primtive_structure = structure.get_primitive_structure()</span><br><span class="line">    <span class="comment"># 保存结构</span></span><br><span class="line">    primtive_structure.to(filename=<span class="string">&#x27;ZrNiSn_primitive.cif&#x27;</span>)</span><br></pre></td></tr></table></figure></div></div><div class="tab-pane" id="primtive_cell-2"><div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.sets <span class="keyword">import</span> MPRelaxSet</span><br><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.inputs <span class="keyword">import</span> Kpoints</span><br><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="comment"># 结构路径</span></span><br><span class="line">primtive_cell = <span class="string">&#x27;./ZrNiSn_primitive.cif&#x27;</span></span><br><span class="line"><span class="comment">#自定义INCAR</span></span><br><span class="line">incar = &#123;</span><br><span class="line">    <span class="string">&quot;ENCUT&quot;</span>:<span class="number">400</span>,</span><br><span class="line">    <span class="string">&quot;EDIFF&quot;</span>:<span class="number">1E-4</span>,</span><br><span class="line">    <span class="string">&quot;EDIFG&quot;</span>:-<span class="number">0.05</span>,</span><br><span class="line">    <span class="string">&quot;ISPIN&quot;</span>:<span class="number">1</span>,</span><br><span class="line">    <span class="string">&quot;LORBIT&quot;</span>:<span class="number">12</span>, </span><br><span class="line">&#125;</span><br><span class="line"><span class="comment"># 读取结构</span></span><br><span class="line">struct = Structure.from_file(primtive_cell)</span><br><span class="line"><span class="comment"># 生成relax输入</span></span><br><span class="line">primtive_relax = MPRelaxSet(struct, user_incar_settings=incar, user_potcar_functional=<span class="string">&#x27;PBE_54&#x27;</span>)</span><br><span class="line"><span class="comment"># 保存</span></span><br><span class="line">primtive_relax.write_input(<span class="string">&#x27;./ZrNiSn_primitive/relax&#x27;</span>)</span><br></pre></td></tr></table></figure></div></div><div class="tab-pane" id="primtive_cell-3"><div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.sets <span class="keyword">import</span> MPStaticSet</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="comment"># 结构优化文件路径</span></span><br><span class="line">relax_dir = <span class="string">&#x27;./ZrNiSn_primitive/relax&#x27;</span></span><br><span class="line"><span class="comment"># 自定义INCAR</span></span><br><span class="line">static_incar = &#123;</span><br><span class="line">    <span class="string">&quot;EDIFF&quot;</span>:<span class="number">1E-6</span>,</span><br><span class="line">    <span class="string">&quot;ISMEAR&quot;</span>:<span class="number">0</span>,</span><br><span class="line">    <span class="string">&quot;LORBIT&quot;</span>:<span class="number">12</span>,</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment"># 生成自洽计算输入</span></span><br><span class="line">primtive_static = MPStaticSet.from_prev_calc(prev_calc_dir=relax_dir,user_incar_settings=static_incar, user_potcar_functional=<span class="string">&#x27;PBE_54&#x27;</span>)</span><br><span class="line"><span class="comment"># 保存</span></span><br><span class="line">prim_static.write_input(<span class="string">&#x27;./ZrNiSn_primitive/static&#x27;</span>)</span><br></pre></td></tr></table></figure></div></div><div class="tab-pane" id="primtive_cell-4"><div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.sets <span class="keyword">import</span> MPNonSCFSet</span><br><span class="line"><span class="keyword">from</span> pymatgen.symmetry.bandstructure <span class="keyword">import</span> HighSymmKpath</span><br><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.inputs <span class="keyword">import</span> Kpoints</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="comment"># 自洽计算路径</span></span><br><span class="line">static_dir = <span class="string">&#x27;./ZrNiSn_primitive/static&#x27;</span></span><br><span class="line"><span class="comment"># 读取结构</span></span><br><span class="line">structure = Structure.from_file(os.path.join(static_dir, <span class="string">&#x27;POSCAR&#x27;</span>))</span><br><span class="line"><span class="comment"># 生成高对称路径</span></span><br><span class="line">kpath = HighSymmKpath(structure=structure,path_type=<span class="string">&#x27;hinuma&#x27;</span>)</span><br><span class="line"><span class="comment"># 自动根据高对称路径生成K点</span></span><br><span class="line">kpoints = Kpoints.automatic_linemode(divisions=<span class="number">10</span>,ibz=kpath)</span><br><span class="line"><span class="comment"># 自定义INCAR</span></span><br><span class="line">band_incar = &#123;</span><br><span class="line">    <span class="string">&quot;EDIFF&quot;</span>:<span class="number">1E-6</span>,</span><br><span class="line">    <span class="string">&quot;ISMEAR&quot;</span>:<span class="number">0</span>,</span><br><span class="line">    <span class="string">&quot;LORBIT&quot;</span>:<span class="number">12</span>,</span><br><span class="line">    <span class="string">&quot;NBANDS&quot;</span>:<span class="number">64</span>,</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment"># 生成band输入</span></span><br><span class="line">band = MPNonSCFSet.from_prev_calc(prev_calc_dir=static_dir,user_incar_settings=band_incar,user_kpoints_settings=kpoints,user_potcar_functional=<span class="string">&#x27;PBE_54&#x27;</span>)</span><br><span class="line"><span class="comment"># 保存</span></span><br><span class="line">band.write_input(<span class="string">&#x27;./ZrNiSn_primitive/band&#x27;</span>)</span><br></pre></td></tr></table></figure></div></div></div></div>
-
-<p>INCAR中有几点设置需要注意：</p>
-<ul>
-<li><code>ISPIN</code>开关需要根据自己的体系来决定是否考虑自旋；</li>
-<li><code>LORBIT</code>建议全程设置为12，方便后面分析轨道投影能带&#x2F;态密度。</li>
-</ul>
-<p>能带计算中这里我们采用<code>HighSymmKpath</code>方法自动针对结构生成高对称路径，需要注意的是，这里的结构必须是<code>primtive_cell</code>。</p>
-<p><em><strong>¡Muchas gracias!</strong></em></p>
-]]></content>
-      <categories>
-        <category>Learn VASP from pymatgen</category>
-      </categories>
-      <tags>
-        <tag>VASP</tag>
-        <tag>pymatgen</tag>
-        <tag>Materials Project</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>计算小白硬学VASP系列——《Learn VASP from pymatgen》章节目录</title>
-    <url>/2024/06/20/Learn-VASP-from-pymatgen-TOC/</url>
-    <content><![CDATA[<h3 id="《Learn-VASP-from-pymatgen》汇总"><a href="#《Learn-VASP-from-pymatgen》汇总" class="headerlink" title="《Learn VASP from pymatgen》汇总"></a>《Learn VASP from pymatgen》汇总</h3><h3 id="1、前期准备"><a href="#1、前期准备" class="headerlink" title="1、前期准备"></a>1、前期准备</h3><a class="button  regular" href="https://andyhox.github.io/2024/05/30/Learn-VASP-from-pymatgen-2/" title="Click here"><i class="fa-solid fa-play-circle"></i> Click here</a>
-
-<ul>
-<li>编译pymatgen，配置相关环境</li>
-</ul>
-<h3 id="2、学会使用Materials-Project"><a href="#2、学会使用Materials-Project" class="headerlink" title="2、学会使用Materials Project"></a>2、学会使用Materials Project</h3><a class="button  regular" href="https://andyhox.github.io/2024/05/30/Learn-VASP-from-pymatgen-3/" title="Click here"><i class="fa-solid fa-play-circle"></i> Click here</a>
-
-<ul>
-<li>介绍无机结构网站<code>Materials Project</code>下载结构、获取已有性质</li>
-<li>介绍mp_api接口的用法</li>
-</ul>
-<h3 id="3、MPRelaxSet用法"><a href="#3、MPRelaxSet用法" class="headerlink" title="3、MPRelaxSet用法"></a>3、MPRelaxSet用法</h3><a class="button  regular" href="https://andyhox.github.io/2024/06/04/Learn-VASP-from-pymatgen-4/" title="Click here"><i class="fa-solid fa-play-circle"></i> Click here</a>
-
-<ul>
-<li>了解最常用的结构优化模块<code>MPRelaxSet()</code>使用</li>
-<li>自定义参数设置（INCAR tags，K点个数）</li>
-</ul>
-<h3 id="4、态密度计算输入自动生成"><a href="#4、态密度计算输入自动生成" class="headerlink" title="4、态密度计算输入自动生成"></a>4、态密度计算输入自动生成</h3><a class="button  regular" href="https://andyhox.github.io/2024/06/11/Learn-VASP-from-pymatgen-5/" title="Click here"><i class="fa-solid fa-play-circle"></i> Click here</a>
-
-<ul>
-<li><code>MPRelaxSet()</code>、<code>MPstaticSet()</code>、<code>MPNonSCFSet()</code>配合使用生成dos计算输入</li>
-</ul>
-<h3 id="5、态密度结果分析"><a href="#5、态密度结果分析" class="headerlink" title="5、态密度结果分析"></a>5、态密度结果分析</h3><a class="button  regular" href="https://andyhox.github.io/2024/06/13/Learn-VASP-from-pymatgen-6/" title="Click here"><i class="fa-solid fa-play-circle"></i> Click here</a>
-
-<ul>
-<li>提起总态密度TDOS</li>
-<li>提取分态密度PDOS</li>
-</ul>
-<h3 id="6、态密度结果绘图"><a href="#6、态密度结果绘图" class="headerlink" title="6、态密度结果绘图"></a>6、态密度结果绘图</h3><a class="button  regular" href="https://andyhox.github.io/2024/06/17/Learn-VASP-from-pymatgen-7/" title="Click here"><i class="fa-solid fa-play-circle"></i> Click here</a>
-
-<ul>
-<li><code>Matplotlib</code>库绘图</li>
-<li><code>Dosplotter()</code>模块绘图</li>
-<li>如何平滑处理态密度图，减少毛刺</li>
-</ul>
-<h3 id="7、能带计算"><a href="#7、能带计算" class="headerlink" title="7、能带计算"></a>7、能带计算</h3><a class="button  regular" href="https://andyhox.github.io/2024/06/18/Learn-VASP-from-pymatgen-8/" title="Click here"><i class="fa-solid fa-play-circle"></i> Click here</a>
-
-<ul>
-<li><code>HighSymmKpath()</code>方法自动生成高对称路径</li>
-</ul>
-<h3 id="8、能带分析"><a href="#8、能带分析" class="headerlink" title="8、能带分析"></a>8、能带分析</h3><a class="button  regular" href="https://andyhox.github.io/2024/06/27/Learn-VASP-from-pymatgen-9/" title="Click here"><i class="fa-solid fa-play-circle"></i> Click here</a>
-
-<ul>
-<li><code>BandStructure()</code>方法提取能带信息</li>
-<li><code>BSPlotter()</code>方法自动绘图</li>
-</ul>
-<h3 id="9、能带态密度汇总"><a href="#9、能带态密度汇总" class="headerlink" title="9、能带态密度汇总"></a>9、能带态密度汇总</h3><a class="button  regular" href="https://andyhox.github.io/2024/06/28/Learn-VASP-from-pymatgen-10/" title="Click here"><i class="fa-solid fa-play-circle"></i> Click here</a>
-
-<ul>
-<li><code>BSDOSPlotter()</code>方法同时绘制能带态密度结果</li>
-</ul>
-<h3 id="10、构建slab模型"><a href="#10、构建slab模型" class="headerlink" title="10、构建slab模型"></a>10、构建slab模型</h3><a class="button  regular" href="https://andyhox.github.io/2024/08/05/Learn-VASP-from-pymatgen-11/" title="Click here"><i class="fa-solid fa-play-circle"></i> Click here</a>
-
-<ul>
-<li><code>SlabGenerator</code>模块自动生成<code>slab</code>结构</li>
-</ul>
-
-  <div class="note p-4 mb-4 rounded-small info">
-    <p>To be continued</p>
-
-  </div>
-]]></content>
-      <categories>
-        <category>Learn VASP from pymatgen</category>
-      </categories>
-      <tags>
-        <tag>VASP</tag>
-        <tag>pymatgen</tag>
-        <tag>Materials Project</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>计算前/后处理工具介绍汇总</title>
-    <url>/2024/06/26/toolkit-TOC/</url>
-    <content><![CDATA[<p>本章汇总了老司机常用或者新发现的计算前处理、后处理工具介绍，只做介绍，是否好用，各位自行评判QAQ</p>
-<h3 id="Pyprocar"><a href="#Pyprocar" class="headerlink" title="Pyprocar"></a>Pyprocar</h3><a class="button  regular" href="https://andyhox.github.io/2024/06/20/Pyprocar-tutorial-1/" title="Click here"><i class="fa-solid fa-play-circle"></i> Click here</a>
-
-<ul>
-<li>python直接调用</li>
-<li>根据计算结果自动绘制能带、态密度、费米面等图</li>
-</ul>
-]]></content>
-      <categories>
-        <category>toolkit</category>
-      </categories>
-      <tags>
-        <tag>toolkit</tag>
       </tags>
   </entry>
   <entry>
@@ -1213,6 +1200,103 @@
         <tag>Pyprocar</tag>
         <tag>Band</tag>
         <tag>DOS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>计算小白硬学VASP系列——《Learn VASP from pymatgen》章节目录</title>
+    <url>/2024/06/20/Learn-VASP-from-pymatgen-TOC/</url>
+    <content><![CDATA[<h3 id="《Learn-VASP-from-pymatgen》汇总"><a href="#《Learn-VASP-from-pymatgen》汇总" class="headerlink" title="《Learn VASP from pymatgen》汇总"></a>《Learn VASP from pymatgen》汇总</h3><h3 id="1、前期准备"><a href="#1、前期准备" class="headerlink" title="1、前期准备"></a>1、前期准备</h3><a class="button  regular" href="https://andyhox.github.io/2024/05/30/Learn-VASP-from-pymatgen-2/" title="Click here"><i class="fa-solid fa-play-circle"></i> Click here</a>
+
+<ul>
+<li>编译pymatgen，配置相关环境</li>
+</ul>
+<h3 id="2、学会使用Materials-Project"><a href="#2、学会使用Materials-Project" class="headerlink" title="2、学会使用Materials Project"></a>2、学会使用Materials Project</h3><a class="button  regular" href="https://andyhox.github.io/2024/05/30/Learn-VASP-from-pymatgen-3/" title="Click here"><i class="fa-solid fa-play-circle"></i> Click here</a>
+
+<ul>
+<li>介绍无机结构网站<code>Materials Project</code>下载结构、获取已有性质</li>
+<li>介绍mp_api接口的用法</li>
+</ul>
+<h3 id="3、MPRelaxSet用法"><a href="#3、MPRelaxSet用法" class="headerlink" title="3、MPRelaxSet用法"></a>3、MPRelaxSet用法</h3><a class="button  regular" href="https://andyhox.github.io/2024/06/04/Learn-VASP-from-pymatgen-4/" title="Click here"><i class="fa-solid fa-play-circle"></i> Click here</a>
+
+<ul>
+<li>了解最常用的结构优化模块<code>MPRelaxSet()</code>使用</li>
+<li>自定义参数设置（INCAR tags，K点个数）</li>
+</ul>
+<h3 id="4、态密度计算输入自动生成"><a href="#4、态密度计算输入自动生成" class="headerlink" title="4、态密度计算输入自动生成"></a>4、态密度计算输入自动生成</h3><a class="button  regular" href="https://andyhox.github.io/2024/06/11/Learn-VASP-from-pymatgen-5/" title="Click here"><i class="fa-solid fa-play-circle"></i> Click here</a>
+
+<ul>
+<li><code>MPRelaxSet()</code>、<code>MPstaticSet()</code>、<code>MPNonSCFSet()</code>配合使用生成dos计算输入</li>
+</ul>
+<h3 id="5、态密度结果分析"><a href="#5、态密度结果分析" class="headerlink" title="5、态密度结果分析"></a>5、态密度结果分析</h3><a class="button  regular" href="https://andyhox.github.io/2024/06/13/Learn-VASP-from-pymatgen-6/" title="Click here"><i class="fa-solid fa-play-circle"></i> Click here</a>
+
+<ul>
+<li>提起总态密度TDOS</li>
+<li>提取分态密度PDOS</li>
+</ul>
+<h3 id="6、态密度结果绘图"><a href="#6、态密度结果绘图" class="headerlink" title="6、态密度结果绘图"></a>6、态密度结果绘图</h3><a class="button  regular" href="https://andyhox.github.io/2024/06/17/Learn-VASP-from-pymatgen-7/" title="Click here"><i class="fa-solid fa-play-circle"></i> Click here</a>
+
+<ul>
+<li><code>Matplotlib</code>库绘图</li>
+<li><code>Dosplotter()</code>模块绘图</li>
+<li>如何平滑处理态密度图，减少毛刺</li>
+</ul>
+<h3 id="7、能带计算"><a href="#7、能带计算" class="headerlink" title="7、能带计算"></a>7、能带计算</h3><a class="button  regular" href="https://andyhox.github.io/2024/06/18/Learn-VASP-from-pymatgen-8/" title="Click here"><i class="fa-solid fa-play-circle"></i> Click here</a>
+
+<ul>
+<li><code>HighSymmKpath()</code>方法自动生成高对称路径</li>
+</ul>
+<h3 id="8、能带分析"><a href="#8、能带分析" class="headerlink" title="8、能带分析"></a>8、能带分析</h3><a class="button  regular" href="https://andyhox.github.io/2024/06/27/Learn-VASP-from-pymatgen-9/" title="Click here"><i class="fa-solid fa-play-circle"></i> Click here</a>
+
+<ul>
+<li><code>BandStructure()</code>方法提取能带信息</li>
+<li><code>BSPlotter()</code>方法自动绘图</li>
+</ul>
+<h3 id="9、能带态密度汇总"><a href="#9、能带态密度汇总" class="headerlink" title="9、能带态密度汇总"></a>9、能带态密度汇总</h3><a class="button  regular" href="https://andyhox.github.io/2024/06/28/Learn-VASP-from-pymatgen-10/" title="Click here"><i class="fa-solid fa-play-circle"></i> Click here</a>
+
+<ul>
+<li><code>BSDOSPlotter()</code>方法同时绘制能带态密度结果</li>
+</ul>
+<h3 id="10、构建slab模型"><a href="#10、构建slab模型" class="headerlink" title="10、构建slab模型"></a>10、构建slab模型</h3><a class="button  regular" href="https://andyhox.github.io/2024/08/05/Learn-VASP-from-pymatgen-11/" title="Click here"><i class="fa-solid fa-play-circle"></i> Click here</a>
+
+<ul>
+<li><code>SlabGenerator</code>模块自动生成<code>slab</code>结构</li>
+</ul>
+<h3 id="11、构建异质结模型"><a href="#11、构建异质结模型" class="headerlink" title="11、构建异质结模型"></a>11、构建异质结模型</h3><a class="button  regular" href="https://andyhox.github.io/2024/08/06/Learn-VASP-from-pymatgen-12/" title="Click here"><i class="fa-solid fa-play-circle"></i> Click here</a>
+
+<ul>
+<li><code>CoherentInterfaceBuilder</code> &amp; <code>ZSLGenerator</code>生成异质结结构</li>
+</ul>
+
+  <div class="note p-4 mb-4 rounded-small info">
+    <p>To be continued</p>
+
+  </div>
+]]></content>
+      <categories>
+        <category>Learn VASP from pymatgen</category>
+      </categories>
+      <tags>
+        <tag>VASP</tag>
+        <tag>pymatgen</tag>
+        <tag>Materials Project</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>计算前/后处理工具介绍汇总</title>
+    <url>/2024/06/26/toolkit-TOC/</url>
+    <content><![CDATA[<p>本章汇总了老司机常用或者新发现的计算前处理、后处理工具介绍，只做介绍，是否好用，各位自行评判QAQ</p>
+<h3 id="Pyprocar"><a href="#Pyprocar" class="headerlink" title="Pyprocar"></a>Pyprocar</h3><a class="button  regular" href="https://andyhox.github.io/2024/06/20/Pyprocar-tutorial-1/" title="Click here"><i class="fa-solid fa-play-circle"></i> Click here</a>
+
+<ul>
+<li>python直接调用</li>
+<li>根据计算结果自动绘制能带、态密度、费米面等图</li>
+</ul>
+]]></content>
+      <categories>
+        <category>toolkit</category>
+      </categories>
+      <tags>
+        <tag>toolkit</tag>
       </tags>
   </entry>
 </search>
