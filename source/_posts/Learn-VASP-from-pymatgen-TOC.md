@@ -84,6 +84,12 @@ date: 2024-06-20 00:00:00
 
 - `SlabGenerator`模块自动生成`slab`结构
 
+### 11、构建异质结模型
+
+{% btn regular :: Click here :: https://andyhox.github.io/2024/08/06/Learn-VASP-from-pymatgen-12/ :: fa-solid fa-play-circle %}
+
+- `CoherentInterfaceBuilder` & `ZSLGenerator`生成异质结结构
+
 {% note info %}
 
 To be continued
