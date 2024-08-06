@@ -251,7 +251,7 @@
 <li><code>substrate_structure</code>：基底结构；</li>
 <li><code>film_structure</code>：表层结构；</li>
 <li><code>film_miller</code>：表层结构米勒指数；</li>
-<li><code>substrate_miller</code>：基地结构米勒指数；</li>
+<li><code>substrate_miller</code>：基底结构米勒指数；</li>
 <li><code>zslgen</code>：<code>ZSLGenerator</code></li>
 </ul>
 <p>以<code>Si</code>与<code>Li</code>为例，构建异质结模型。下载对应结构：</p>
@@ -268,7 +268,7 @@
 <blockquote>
 <p>运行代码输出端面的列表<code>[(&#39;Li_P4/mmm_1&#39;, &#39;Si_P4/mmm_1&#39;)]</code></p>
 </blockquote>
-<p><strong>Note</strong>：<code>get_interfaces()</code>中<code>termination</code>支持的数据格式为元素，所以这里用<code>cib.terminations[0]</code>来进行调用，或者直接写<code>termination=(&#39;Li_P4/mmm_1&#39;, &#39;Si_P4/mmm_1&#39;)</code>。</p>
+<p><strong>Note</strong>：<code>get_interfaces()</code>中<code>termination</code>支持的数据格式为元组，所以这里用<code>cib.terminations[0]</code>来进行调用，或者直接写<code>termination=(&#39;Li_P4/mmm_1&#39;, &#39;Si_P4/mmm_1&#39;)</code>。</p>
 </li>
 <li><p><code>gap</code>：异质结上下表面间距；</p>
 </li>
@@ -291,7 +291,7 @@
 <p><code>VESTA</code>打开：</p>
 <p><img src="/2024/08/06/Learn-VASP-from-pymatgen-12/image-20240806094616702.png" alt="image-20240806094616702"></p>
 <p>可以再输出最后一个结构对比一下：</p>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line">......</span><br><span class="line"><span class="comment"># 转化成列表</span></span><br><span class="line">Interfaces = <span class="built_in">list</span>(interfaces)</span><br><span class="line"><span class="comment"># 输出第一个结构</span></span><br><span class="line">Interfaces[<span class="number">190</span>].to(<span class="string">&quot;./Heter_191.cif&quot;</span>)</span><br></pre></td></tr></table></figure></div>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line">......</span><br><span class="line"><span class="comment"># 转化成列表</span></span><br><span class="line">Interfaces = <span class="built_in">list</span>(interfaces)</span><br><span class="line"><span class="comment"># 输出最后一个结构</span></span><br><span class="line">Interfaces[<span class="number">190</span>].to(<span class="string">&quot;./Heter_191.cif&quot;</span>)</span><br></pre></td></tr></table></figure></div>
 
 <p><code>VESTA</code>打开：</p>
 <p><img src="/2024/08/06/Learn-VASP-from-pymatgen-12/image-20240806094820632.png" alt="image-20240806094820632"></p>
