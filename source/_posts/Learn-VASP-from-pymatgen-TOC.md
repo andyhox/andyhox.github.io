@@ -90,6 +90,14 @@ date: 2024-06-20 00:00:00
 
 - `CoherentInterfaceBuilder` & `ZSLGenerator`生成异质结结构
 
+### 12、自动搜索吸附位点&构建吸附模型
+
+{% btn regular :: Click here :: https://andyhox.github.io/2024/08/07/Learn-VASP-from-pymatgen-13/ :: fa-solid fa-play-circle %}
+
+- `AdsorbateSiteFinder`搜索吸附位点
+- 吸附模型2D可视化
+- 调用`ase`导入常见吸附分子
+
 {% note info %}
 
 To be continued
