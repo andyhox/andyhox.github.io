@@ -1382,7 +1382,7 @@
   </entry>
   <entry>
     <title>Chap.14  计算小白硬学VASP —— 各类结构“Transformation”使用说明（一）</title>
-    <url>/2024/08/07/Learn-VASP-from-pymatgen-14/</url>
+    <url>/2024/08/09/Learn-VASP-from-pymatgen-14/</url>
     <content><![CDATA[<p><em><strong>¡Hola a todos!</strong></em></p>
 <p>本章开始，主要介绍<code>pymatgen</code>中<code>standard_transformations</code>中各类<code>Transformation</code>的使用说明。</p>
 <h3 id="AutoOxiStateDecorationTransformation"><a href="#AutoOxiStateDecorationTransformation" class="headerlink" title="AutoOxiStateDecorationTransformation"></a>AutoOxiStateDecorationTransformation</h3><p>该类主要是自动平衡结构中的价态信息，以<code>LiFePO4</code>结构为例，初始结构信息如下：</p>
