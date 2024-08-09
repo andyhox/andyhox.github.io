@@ -1216,6 +1216,12 @@
 <li>吸附模型2D可视化</li>
 <li>调用<code>ase</code>导入常见吸附分子</li>
 </ul>
+<h3 id="13、Transformation类用法（一）"><a href="#13、Transformation类用法（一）" class="headerlink" title="13、Transformation类用法（一）"></a>13、Transformation类用法（一）</h3><a class="button  regular" href="https://andyhox.github.io/2024/08/09/Learn-VASP-from-pymatgen-14/" title="Click here"><i class="fa-solid fa-play-circle"></i> Click here</a>
+
+<ul>
+<li><code>AutoOxiStateDecorationTransformation</code></li>
+<li><code>ChargedCellTransformation</code></li>
+</ul>
 
   <div class="note p-4 mb-4 rounded-small info">
     <p>To be continued</p>
