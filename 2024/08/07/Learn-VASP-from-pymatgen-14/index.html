@@ -17,28 +17,24 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="https://andyhox.github.io/2024/08/06/learn-vasp-from-pymatgen-12/"/>
+    <link rel="canonical" href="https://andyhox.github.io/2024/08/07/learn-vasp-from-pymatgen-14/"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
     
         <meta name="description" content="Learn VASP from pymatgen">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Chap.12  计算小白硬学VASP —— 构建异质结模型">
-<meta property="og:url" content="https://andyhox.github.io/2024/08/06/Learn-VASP-from-pymatgen-12/index.html">
+<meta property="og:title" content="Chap.14  计算小白硬学VASP —— 各类结构“Transformation”使用说明（一）">
+<meta property="og:url" content="https://andyhox.github.io/2024/08/07/Learn-VASP-from-pymatgen-14/index.html">
 <meta property="og:site_name" content="Andy">
 <meta property="og:description" content="Learn VASP from pymatgen">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://andyhox.github.io/2024/08/06/Learn-VASP-from-pymatgen-12/image-20240806094616702.png">
-<meta property="og:image" content="https://andyhox.github.io/2024/08/06/Learn-VASP-from-pymatgen-12/image-20240806094820632.png">
-<meta property="article:published_time" content="2024-08-05T16:00:00.000Z">
-<meta property="article:modified_time" content="2024-08-06T02:08:14.954Z">
+<meta property="article:published_time" content="2024-08-06T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-08-09T08:58:50.063Z">
 <meta property="article:author" content="andyhoo">
 <meta property="article:tag" content="VASP">
 <meta property="article:tag" content="pymatgen">
-<meta property="article:tag" content="Materials Project">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://andyhox.github.io/2024/08/06/Learn-VASP-from-pymatgen-12/image-20240806094616702.png">
     
     
         <!-- Google tag (gtag.js) -->
@@ -60,7 +56,7 @@
     
     <title>
         
-            Chap.12  计算小白硬学VASP —— 构建异质结模型 -
+            Chap.14  计算小白硬学VASP —— 各类结构“Transformation”使用说明（一） -
         
         A&amp;H
     </title>
@@ -503,10 +499,10 @@
             
                 
                 
-                <img src="/images/wallhaven-gpkd77_3840x2160.png" alt="Chap.12  计算小白硬学VASP —— 构建异质结模型" class="w-full h-60 sm:h-72 md:h-80 object-cover sm:rounded-t-large dark:brightness-75"/>
+                <img src="/images/wallhaven-gpkd77_3840x2160.png" alt="Chap.14  计算小白硬学VASP —— 各类结构“Transformation”使用说明（一）" class="w-full h-60 sm:h-72 md:h-80 object-cover sm:rounded-t-large dark:brightness-75"/>
                 
                 <div class="w-full flex items-center absolute bottom-0 justify-start">
-                    <h1 class="article-title-cover text-center mx-6 my-6 text-second-text-color bg-background-color-transparent px-4 py-3 text-3xl sm:text-4xl md:text-5xl font-semibold backdrop-blur-lg rounded-xl border border-border-color ">Chap.12  计算小白硬学VASP —— 构建异质结模型</h1>
+                    <h1 class="article-title-cover text-center mx-6 my-6 text-second-text-color bg-background-color-transparent px-4 py-3 text-3xl sm:text-4xl md:text-5xl font-semibold backdrop-blur-lg rounded-xl border border-border-color ">Chap.14  计算小白硬学VASP —— 各类结构“Transformation”使用说明（一）</h1>
                 </div>
             
             </div>
@@ -527,15 +523,15 @@
                         <div class="article-meta-info">
     <span class="article-date article-meta-item">
         <i class="fa-regular fa-pen-fancy"></i>&nbsp;
-        <span class="desktop">2024-08-06</span>
-        <span class="mobile">2024-08-06</span>
+        <span class="desktop">2024-08-07</span>
+        <span class="mobile">2024-08-07</span>
         <span class="hover-info">创建</span>
     </span>
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2024-08-06 10:08:14</span>
-            <span class="mobile">2024-08-06 10:08:14</span>
+            <span class="desktop">2024-08-09 16:58:50</span>
+            <span class="mobile">2024-08-09 16:58:50</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -570,10 +566,6 @@
                         | <a href="/tags/pymatgen/">pymatgen</a>&nbsp;
                     </li>
                 
-                    <li>
-                        | <a href="/tags/Materials-Project/">Materials Project</a>&nbsp;
-                    </li>
-                
             </ul>
         </span>
     
@@ -581,7 +573,7 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>1.3k 字</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>1.2k 字</span>
         </span>
     
     
@@ -606,70 +598,39 @@
 
         <div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
             <p><em><strong>¡Hola a todos!</strong></em></p>
-<p>本章介绍如何自动构建异质结模型。</p>
-<h3 id="CoherentInterfaceBuilder-ZSLGenerator"><a href="#CoherentInterfaceBuilder-ZSLGenerator" class="headerlink" title="CoherentInterfaceBuilder &amp; ZSLGenerator"></a>CoherentInterfaceBuilder &amp; ZSLGenerator</h3><p><code>pymatgen</code>中自动构建异质结模型需要调用<code>CoherentInterfaceBuilder</code>和<code>ZSLGenerator</code>。其中前者是用于生成<code>interfaces</code>，而后者主要是用于定义晶面的匹配度。导入方法为：</p>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.analysis.interfaces.coherent_interfaces <span class="keyword">import</span> CoherentInterfaceBuilder</span><br><span class="line"><span class="keyword">from</span> pymatgen.analysis.interfaces.zsl <span class="keyword">import</span> ZSLGenerator</span><br></pre></td></tr></table></figure></div>
-
-<p>首先介绍<code>ZSLGenerator</code>，原理见：<a class="link" target="_blank" rel="noopener" href="https://doi.org/10.1063/1.333084">Lattice match: An application to heteroepitaxy <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>。</p>
-<p><code>ZSLGenetator</code>接受四个参数传入：</p>
-<ul>
-<li><code>max_area_ratio_tol</code>：上下表面面积最大公差，默认为0.09；</li>
-<li><code>max_area</code>：最大表面面积，默认为400$Å^2$；</li>
-<li><code>max_length_tol</code>：超晶格最大公差，默认0.03；</li>
-<li><code>max_angle_tol</code>：上下表面基矢角度最大公差，默认0.01；</li>
-</ul>
-<p><code>CoherentInterfaceBuilder</code>接受五个参数传入：</p>
-<ul>
-<li><code>substrate_structure</code>：基底结构；</li>
-<li><code>film_structure</code>：表层结构；</li>
-<li><code>film_miller</code>：表层结构米勒指数；</li>
-<li><code>substrate_miller</code>：基底结构米勒指数；</li>
-<li><code>zslgen</code>：<code>ZSLGenerator</code></li>
-</ul>
-<p>以<code>Si</code>与<code>Li</code>为例，构建异质结模型。下载对应结构：</p>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"><span class="keyword">from</span> mp_api.client <span class="keyword">import</span> MPRester</span><br><span class="line"></span><br><span class="line">api_key = <span class="string">&quot;your key&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> MPRester(api_key) <span class="keyword">as</span> mpr:</span><br><span class="line">    Si = mpr.get_structure_by_material_id(<span class="string">&quot;mp-149&quot;</span>, conventional_unit_cell=<span class="literal">True</span>)</span><br><span class="line">    Li = mpr.get_structure_by_material_id(<span class="string">&quot;mp-135&quot;</span>, conventional_unit_cell=<span class="literal">True</span>)</span><br><span class="line">    Si.to(filename=<span class="string">&quot;./Si_convention.cif&quot;</span>)</span><br><span class="line">    Li.to(filename=<span class="string">&quot;./Li_convention.cif&quot;</span>)</span><br></pre></td></tr></table></figure></div>
-
-<p>生成<code>Si(100)/Li(100)</code>异质结：</p>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.analysis.interfaces.coherent_interfaces <span class="keyword">import</span> CoherentInterfaceBuilder</span><br><span class="line"><span class="keyword">from</span> pymatgen.analysis.interfaces.zsl <span class="keyword">import</span> ZSLGenerator</span><br><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"></span><br><span class="line"><span class="comment"># 结构</span></span><br><span class="line">substratrate_Si = Structure.from_file(<span class="string">&quot;./Si_conventional.cif&quot;</span>)</span><br><span class="line">film_Li = Structure.from_file(<span class="string">&quot;./Li_convention.cif&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 实例化</span></span><br><span class="line">cib = CoherentInterfaceBuilder(</span><br><span class="line">    substrate_structure=substratrate_Si,</span><br><span class="line">    film_structure=film_Li,</span><br><span class="line">    film_miller=([<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>]),</span><br><span class="line">    substrate_miller=([<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>]),</span><br><span class="line">    zslgen=ZSLGenerator(),</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成表面</span></span><br><span class="line">interfaces = cib.get_interfaces(</span><br><span class="line">    termination=cib.terminations[<span class="number">0</span>], 	<span class="comment"># 上下层结构暴露面</span></span><br><span class="line">    gap=<span class="number">2.0</span>, 							<span class="comment"># 异质结间距</span></span><br><span class="line">    vacuum_over_film=<span class="number">20.0</span>, 				<span class="comment"># 真空层厚度</span></span><br><span class="line">    film_thickness=<span class="number">2</span>, 					<span class="comment"># 表层结构厚度</span></span><br><span class="line">    substrate_thickness=<span class="number">4</span>, 				<span class="comment"># 基底结构厚度</span></span><br><span class="line">    in_layers=<span class="literal">True</span>						</span><br><span class="line">)</span><br></pre></td></tr></table></figure></div>
-
-<p>这里在实例化<code>CoherentInterfaceBuilder</code>之后调用<code>get_interfaces()</code>生成所有符合条件的异质结结构。<code>get_interfaces()</code>接受六个传入参数：</p>
-<ul>
-<li><p><code>termination</code>：上下表面的端面。注意该参数有固定写法，可以调用<code>cib.terminations</code>查看<code>Si(100)/Li(100)</code>端面种类</p>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">......</span><br><span class="line"><span class="built_in">print</span>(cib.terminations)</span><br></pre></td></tr></table></figure></div>
-
-<blockquote>
-<p>运行代码输出端面的列表<code>[(&#39;Li_P4/mmm_1&#39;, &#39;Si_P4/mmm_1&#39;)]</code></p>
-</blockquote>
-<p><strong>Note</strong>：<code>get_interfaces()</code>中<code>termination</code>支持的数据格式为元组，所以这里用<code>cib.terminations[0]</code>来进行调用，或者直接写<code>termination=(&#39;Li_P4/mmm_1&#39;, &#39;Si_P4/mmm_1&#39;)</code>。</p>
-</li>
-<li><p><code>gap</code>：异质结上下表面间距；</p>
-</li>
-<li><p><code>vacuum_over_film</code>：真空层厚度，这里指上下表面之间的真空层；</p>
-</li>
-<li><p><code>film_thickness</code>&amp;<code>substrate_thickness</code>：上下<code>slab</code>厚度；</p>
-</li>
-<li><p><code>in_layers</code>：<code>slab</code>厚度用晶面厚度为单位，默认为<code>True</code></p>
-</li>
-</ul>
-<p>继续，得到所有的结构：</p>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.analysis.interfaces.coherent_interfaces <span class="keyword">import</span> CoherentInterfaceBuilder</span><br><span class="line"><span class="keyword">from</span> pymatgen.analysis.interfaces.zsl <span class="keyword">import</span> ZSLGenerator</span><br><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"></span><br><span class="line"><span class="comment"># 结构</span></span><br><span class="line">substratrate_Si = Structure.from_file(<span class="string">&quot;./Si_conventional.cif&quot;</span>)</span><br><span class="line">film_Li = Structure.from_file(<span class="string">&quot;./Li_convention.cif&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 实例化</span></span><br><span class="line">cib = CoherentInterfaceBuilder(</span><br><span class="line">    substrate_structure=substratrate_Si,</span><br><span class="line">    film_structure=film_Li,</span><br><span class="line">    film_miller=([<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>]),</span><br><span class="line">    substrate_miller=([<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>]),</span><br><span class="line">    zslgen=ZSLGenerator(),</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成表面</span></span><br><span class="line">interfaces = cib.get_interfaces(</span><br><span class="line">    termination=cib.terminations[<span class="number">0</span>], 	<span class="comment"># 上下层结构暴露面</span></span><br><span class="line">    gap=<span class="number">2.0</span>, 							<span class="comment"># 异质结间距</span></span><br><span class="line">    vacuum_over_film=<span class="number">20.0</span>, 				<span class="comment"># 真空层厚度</span></span><br><span class="line">    film_thickness=<span class="number">2</span>, 					<span class="comment"># 表层结构厚度</span></span><br><span class="line">    substrate_thickness=<span class="number">4</span>, 				<span class="comment"># 基底结构厚度</span></span><br><span class="line">    in_layers=<span class="literal">True</span>						</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">count = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> i, interface <span class="keyword">in</span> <span class="built_in">enumerate</span>(interfaces):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Interface <span class="subst">&#123;i&#125;</span>:&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(interface)</span><br><span class="line">    count += <span class="number">1</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;Total number of interfaces: <span class="subst">&#123;count&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure></div>
+<p>本章开始，主要介绍<code>pymatgen</code>中<code>standard_transformations</code>中各类<code>Transformation</code>的使用说明。</p>
+<h3 id="AutoOxiStateDecorationTransformation"><a href="#AutoOxiStateDecorationTransformation" class="headerlink" title="AutoOxiStateDecorationTransformation"></a>AutoOxiStateDecorationTransformation</h3><p>该类主要是自动平衡结构中的价态信息，以<code>LiFePO4</code>结构为例，初始结构信息如下：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"></span><br><span class="line">LFP = Structure.from_file(<span class="string">&quot;./LiFePO4.vasp&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(LFP)</span><br></pre></td></tr></table></figure></div>
 
 <p>运行代码：</p>
-<div class="highlight-container" data-rel="Txt"><figure class="iseeu highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">Interface 0:</span><br><span class="line">Full Formula (Li10 Si16)</span><br><span class="line">Reduced Formula: Li5Si8</span><br><span class="line">abc   :   7.698558   7.698558  27.802433</span><br><span class="line">angles:  90.000000  90.000000  90.000000</span><br><span class="line">pbc   :       True       True       True</span><br><span class="line">Sites (26)</span><br><span class="line">  #  SP       a     b         c    bulk_equivalent  bulk_wyckoff    interface_label</span><br><span class="line">---  ----  ----  ----  --------  -----------------  --------------  -----------------</span><br><span class="line">  0  Li    0     0     0.577558                  0  a               film</span><br><span class="line">  1  Li    0.4   0.2   0.577558                  0  a               film</span><br><span class="line">  2  Li    0.2   0.6   0.577558                  0  a               film</span><br><span class="line">  3  Li    0.8   0.4   0.577558                  0  a               film</span><br><span class="line">  4  Li    0.6   0.8   0.577558                  0  a               film</span><br><span class="line">  5  Li    0.1   0.3   0.639411                  0  a               film</span><br><span class="line">  6  Li    0.5   0.5   0.639411                  0  a               film</span><br><span class="line">  7  Li    0.3   0.9   0.639411                  0  a               film</span><br><span class="line">  8  Li    0.9   0.7   0.639411                  0  a               film</span><br><span class="line">  9  Li    0.7   0.1   0.639411                  0  a               film</span><br><span class="line"> 10  Si    0     0.25  0.407722                  0  a               substrate</span><br><span class="line"> 11  Si    0     0.75  0.407722                  0  a               substrate</span><br><span class="line"> 12  Si    0.5   0.25  0.407722                  0  a               substrate</span><br><span class="line"> 13  Si    0.5   0.75  0.407722                  0  a               substrate</span><br><span class="line"> 14  Si    0     0.5   0.358772                  0  a               substrate</span><br><span class="line"> 15  Si    0     0     0.358772                  0  a               substrate</span><br><span class="line"> 16  Si    0.5   0.5   0.358772                  0  a               substrate</span><br><span class="line"> 17  Si    0.5   0     0.358772                  0  a               substrate</span><br><span class="line"> 18  Si    0.25  0.5   0.505622                  0  a               substrate</span><br><span class="line"> 19  Si    0.25  0     0.505622                  0  a               substrate</span><br><span class="line"> 20  Si    0.75  0.5   0.505622                  0  a               substrate</span><br><span class="line"> 21  Si    0.75  1     0.505622                  0  a               substrate</span><br><span class="line"> 22  Si    0.25  0.25  0.456672                  0  a               substrate</span><br><span class="line"> 23  Si    0.25  0.75  0.456672                  0  a               substrate</span><br><span class="line"> 24  Si    0.75  0.25  0.456672                  0  a               substrate</span><br><span class="line"> 25  Si    0.75  0.75  0.456672                  0  a               substrate</span><br><span class="line"> ......</span><br><span class="line"> ......</span><br><span class="line"> Total number of interfaces: 191</span><br></pre></td></tr></table></figure></div>
+<div class="highlight-container" data-rel="Tex"><figure class="iseeu highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">Full Formula (Li4 Fe4 P4 O16)</span><br><span class="line">Reduced Formula: LiFePO4</span><br><span class="line">abc   :   4.654917   5.970755  10.236196</span><br><span class="line">angles:  90.000000  90.000000  90.000000</span><br><span class="line">pbc   :       True       True       True</span><br><span class="line">Sites (28)</span><br><span class="line">  <span class="params">#</span>  SP           a         b         c</span><br><span class="line">---  ----  --------  --------  --------</span><br><span class="line">  0  Li    0         0         0</span><br><span class="line">  1  Li    0.5       0.5       0.5</span><br><span class="line">  2  Li    0.5       0         0.5</span><br><span class="line">  3  Li    0         0.5       0</span><br><span class="line">  4  Fe    0.529866  0.25      0.781151</span><br><span class="line">  5  Fe    0.029866  0.75      0.718849</span><br><span class="line">  6  Fe    0.970134  0.25      0.281151</span><br><span class="line">  7  Fe    0.470134  0.75      0.218849</span><br><span class="line">  8  P     0.418623  0.25      0.093866</span><br><span class="line">  9  P     0.918623  0.75      0.406134</span><br><span class="line"> 10  P     0.081377  0.25      0.593866</span><br><span class="line"> 11  P     0.581377  0.75      0.906134</span><br><span class="line"> 12  O     0.744787  0.25      0.094231</span><br><span class="line"> 13  O     0.713735  0.545558  0.834155</span><br><span class="line"> 14  O     0.713735  0.954442  0.834155</span><br><span class="line"> 15  O     0.255213  0.75      0.905769</span><br><span class="line"> 16  O     0.709864  0.75      0.044309</span><br><span class="line"> 17  O     0.244787  0.75      0.405769</span><br><span class="line"> 18  O     0.286265  0.045558  0.165845</span><br><span class="line"> 19  O     0.213735  0.454442  0.665845</span><br><span class="line"> 20  O     0.786265  0.545558  0.334155</span><br><span class="line"> 21  O     0.786265  0.954442  0.334155</span><br><span class="line"> 22  O     0.290136  0.25      0.955691</span><br><span class="line"> 23  O     0.209864  0.25      0.455691</span><br><span class="line"> 24  O     0.790136  0.75      0.544309</span><br><span class="line"> 25  O     0.755213  0.25      0.594231</span><br><span class="line"> 26  O     0.213735  0.045558  0.665845</span><br><span class="line"> 27  O     0.286265  0.454442  0.165845</span><br></pre></td></tr></table></figure></div>
 
-<p>符合要求的<code>interfaces</code>总共有191个。<code>interfaces</code>的类型是一个迭代器，不能直接调用输出其中的结果，但是可以先转化成<code>list</code>，然后可以导出第一个结构看下结果：</p>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">......</span><br><span class="line"><span class="comment"># 转化成列表</span></span><br><span class="line">Interfaces = <span class="built_in">list</span>(interfaces)</span><br><span class="line"><span class="comment"># 输出第一个结构</span></span><br><span class="line">Interfaces[<span class="number">0</span>].to(<span class="string">&quot;./Heter_1.cif&quot;</span>)</span><br></pre></td></tr></table></figure></div>
+<p>此时结构信息中只包含元素种类及原子坐标。</p>
+<p>调用<code>AutoOxiStateDecorationTransformation</code>：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.transformations.standard_transformations <span class="keyword">import</span> AutoOxiStateDecorationTransformation</span><br><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"></span><br><span class="line">LFP = Structure.from_file(<span class="string">&quot;./LiFePO4.vasp&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 实例化</span></span><br><span class="line">transformation = AutoOxiStateDecorationTransformation()</span><br><span class="line">new_LFP = transformation.apply_transformation(LFP)</span><br><span class="line"><span class="comment"># 打印结果</span></span><br><span class="line"><span class="built_in">print</span>(new_LFP)</span><br></pre></td></tr></table></figure></div>
 
-<p><code>VESTA</code>打开：</p>
-<p><img src="/2024/08/06/Learn-VASP-from-pymatgen-12/image-20240806094616702.png" alt="image-20240806094616702"></p>
-<p>可以再输出最后一个结构对比一下：</p>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">......</span><br><span class="line"><span class="comment"># 转化成列表</span></span><br><span class="line">Interfaces = <span class="built_in">list</span>(interfaces)</span><br><span class="line"><span class="comment"># 输出最后一个结构</span></span><br><span class="line">Interfaces[<span class="number">190</span>].to(<span class="string">&quot;./Heter_191.cif&quot;</span>)</span><br></pre></td></tr></table></figure></div>
+<p>运行代码：</p>
+<div class="highlight-container" data-rel="Tex"><figure class="iseeu highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">Full Formula (Li4 Fe4 P4 O16)</span><br><span class="line">Reduced Formula: LiFePO4</span><br><span class="line">abc   :   4.654917   5.970755  10.236196</span><br><span class="line">angles:  90.000000  90.000000  90.000000</span><br><span class="line">pbc   :       True       True       True</span><br><span class="line">Sites (28)</span><br><span class="line">  <span class="params">#</span>  SP           a         b         c</span><br><span class="line">---  ----  --------  --------  --------</span><br><span class="line">  0  Li+   0         0         0</span><br><span class="line">  1  Li+   0.5       0.5       0.5</span><br><span class="line">  2  Li+   0.5       0         0.5</span><br><span class="line">  3  Li+   0         0.5       0</span><br><span class="line">  4  Fe2+  0.529866  0.25      0.781151</span><br><span class="line">  5  Fe2+  0.029866  0.75      0.718849</span><br><span class="line">  6  Fe2+  0.970134  0.25      0.281151</span><br><span class="line">  7  Fe2+  0.470134  0.75      0.218849</span><br><span class="line">  8  P5+   0.418623  0.25      0.093866</span><br><span class="line">  9  P5+   0.918623  0.75      0.406134</span><br><span class="line"> 10  P5+   0.081377  0.25      0.593866</span><br><span class="line"> 11  P5+   0.581377  0.75      0.906134</span><br><span class="line"> 12  O2-   0.744787  0.25      0.094231</span><br><span class="line"> 13  O2-   0.713735  0.545558  0.834155</span><br><span class="line"> 14  O2-   0.713735  0.954442  0.834155</span><br><span class="line"> 15  O2-   0.255213  0.75      0.905769</span><br><span class="line"> 16  O2-   0.709864  0.75      0.044309</span><br><span class="line"> 17  O2-   0.244787  0.75      0.405769</span><br><span class="line"> 18  O2-   0.286265  0.045558  0.165845</span><br><span class="line"> 19  O2-   0.213735  0.454442  0.665845</span><br><span class="line"> 20  O2-   0.786265  0.545558  0.334155</span><br><span class="line"> 21  O2-   0.786265  0.954442  0.334155</span><br><span class="line"> 22  O2-   0.290136  0.25      0.955691</span><br><span class="line"> 23  O2-   0.209864  0.25      0.455691</span><br><span class="line"> 24  O2-   0.790136  0.75      0.544309</span><br><span class="line"> 25  O2-   0.755213  0.25      0.594231</span><br><span class="line"> 26  O2-   0.213735  0.045558  0.665845</span><br><span class="line"> 27  O2-   0.286265  0.454442  0.165845</span><br></pre></td></tr></table></figure></div>
 
-<p><code>VESTA</code>打开：</p>
-<p><img src="/2024/08/06/Learn-VASP-from-pymatgen-12/image-20240806094820632.png" alt="image-20240806094820632"></p>
-<p>可以发现同样的情况下，最后一个结构整体结构要大很多，相对更复杂。</p>
-<p>这是因为<code>Interfaces</code>里储存的结构是根据结构从简单到复杂进行排列，这里的”复杂”对应的是程序为了搜索匹配的超晶格表面，会自动进行晶格重定向或晶格基矢转变来进行匹配。</p>
-<p>实际使用时，为了节省计算时间，推荐选取最靠前的几个结构进行计算即可。</p>
+<p>此时可以发现对应的元素符号之后多了化合价信息。</p>
+<p><code>VASP</code>计算磁性材料时，初始磁矩的设置直接影响到计算过程的收敛快慢以及最终的能量。该类的用法在实际计算中可以为我们计算磁矩信息提供一个合理的初猜值，便于更好的自定义<code>MAGMOM</code>参数。</p>
+<h3 id="ChargedCellTransformation"><a href="#ChargedCellTransformation" class="headerlink" title="ChargedCellTransformation"></a>ChargedCellTransformation</h3><p>该类主要给结构施加额外电荷，使体系整体带正电或者负电。</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.transformations.standard_transformations <span class="keyword">import</span> ChargedCellTransformation</span><br><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"></span><br><span class="line">LFP = Structure.from_file(<span class="string">&quot;./LiFePO4.vasp&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(LFP)</span><br><span class="line"><span class="comment"># 实例化</span></span><br><span class="line">transformation = ChargedCellTransformation(charge=<span class="number">2</span>)</span><br><span class="line">new_LFP = transformation.apply_transformation(LFP)</span><br><span class="line"><span class="built_in">print</span>(new_LFP)</span><br></pre></td></tr></table></figure></div>
+
+<p><code>ChargedCellTransformation</code>实例化时传入<code>charge</code>参数来确定体系带电情况。</p>
+<p>部分输出：</p>
+<div class="highlight-container" data-rel="Tex"><figure class="iseeu highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">LFP：</span><br><span class="line">Full Formula (Li4 Mn1 Fe3 P4 O16)</span><br><span class="line">Reduced Formula: Li4MnFe3(PO4)4</span><br><span class="line">abc   :   4.654917   5.970755  10.236196</span><br><span class="line">angles:  90.000000  90.000000  90.000000</span><br><span class="line">pbc   :       True       True       True</span><br><span class="line">Sites (28)</span><br><span class="line"></span><br><span class="line">new<span class="built_in">_</span>LFP:</span><br><span class="line">Full Formula (Li4 Mn1 Fe3 P4 O16)</span><br><span class="line">Reduced Formula: Li4MnFe3(PO4)4</span><br><span class="line">abc   :   4.654917   5.970755  10.236196</span><br><span class="line">angles:  90.000000  90.000000  90.000000</span><br><span class="line">pbc   :       True       True       True</span><br><span class="line">Overall Charge: +2	<span class="params">#</span> 体系带正电</span><br><span class="line">Sites (28)</span><br></pre></td></tr></table></figure></div>
+
+<p><code>Overall Charge: +2</code>说明给体系加了两个正电荷。</p>
+<p>怎么在计算中体现带电情况呢？在之前直接调用<code>MPRelaxSet</code>的基础上有一点点变化：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.transformations.standard_transformations <span class="keyword">import</span> ChargedCellTransformation</span><br><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.sets <span class="keyword">import</span> MPRelaxSet</span><br><span class="line"></span><br><span class="line">LFP = Structure.from_file(<span class="string">&quot;./LiFePO4.vasp&quot;</span>)</span><br><span class="line"></span><br><span class="line">transformation = ChargedCellTransformation(charge=<span class="number">2</span>)</span><br><span class="line">new_LFP = transformation.apply_transformation(LFP)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">old_set = MPRelaxSet(LFP, use_structure_charge=<span class="literal">True</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;不带电体系INCAR：\n<span class="subst">&#123;old_set.incar&#125;</span>&#x27;</span>)</span><br><span class="line"></span><br><span class="line">new_set = MPRelaxSet(new_LFP, use_structure_charge=<span class="literal">True</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;带电体系INCAR：\n<span class="subst">&#123;new_set.incar&#125;</span>&#x27;</span>)</span><br></pre></td></tr></table></figure></div>
+
+<p>首先，在调用<code>MPRelaxSet</code>的时候需要设置<code>use_structure_charge=True</code>，这样才读取的是结构中的电荷信息，反之则采用默认的设置。</p>
+<p>代码部分输出：</p>
+<div class="highlight-container" data-rel="Tex"><figure class="iseeu highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">不带电体系INCAR：</span><br><span class="line">......</span><br><span class="line">MAGMOM = 4*0.6 4*5.0 20*0.6</span><br><span class="line">NELECT = 183.0</span><br><span class="line">NELM = 100</span><br><span class="line">NSW = 99</span><br><span class="line">PREC = Accurate</span><br><span class="line">SIGMA = 0.05</span><br><span class="line"></span><br><span class="line">带电体系INCAR：</span><br><span class="line">......</span><br><span class="line">MAGMOM = 4*0.6 4*5.0 20*0.6</span><br><span class="line">NELECT = 181.0</span><br><span class="line">NELM = 100</span><br><span class="line">NSW = 99</span><br><span class="line">PREC = Accurate</span><br><span class="line">SIGMA = 0.05</span><br></pre></td></tr></table></figure></div>
+
+<p>对比可发现，两种<code>INCAR</code>的<code>NELECT</code>的参数不同。<code>NELECT</code>参数描述的是体系的电荷数，带电体系中<code>NELECT</code>数目变少，则说明此时体系带正电；反之，<code>NELECT</code>数目增多说明体系带负电。</p>
+<p>该类可用于在半导体材料中由于缺陷和掺杂使得体系带电，进而研究这些带电缺陷的形成能、迁移机制等对材料的影响；也可以用于模拟电池界面上额外电荷的分布情况来研究枝晶的生长情况。</p>
 <p><em><strong>¡Muchas gracias!</strong></em></p>
 
         </div>
@@ -678,18 +639,18 @@
             <div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
                 <div class="article-copyright-info-container">
     <ul>
-        <li><strong>标题:</strong> Chap.12  计算小白硬学VASP —— 构建异质结模型</li>
+        <li><strong>标题:</strong> Chap.14  计算小白硬学VASP —— 各类结构“Transformation”使用说明（一）</li>
         <li><strong>作者:</strong> 炫酷老司机</li>
         <li><strong>创建于
-                :</strong> 2024-08-06 00:00:00</li>
+                :</strong> 2024-08-07 00:00:00</li>
         
             <li>
                 <strong>更新于
-                    :</strong> 2024-08-06 10:08:14
+                    :</strong> 2024-08-09 16:58:50
             </li>
         
         <li>
-            <strong>链接:</strong> https://andyhox.github.io/2024/08/06/Learn-VASP-from-pymatgen-12/
+            <strong>链接:</strong> https://andyhox.github.io/2024/08/07/Learn-VASP-from-pymatgen-14/
         </li>
         <li>
             <strong>
@@ -718,10 +679,6 @@
                         <a href="/tags/pymatgen/">#pymatgen</a>&nbsp;
                     </li>
                 
-                    <li class="tag-item mx-0.5">
-                        <a href="/tags/Materials-Project/">#Materials Project</a>&nbsp;
-                    </li>
-                
             </ul>
         
 
@@ -733,13 +690,13 @@
                     <div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
                         <a class="prev"
                         rel="prev"
-                        href="/2024/08/07/Learn-VASP-from-pymatgen-14/"
+                        href="/2024/08/07/Learn-VASP-from-pymatgen-13/"
                         >
                             <span class="left arrow-icon flex justify-center items-center">
                                 <i class="fa-solid fa-chevron-left"></i>
                             </span>
                             <span class="title flex justify-center items-center">
-                                <span class="post-nav-title-item">Chap.14  计算小白硬学VASP —— 各类结构“Transformation”使用说明（一）</span>
+                                <span class="post-nav-title-item">Chap.13  计算小白硬学VASP —— 自动搜索表面吸附位点并生成吸附结构</span>
                                 <span class="post-nav-item">上一篇</span>
                             </span>
                         </a>
@@ -749,10 +706,10 @@
                     <div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
                         <a class="next"
                         rel="next"
-                        href="/2024/08/05/Learn-VASP-from-pymatgen-11/"
+                        href="/2024/08/06/Learn-VASP-from-pymatgen-12/"
                         >
                             <span class="title flex justify-center items-center">
-                                <span class="post-nav-title-item">Chap.11  计算小白硬学VASP —— 构建slab模型</span>
+                                <span class="post-nav-title-item">Chap.12  计算小白硬学VASP —— 构建异质结模型</span>
                                 <span class="post-nav-item">下一篇</span>
                             </span>
                             <span class="right arrow-icon flex justify-center items-center">
@@ -773,8 +730,8 @@
             <div class="post-toc-wrap">
     <div class="post-toc">
         <div class="toc-title">此页目录</div>
-        <div class="page-title">Chap.12  计算小白硬学VASP —— 构建异质结模型</div>
-        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#CoherentInterfaceBuilder-ZSLGenerator"><span class="nav-text">CoherentInterfaceBuilder &amp; ZSLGenerator</span></a></li></ol>
+        <div class="page-title">Chap.14  计算小白硬学VASP —— 各类结构“Transformation”使用说明（一）</div>
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#AutoOxiStateDecorationTransformation"><span class="nav-text">AutoOxiStateDecorationTransformation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ChargedCellTransformation"><span class="nav-text">ChargedCellTransformation</span></a></li></ol>
 
     </div>
 </div>
