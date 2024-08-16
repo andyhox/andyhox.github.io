@@ -98,6 +98,20 @@ date: 2024-06-20 00:00:00
 - 吸附模型2D可视化
 - 调用`ase`导入常见吸附分子
 
+### 13、Transformation类用法（一）
+
+{% btn regular :: Click here :: https://andyhox.github.io/2024/08/09/Learn-VASP-from-pymatgen-14/ :: fa-solid fa-play-circle %}
+
+- `AutoOxiStateDecorationTransformation`
+- `ChargedCellTransformation`
+
+### 14、Transformation类用法（二）
+
+{% btn regular :: Click here :: https://andyhox.github.io/2024/08/16/Learn-VASP-from-pymatgen-15/ :: fa-solid fa-play-circle %}
+
+- `SubstitutionTransformation`
+- `ReplaceSiteSpeciesTransformation`
+
 {% note info %}
 
 To be continued
