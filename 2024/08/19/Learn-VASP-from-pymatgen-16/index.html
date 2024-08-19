@@ -17,18 +17,26 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="https://andyhox.github.io/tags/materials-project/"/>
+    <link rel="canonical" href="https://andyhox.github.io/2024/08/19/learn-vasp-from-pymatgen-16/"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
     
-        <meta property="og:type" content="website">
-<meta property="og:title" content="Andy">
-<meta property="og:url" content="https://andyhox.github.io/tags/Materials-Project/index.html">
+        <meta name="description" content="Learn VASP from pymatgen">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Chap.16  计算小白硬学VASP —— 各类结构“Transformation”使用说明（三）">
+<meta property="og:url" content="https://andyhox.github.io/2024/08/19/Learn-VASP-from-pymatgen-16/index.html">
 <meta property="og:site_name" content="Andy">
+<meta property="og:description" content="Learn VASP from pymatgen">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://andyhox.github.io/2024/08/19/Learn-VASP-from-pymatgen-16/image-20240819111140780.png">
+<meta property="article:published_time" content="2024-08-18T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-08-19T03:15:16.412Z">
 <meta property="article:author" content="andyhoo">
+<meta property="article:tag" content="VASP">
+<meta property="article:tag" content="pymatgen">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://andyhox.github.io/2024/08/19/Learn-VASP-from-pymatgen-16/image-20240819111140780.png">
     
     
         <!-- Google tag (gtag.js) -->
@@ -50,7 +58,7 @@
     
     <title>
         
-            标签: Materials Project -
+            Chap.16  计算小白硬学VASP —— 各类结构“Transformation”使用说明（三） -
         
         A&amp;H
     </title>
@@ -486,155 +494,230 @@
             <div class="main-content">
 
                 
-                    <div class="tag-container">
-	<div class="tag-name">
-		<i class="fa-solid fa-tag"></i>&nbsp;Materials Project
-	</div>
-	<div class="tag-post-list">
-		
-<div class="archive-list-container">
-    
-        <section class="archive-item mb-spacing-unit last:mb-0">
-            <div class="archive-item-header flex flex-row items-center mb-2">
-                <span class="archive-year font-semibold text-3xl mr-2">2024</span>
-                <span class="archive-year-post-count text-xs md:text-sm font-bold rounded-small bg-third-background-color py-[2px] px-[10px] border border-border-color">10</span>
-            </div>
+                    <div class="post-page-container flex relative justify-between box-border w-full h-full">
+    <div class="article-content-container">
+
+        <div class="article-title relative w-full">
             
-            <ul class="article-list pl-0 md:pl-8 text-lg leading-[1.5]">
                 
-                    
-                    
-                         <!-- Close the previous LI if not the first item -->
-                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is='08-06'>
-                    
-                    <a href="/2024/08/06/Learn-VASP-from-pymatgen-12/" class="block overflow-hidden w-fit">
-                        <span class="article-title my-0.5 text-2xl">Chap.12  计算小白硬学VASP —— 构建异质结模型</span>
-                    </a>
-                    
                 
-                    
+                <img src="/images/wallhaven-gpkd77_3840x2160.png" alt="Chap.16  计算小白硬学VASP —— 各类结构“Transformation”使用说明（三）" class="w-full h-60 sm:h-72 md:h-80 object-cover sm:rounded-t-large dark:brightness-75"/>
+                
+                <div class="w-full flex items-center absolute bottom-0 justify-start">
+                    <h1 class="article-title-cover text-center mx-6 my-6 text-second-text-color bg-background-color-transparent px-4 py-3 text-3xl sm:text-4xl md:text-5xl font-semibold backdrop-blur-lg rounded-xl border border-border-color ">Chap.16  计算小白硬学VASP —— 各类结构“Transformation”使用说明（三）</h1>
+                </div>
+            
+            </div>
+
+        
+            <div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+                <div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+                    <img src="/images/avatar.jpg">
+                </div>
+                <div class="info flex flex-col justify-between">
+                    <div class="author flex items-center">
+                        <span class="name text-default-text-color text-lg font-semibold">炫酷老司机</span>
+                        
+                            <span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv99</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2024-08-19</span>
+        <span class="mobile">2024-08-19</span>
+        <span class="hover-info">创建</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2024-08-19 11:15:16</span>
+            <span class="mobile">2024-08-19 11:15:16</span>
+            <span class="hover-info">更新</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
                     
                         
-                            </li>
-                         <!-- Close the previous LI if not the first item -->
-                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is='08-05'>
+                        <li>
+                            <a href="/categories/Learn-VASP-from-pymatgen/">Learn VASP from pymatgen</a>&nbsp;
+                        </li>
                     
-                    <a href="/2024/08/05/Learn-VASP-from-pymatgen-11/" class="block overflow-hidden w-fit">
-                        <span class="article-title my-0.5 text-2xl">Chap.11  计算小白硬学VASP —— 构建slab模型</span>
-                    </a>
                     
                 
-                    
-                    
-                        
-                            </li>
-                         <!-- Close the previous LI if not the first item -->
-                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is='06-28'>
-                    
-                    <a href="/2024/06/28/Learn-VASP-from-pymatgen-10/" class="block overflow-hidden w-fit">
-                        <span class="article-title my-0.5 text-2xl">Chap.10  计算小白硬学VASP —— 材料性质计算—&gt;能带态密度图汇总</span>
-                    </a>
-                    
-                
-                    
-                    
-                        
-                            </li>
-                         <!-- Close the previous LI if not the first item -->
-                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is='06-27'>
-                    
-                    <a href="/2024/06/27/Learn-VASP-from-pymatgen-9/" class="block overflow-hidden w-fit">
-                        <span class="article-title my-0.5 text-2xl">Chap.9  计算小白硬学VASP —— 材料性质计算—&gt;能带分析</span>
-                    </a>
-                    
-                
-                    
-                    
-                        
-                            </li>
-                         <!-- Close the previous LI if not the first item -->
-                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is='06-20'>
-                    
-                    <a href="/2024/06/20/Learn-VASP-from-pymatgen-TOC/" class="block overflow-hidden w-fit">
-                        <span class="article-title my-0.5 text-2xl">计算小白硬学VASP系列——《Learn VASP from pymatgen》章节目录</span>
-                    </a>
-                    
-                
-                    
-                    
-                        
-                            </li>
-                         <!-- Close the previous LI if not the first item -->
-                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is='06-18'>
-                    
-                    <a href="/2024/06/18/Learn-VASP-from-pymatgen-8/" class="block overflow-hidden w-fit">
-                        <span class="article-title my-0.5 text-2xl">Chap.8  计算小白硬学VASP —— 材料性质计算—&gt;能带计算</span>
-                    </a>
-                    
-                
-                    
-                    
-                        
-                            </li>
-                         <!-- Close the previous LI if not the first item -->
-                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is='06-17'>
-                    
-                    <a href="/2024/06/17/Learn-VASP-from-pymatgen-7/" class="block overflow-hidden w-fit">
-                        <span class="article-title my-0.5 text-2xl">Chap.7  计算小白硬学VASP —— 材料性质计算—&gt;态密度分析（2）</span>
-                    </a>
-                    
-                
-                    
-                    
-                        
-                            </li>
-                         <!-- Close the previous LI if not the first item -->
-                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is='06-13'>
-                    
-                    <a href="/2024/06/13/Learn-VASP-from-pymatgen-6/" class="block overflow-hidden w-fit">
-                        <span class="article-title my-0.5 text-2xl">Chap.6  计算小白硬学VASP —— 材料性质计算—&gt;态密度分析(1)</span>
-                    </a>
-                    
-                
-                    
-                    
-                        
-                            </li>
-                         <!-- Close the previous LI if not the first item -->
-                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is='06-11'>
-                    
-                    <a href="/2024/06/11/Learn-VASP-from-pymatgen-5/" class="block overflow-hidden w-fit">
-                        <span class="article-title my-0.5 text-2xl">Chap.5  计算小白硬学VASP —— 材料性质计算—&gt;态密度</span>
-                    </a>
-                    
-                
-                    
-                    
-                        
-                            </li>
-                         <!-- Close the previous LI if not the first item -->
-                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is='06-04'>
-                    
-                    <a href="/2024/06/04/Learn-VASP-from-pymatgen-4/" class="block overflow-hidden w-fit">
-                        <span class="article-title my-0.5 text-2xl">Chap.4  计算小白硬学VASP —— MPRelaxSet用法</span>
-                    </a>
-                    
-                
-                </li> <!-- Ensure the last item is properly closed -->
             </ul>
-        </section>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/VASP/">VASP</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/pymatgen/">pymatgen</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>1k 字</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>5 分钟</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
     
 </div>
 
-	</div>
+                    </div>
+                </div>
+            </div>
+        
+
+        
+
+
+        <div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+            <p><em><strong>¡Hola a todos!</strong></em></p>
+<p>上一章介绍了怎么构建<code>disordered</code>分数占据结构，本章介绍怎么从<code>disordered</code>分数占据结构中生成可以直接计算的结构。</p>
+<h3 id="OrderDisorderedStructureTransformation"><a href="#OrderDisorderedStructureTransformation" class="headerlink" title="OrderDisorderedStructureTransformation"></a>OrderDisorderedStructureTransformation</h3><p>上一章以<code>LiFePO4</code>为例，在<code>8a</code>O位点替换掺杂S元素，生成的<code>disordered</code>结构如下：</p>
+<div class="highlight-container" data-rel="Tex"><figure class="iseeu highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">Full Formula (Li4 Fe4 P4 S0.8 O15.2)</span><br><span class="line">Reduced Formula: Li4Fe4P4S0.8O15.2</span><br><span class="line">abc   :  10.236196   5.970755   4.654917</span><br><span class="line">angles:  90.000000  90.000000  90.000000</span><br><span class="line">pbc   :       True       True       True</span><br><span class="line">Sites (28)</span><br><span class="line">  <span class="params">#</span>  SP                       a         b         c</span><br><span class="line">---  ----------------  --------  --------  --------</span><br><span class="line">  0  Li+               0         0         0</span><br><span class="line">  1  Li+               0.5       0         0.5</span><br><span class="line">  2  Li+               0.5       0.5       0.5</span><br><span class="line">  3  Li+               0         0.5       0</span><br><span class="line">  4  Fe2+              0.218849  0.25      0.529866</span><br><span class="line">  5  Fe2+              0.781151  0.75      0.470134</span><br><span class="line">  6  Fe2+              0.281151  0.75      0.029866</span><br><span class="line">  7  Fe2+              0.718849  0.25      0.970134</span><br><span class="line">  8  P5+               0.093866  0.75      0.581377</span><br><span class="line">  9  P5+               0.906134  0.25      0.418623</span><br><span class="line"> 10  P5+               0.406134  0.25      0.081377</span><br><span class="line"> 11  P5+               0.593866  0.75      0.918623</span><br><span class="line"> 12  S2-:0.1, O2-:0.9  0.165845  0.545558  0.713735</span><br><span class="line"> 13  S2-:0.1, O2-:0.9  0.834155  0.454442  0.286265</span><br><span class="line"> 14  S2-:0.1, O2-:0.9  0.334155  0.454442  0.213735</span><br><span class="line"> 15  S2-:0.1, O2-:0.9  0.665845  0.545558  0.786265</span><br><span class="line"> 16  S2-:0.1, O2-:0.9  0.665845  0.954442  0.786265</span><br><span class="line"> 17  S2-:0.1, O2-:0.9  0.334155  0.045558  0.213735</span><br><span class="line"> 18  S2-:0.1, O2-:0.9  0.834155  0.045558  0.286265</span><br><span class="line"> 19  S2-:0.1, O2-:0.9  0.165845  0.954442  0.713735</span><br><span class="line"> 20  O2-               0.044309  0.25      0.290136</span><br><span class="line"> 21  O2-               0.955691  0.75      0.709864</span><br><span class="line"> 22  O2-               0.455691  0.75      0.790136</span><br><span class="line"> 23  O2-               0.544309  0.25      0.209864</span><br><span class="line"> 24  O2-               0.094231  0.75      0.255213</span><br><span class="line"> 25  O2-               0.905769  0.25      0.744787</span><br><span class="line"> 26  O2-               0.405769  0.25      0.755213</span><br><span class="line"> 27  O2-               0.594231  0.75      0.244787</span><br></pre></td></tr></table></figure></div>
+
+<p>把上述结构提取对称性，可以更直观的看出替换信息：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.......</span><br><span class="line">final_LFP = SpacegroupAnalyzer(final_LFP).get_symmetrized_structure()</span><br><span class="line"><span class="built_in">print</span>(final_LFP)</span><br></pre></td></tr></table></figure></div>
+
+<p>输出：</p>
+<div class="highlight-container" data-rel="Tex"><figure class="iseeu highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">SymmetrizedStructure</span><br><span class="line">Full Formula (Li4 Fe4 P4 S0.8 O15.2)</span><br><span class="line">Reduced Formula: Li4Fe4P4S0.8O15.2</span><br><span class="line">Spacegroup: Pnma (62)</span><br><span class="line">abc   :  10.236196   5.970755   4.654917</span><br><span class="line">angles:  90.000000  90.000000  90.000000</span><br><span class="line">Sites (28)</span><br><span class="line">  <span class="params">#</span>  SP                       a         b         c  Wyckoff</span><br><span class="line">---  ----------------  --------  --------  --------  ---------</span><br><span class="line">  0  Li+               0         0         0         4a</span><br><span class="line">  1  Fe2+              0.218849  0.25      0.529866  4c</span><br><span class="line">  2  P5+               0.093866  0.75      0.581377  4c</span><br><span class="line">  3  S2-:0.1, O2-:0.9  0.165845  0.545558  0.713735  8d</span><br><span class="line">  4  O2-               0.044309  0.25      0.290136  4c</span><br><span class="line">  5  O2-               0.094231  0.75      0.255213  4c</span><br></pre></td></tr></table></figure></div>
+
+<p>下一步就是如何生成<code>ordered</code>结构，现在就是要用到<code>OrderDisorderedStructureTransformation</code>类：</p>
+<ul>
+<li><code>algo</code>：使用的算法，可选：<code>ALGO_BEST_FIRST=2</code>、<code>ALGO_COMPLETE=1</code>、<code>ALGO_FAST=0</code>；默认为0。</li>
+<li><code>symmetrized_structures</code>：输入结构是否包含对称性</li>
+<li><code>no_oxo_states</code>：是否去除价态</li>
+</ul>
+<p>在调用前，我们需要查看下输入结构信息，如果包含对称性，即上述后者的结构信息，则需要打开<code>symmetrized_structures=True</code></p>
+<p>其次，还需要判断初始结构中的<code>disordered</code>位点是否能够分配，否者则需要先超胞。通俗地讲，消除<code>disordered</code>位点的办法就是随机分配位点，如，上述<code>8a</code>O位惯用胞中总共有8个位点，但<code>O ：S</code>的占据比为<code>9 : 1</code>，如此一来则位点不够分配，则需要先超胞提供足够多的位点，然后再进行操作。</p>
+<p>这里，为了方便直接跟惯用胞对比，我们改一下掺杂比例<code>O ：S</code>的占据比为<code>1 : 1</code></p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.transformations.standard_transformations <span class="keyword">import</span> OrderDisorderedStructureTransformation</span><br><span class="line"><span class="keyword">from</span> pymatgen.io.cif <span class="keyword">import</span> CifParser</span><br><span class="line"><span class="keyword">from</span> pymatgen.transformations.site_transformations <span class="keyword">import</span> ReplaceSiteSpeciesTransformation</span><br><span class="line"><span class="keyword">from</span> pymatgen.symmetry.analyzer <span class="keyword">import</span> SpacegroupAnalyzer</span><br><span class="line"><span class="keyword">from</span> pymatgen.io.cif <span class="keyword">import</span> CifWriter</span><br><span class="line"></span><br><span class="line">ini_LFP = CifParser(<span class="string">&#x27;./LiFePO4.cif&#x27;</span>).parse_structures()[<span class="number">0</span>]</span><br><span class="line">symm_LFP = SpacegroupAnalyzer(ini_LFP).get_symmetrized_structure()</span><br><span class="line"></span><br><span class="line">wyckoff_sites = SpacegroupAnalyzer(ini_LFP).get_symmetry_dataset().wyckoffs</span><br><span class="line"></span><br><span class="line">oxygen_d_indices = [i <span class="keyword">for</span> i, site <span class="keyword">in</span> <span class="built_in">enumerate</span>(wyckoff_sites) <span class="keyword">if</span> site == <span class="string">&#x27;d&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 复制初始结构到最终结构</span></span><br><span class="line">final_LFP = ini_LFP.copy()</span><br><span class="line"><span class="comment"># 对类型为&#x27;d&#x27;的氧原子位点进行物种替换</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> oxygen_d_indices:</span><br><span class="line">    indices_species_map = &#123;i:&#123;<span class="string">&#x27;O2-&#x27;</span>:<span class="number">0.5</span>, <span class="string">&#x27;S2-&#x27;</span>:<span class="number">0.5</span>&#125;&#125;  <span class="comment"># 替换比例为O2-:0.5, S2-:0.5</span></span><br><span class="line">    trans = ReplaceSiteSpeciesTransformation(indices_species_map)  <span class="comment"># 创建替换物种变换对象</span></span><br><span class="line">    final_LFP = trans.apply_transformation(final_LFP)  <span class="comment"># 应用变换到最终结构</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 先保存初始disordered结构</span></span><br><span class="line">final_LFP = SpacegroupAnalyzer(final_LFP).get_symmetrized_structure()</span><br><span class="line">CifWriter(final_LFP,symprec=<span class="number">0.01</span>).write_file(<span class="string">&#x27;./LiFePO4_doped.cif&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#实例化</span></span><br><span class="line">trans = OrderDisorderedStructureTransformation(algo=<span class="number">0</span>,symmetrized_structures=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成结构</span></span><br><span class="line">ordered_LFPs = trans.apply_transformation(input_struct,return_ranked_list=<span class="number">5</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 保存结构</span></span><br><span class="line"><span class="keyword">for</span> i,struct <span class="keyword">in</span> <span class="built_in">enumerate</span>(ordered_LFPs):</span><br><span class="line">    CifWriter(struct[<span class="string">&#x27;structure&#x27;</span>],symprec=<span class="number">0.01</span>).write_file(<span class="string">f&#x27;./LiFePO4_doped_<span class="subst">&#123;i&#125;</span>.cif&#x27;</span>)</span><br></pre></td></tr></table></figure></div>
+
+<p><code>apply_transformation</code>中<code>return_ranked_list=5</code>表示输出五个目标<code>ordered</code>结构，否则只会输出一个结构。</p>
+<p>把输出结构导入<code>VESTA</code>查看：</p>
+<p><img src="/2024/08/19/Learn-VASP-from-pymatgen-16/image-20240819111140780.png" alt="image-20240819111140780"></p>
+<p><strong>Note</strong>：该方法进行分配时不会考虑对称性来较少目标结构的总数量，所以对于生成的<code>Ordered</code>结构，需要甄别一下再提交<code>VASP</code>计算。</p>
+<p><em><strong>¡Muchas gracias!</strong></em></p>
+
+        </div>
+
+        
+            <div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>标题:</strong> Chap.16  计算小白硬学VASP —— 各类结构“Transformation”使用说明（三）</li>
+        <li><strong>作者:</strong> 炫酷老司机</li>
+        <li><strong>创建于
+                :</strong> 2024-08-19 00:00:00</li>
+        
+            <li>
+                <strong>更新于
+                    :</strong> 2024-08-19 11:15:16
+            </li>
+        
+        <li>
+            <strong>链接:</strong> https://andyhox.github.io/2024/08/19/Learn-VASP-from-pymatgen-16/
+        </li>
+        <li>
+            <strong>
+                版权声明:
+            </strong>
+            
+
+            
+                欢迎个人转载、使用、转贴等，但请获得作者同意且注明出处！
+            
+        </li>
+    </ul>
 </div>
 
-<div class="tag-paginator">
-	<div class="paginator">
-    <span class="page-number current">1</span><a class="page-number" href="/tags/Materials-Project/page/2/">2</a><a class="extend next" rel="next" href="/tags/Materials-Project/page/2/"><i class="fa-regular fa-angle-right"></i></a>
+            </div>
+        
+
+        
+            <ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+                
+                    <li class="tag-item mx-0.5">
+                        <a href="/tags/VASP/">#VASP</a>&nbsp;
+                    </li>
+                
+                    <li class="tag-item mx-0.5">
+                        <a href="/tags/pymatgen/">#pymatgen</a>&nbsp;
+                    </li>
+                
+            </ul>
+        
+
+        
+
+        
+            <div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+                
+                
+                    <div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+                        <a class="next"
+                        rel="next"
+                        href="/2024/08/16/Learn-VASP-from-pymatgen-15/"
+                        >
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">Chap.15  计算小白硬学VASP —— 各类结构“Transformation”使用说明（二）</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                            <span class="right arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+
+        
+    </div>
+
+    
+        <div class="toc-content-container">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">此页目录</div>
+        <div class="page-title">Chap.16  计算小白硬学VASP —— 各类结构“Transformation”使用说明（三）</div>
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#OrderDisorderedStructureTransformation"><span class="nav-text">OrderDisorderedStructureTransformation</span></a></li></ol>
+
+    </div>
+</div>
+        </div>
+    
 </div>
 
-</div>
 
 
                 
@@ -721,6 +804,23 @@
         </div>
     </div>
 
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
     
 
     <div class="right-side-tools-container">
