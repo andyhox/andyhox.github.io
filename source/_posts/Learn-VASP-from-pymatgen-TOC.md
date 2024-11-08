@@ -112,6 +112,12 @@ date: 2024-06-20 00:00:00
 - `SubstitutionTransformation`
 - `ReplaceSiteSpeciesTransformation`
 
+### 15、Transformation类用法（三）
+
+{% btn regular :: Click here :: https://andyhox.github.io/2024/08/19/Learn-VASP-from-pymatgen-16/ :: fa-solid fa-play-circle %}
+
+- `OrderDisorderedStructureTransformation`
+
 {% note info %}
 
 To be continued

@@ -24,3 +24,17 @@ date: 2024-06-26
 - python直接调用
 - 根据计算结果自动绘制能带、态密度、费米面等图
 
+### Atomate2
+
+- 了解`Atomate2`的功能和基本用法
+
+{% btn regular :: Click here :: https://andyhox.github.io/2024/11/08/Atomate2-1/ :: fa-solid fa-play-circle %}
+
+- `Atomate2`配置以及自定义参数设置
+
+{% btn regular :: Click here :: https://andyhox.github.io/2024/11/08/Atomate2-2/ :: fa-solid fa-play-circle %}
+
+- `Atomate2`自定义工作流
+
+{% btn regular :: Click here :: https://andyhox.github.io/2024/11/08/Atomate2-3/ :: fa-solid fa-play-circle %}
+
