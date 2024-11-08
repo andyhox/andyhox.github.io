@@ -1258,6 +1258,21 @@
 <li>python直接调用</li>
 <li>根据计算结果自动绘制能带、态密度、费米面等图</li>
 </ul>
+<h3 id="Atomate2"><a href="#Atomate2" class="headerlink" title="Atomate2"></a>Atomate2</h3><ul>
+<li>了解<code>Atomate2</code>的功能和基本用法</li>
+</ul>
+<a class="button  regular" href="https://andyhox.github.io/2024/11/08/Atomate2-1/" title="Click here"><i class="fa-solid fa-play-circle"></i> Click here</a>
+
+<ul>
+<li><code>Atomate2</code>配置以及自定义参数设置</li>
+</ul>
+<a class="button  regular" href="https://andyhox.github.io/2024/11/08/Atomate2-2/" title="Click here"><i class="fa-solid fa-play-circle"></i> Click here</a>
+
+<ul>
+<li><code>Atomate2</code>自定义工作流</li>
+</ul>
+<a class="button  regular" href="https://andyhox.github.io/2024/11/08/Atomate2-3/" title="Click here"><i class="fa-solid fa-play-circle"></i> Click here</a>
+
 ]]></content>
       <categories>
         <category>toolkit</category>
@@ -1578,43 +1593,305 @@
       </tags>
   </entry>
   <entry>
-    <title>计算工具系列 —— Smatool</title>
-    <url>/2024/09/24/smatool-tutorial/</url>
-    <content><![CDATA[<p><em><strong>¡Hola a todos!</strong></em></p>
-<p>最近学习了一下<code>Smatool</code>的用法，分享一下使用心得。</p>
-<p>[官网介绍](<a class="link" href="https://github.com/gmp007/smatool">gmp007/smatool: Open-source first-principles computational toolkit for the efficient calculation of the strength of materials in 1D, 2D, and 3D materials at both zero and finite temperatures (github.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>)</p>
-<blockquote>
-<p>Strength of Materials Analysis Toolkit is a comprehensive computational package developed to evaluate the tensile, shear, biaxial, and indentation strength (Vickers’ hardness) of materials at zero temperature (using density functional theory) and finite temperature (using ab-initio molecular dynamics). Integrating advanced algorithms and leveraging the capabilities of well-established electronic structure codes like VASP and QE as the stress calculator, SMATool provides a robust platform for analyzing the strength of 1D, 2D, and 3D materials.</p>
-</blockquote>
-<p>简单来说，<code>smatool</code>可用于评估材料的拉伸、剪切、双向和压痕强度，采用密度泛函理论和第一性原理分子动力学。</p>
-<h3 id="安装流程"><a href="#安装流程" class="headerlink" title="安装流程"></a>安装流程</h3><p>推荐在<code>conda</code>环境下进行安装，首先新建一个环境，后续专门为<code>smatool</code>配置依赖库：</p>
-<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line">conda create -n smatool_env</span><br></pre></td></tr></table></figure></div>
-
-<p>进入<code>smatool_env</code>环境后，可直接<code>pip</code>快速安装：</p>
-<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line">conda activate smatool_env</span><br><span class="line">pip install -U smatool</span><br></pre></td></tr></table></figure></div>
-
-<p>如果未出现任何报错就说明安装完成了，后续可以直接使用了。</p>
-<h3 id="输入文件介绍"><a href="#输入文件介绍" class="headerlink" title="输入文件介绍"></a>输入文件介绍</h3><p>使用<code>smatool</code>我们只需要提供结构文件即可，<code>smatool</code>接受的结构文件格式为<code>.cif</code>和<code>.vasp</code>格式。确保当前路径下有符合要求的结构文件后，在命令行直接输入<code>smatool -0</code>会生成<code>smatool.in</code>文件，跟大多数软件一样，<code>.in</code>文件的生成大多都是控制计算的参数和流程，下面是<code>smatool</code>生成的默认<code>.in</code>文件：</p>
-<div class="highlight-container" data-rel="Tex"><figure class="iseeu highlight tex"><table><tr><td class="code"><pre><span class="line"><span class="params">########################################</span></span><br><span class="line"><span class="params">###</span>  SMATool package input control   <span class="params">###</span></span><br><span class="line"><span class="params">########################################</span></span><br><span class="line"><span class="params">#</span>choose stress calculator: VASP/QE currently supported</span><br><span class="line">code<span class="built_in">_</span>type = vasp</span><br><span class="line"></span><br><span class="line"><span class="params">#</span>choose method: DFT(static) and MD(dynamic)</span><br><span class="line">mode = dft</span><br><span class="line"></span><br><span class="line"><span class="params">#</span>structure file name with .cif or .vasp</span><br><span class="line">structure<span class="built_in">_</span>file = file.cif</span><br><span class="line"></span><br><span class="line"><span class="params">#</span>choose dimension: 1D/2D/3D</span><br><span class="line">dimensional = 2D</span><br><span class="line"></span><br><span class="line"><span class="params">#</span> strain: start, end, and interval</span><br><span class="line">strains = 0.01 0.8 0.01</span><br><span class="line"></span><br><span class="line"><span class="params">#</span>perform compression with tensile </span><br><span class="line">plusminus = off</span><br><span class="line"></span><br><span class="line"><span class="params">#</span>yieldpoint offset, e.g. 0.2<span class="comment">%</span></span><br><span class="line">yieldpoint<span class="built_in">_</span>offset = 0.002</span><br><span class="line"></span><br><span class="line"><span class="params">#</span>stress components: Tensile<span class="built_in">_</span>x Tensile<span class="built_in">_</span>y Tensile<span class="built_in">_</span>z Tensile<span class="built_in">_</span>biaxial indent<span class="built_in">_</span>strength Shear (xz for 1D and 3D and xy for 2D)</span><br><span class="line"><span class="params">#</span> you can writ more than one case by just listing them (no comma, just space)  </span><br><span class="line">components = Tensile<span class="built_in">_</span>x</span><br><span class="line"></span><br><span class="line"><span class="params">#</span>supercell for MD simulation</span><br><span class="line">md<span class="built_in">_</span>supercell = 1, 1, 1</span><br><span class="line"></span><br><span class="line"><span class="params">#</span>save structure files at each strain</span><br><span class="line">save<span class="built_in">_</span>struct = on</span><br><span class="line"></span><br><span class="line"><span class="params">#</span>molecular dynamics time step</span><br><span class="line">md<span class="built_in">_</span>timestep = 500</span><br><span class="line"></span><br><span class="line"><span class="params">#</span>apply rotation along strain (plane) and slip directions</span><br><span class="line">rotation = off</span><br><span class="line"></span><br><span class="line"><span class="params">#</span>define strain direction, uses Miller indices, e.g., 11, 0-1 for 2D</span><br><span class="line">slip<span class="built_in">_</span>parameters = 100, 111</span><br><span class="line"></span><br><span class="line"><span class="params">#</span>slipping on; must be on/yes/1 once shear modeling is enabled</span><br><span class="line">slipon = off</span><br><span class="line"></span><br><span class="line"><span class="params">#</span>explicit potential directory</span><br><span class="line">potential<span class="built_in">_</span>dir = /potential/</span><br><span class="line"></span><br><span class="line"><span class="params">#</span>Use saved data. postprocessing only</span><br><span class="line">use<span class="built_in">_</span>saved<span class="built_in">_</span>data = false</span><br><span class="line"></span><br><span class="line"><span class="params">#</span>job submission command</span><br><span class="line">job<span class="built_in">_</span>submit<span class="built_in">_</span>command = vasp/pw.x &gt; log</span><br></pre></td></tr></table></figure></div>
-
-<p>仅介绍几个关键的词条，其余可看英文注释或查看官网源码：</p>
+    <title>计算工作流——Atomate2基本设置</title>
+    <url>/2024/11/08/%E4%BA%8C%E3%80%81Atomate2%E5%9F%BA%E6%9C%AC%E8%AE%BE%E7%BD%AE/</url>
+    <content><![CDATA[<p><code>Atomate2</code>​安装过程<a class="link" href="https://materialsproject.github.io/atomate2/user/install.html">官网 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>上介绍的已经非常详细了，唯一需要注意的是云数据库的设置。<code>Atomate2</code>​推荐采用云数据库来存储工作量计算结果，官网给出的例子为使用<code>Mongdb Atlas</code>​。但是由于一些原因，采用云数据库来储存数据，对于个人用户来说不是很友好，特别是国内用户：</p>
 <ul>
-<li><code>code_type</code>：<code>smatool</code>设有<code>VASP</code>和<code>QE</code>结构，需要指定后续第一性原理计算用到的软件；</li>
-<li><code>mode</code>：指定计算方式是通过“静态“的弛豫计算还是aiMD，区别在于”静态“的是通过弛豫计算来进行不考虑温度，而aiMD则是在有限温度下进行一定步数的计算来得到结构进行分析；</li>
-<li><code>structure_file</code>：结构文件；</li>
-<li><code>strains</code>：应变区间，三个值对应的是起点，终点，取点步长。如果不知道应变范围该怎么取，可以适当取大一点。该软件自带算法可检测屈服极限后连续五个下降的应力会自动停止计算，无论此时有没有打到应变的取值上限；</li>
-<li><code>components</code>：定义计算内容：抗拉强度，剪切强度，压痕硬度。根据材料维度不同，可选择的计算内容也不同，比如体相的抗拉强度可以计算xyz三个方向的；</li>
-<li><code>slip_parameters</code>：对应材料的滑移系。滑移面，滑移方向；</li>
-<li><code>rotation</code>：是否考虑滑移面和滑移方向的旋转，在塑性变形中涉及；</li>
-<li><code>slipon</code>：与<code>rotation</code>合用，在计算剪切时考虑滑移作用。</li>
+<li>由于“局域网”问题，许多集群可能连接不上<code>Mongdb Atlas</code>​，或者速度比较慢，容易掉线；</li>
+<li>云数据库要花钱购买存储空间，<code>Mongdb Atlas</code>​也只提供500M的免费空间，长期来看也是不够用的，不管你是学生还是社畜，咱自己总不能倒贴上班吧；</li>
+<li>小批量计算没有这个必要，个人用户自己计算的东西，体量实在太小，没必要纠结于按照官网教程来配置数据库，我们主要是使用<code>Atomate2</code>​方便的工作流。</li>
 </ul>
+<p><strong>Note：</strong> 当然，如果你单位有这个条件搭建数据库，那自然是更好的QAQ。</p>
+<p>采用本地读取数据，实际上官网上也给出了相应的介绍，只需要把对应的<code>jobflow.yaml</code>​文件设置成以下格式：</p>
+<p><img src="/2024/11/08/%E4%BA%8C%E3%80%81Atomate2%E5%9F%BA%E6%9C%AC%E8%AE%BE%E7%BD%AE/image-20241101112554-88e2sbd.png" alt="image"></p>
+<p>‍</p>
+<p>自此，假设你已经完成了<code>pymatgen</code>​的配置（<code>pymatgen</code>​的配置之前出过详细的教程，可查看往期内容），<code>Atomate2</code>​的配置，那么接下来就可以正式进入<code>Atomate2</code>​的实操了。</p>
+<h2 id="Atomate2可运行任务-工作流类型"><a href="#Atomate2可运行任务-工作流类型" class="headerlink" title="Atomate2可运行任务&amp;工作流类型"></a>Atomate2可运行任务&amp;工作流类型</h2><p>下表为<code>Atomate2</code>​已经为你预制的计算类型，实际使用时只需要进行调用即可：</p>
+<p><img src="/2024/11/08/%E4%BA%8C%E3%80%81Atomate2%E5%9F%BA%E6%9C%AC%E8%AE%BE%E7%BD%AE/image-20241014143658-dfvi8jf.png" alt="image"></p>
+<p>根据任务<code>Type</code>​不同，<code>job</code>​任务的调用为：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> atomate2.vasp.jobs.core <span class="keyword">import</span> *</span><br></pre></td></tr></table></figure></div>
+
+<p><code>flow</code>​任务的调用为：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> atomate2.vasp.flows.core <span class="keyword">import</span> *</span><br></pre></td></tr></table></figure></div>
+
+<p>除此上述“基本”的工作流之外，<code>Atomate2</code>​还有相对复杂的工作流，例如：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> atomate2.vasp.flows.adsorption <span class="keyword">import</span> AdsorptionMaker</span><br></pre></td></tr></table></figure></div>
+
+<p>这是一个计算吸附能的工作流，具体流程为：</p>
+<blockquote>
+<p>The flow consists of the following steps:</p>
+<ol>
+<li>Optimize the molecule structure and calculate its static energy.</li>
+<li>Optimize the bulk structure.</li>
+<li>Generate a slab structure using the optimized bulk structure and calculate its static energy.</li>
+<li>Generate adsorption sites on the slab and calculate corresponding static energy.</li>
+<li>Calculate the adsorption energy by calculating the energy difference between the slab with adsorbed molecule and the sum of the slab without the adsorbed molecule and the molecule.</li>
+</ol>
+</blockquote>
+<p>吸附能工作流相对来说比较复杂，涉及到多步计算以及结构变化操作，工作流中的每一个<code>task</code>​的参数设置都要格外小心，相对于上述“基本”工作流而言，属于“进阶”工作流，如果用好了的话会非常方便，当然也有它的使用局限性，我们后面再介绍。</p>
+<h2 id="工作流的组成"><a href="#工作流的组成" class="headerlink" title="工作流的组成"></a>工作流的组成</h2><p>本小节是本篇内容的核心部分。</p>
+<p><code>Atomate2</code>​给出的工作流中，关键参数是已经提供了默认值的，例如之前给出得例子：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> atomate2.vasp.flows.core <span class="keyword">import</span> RelaxBandStructureMaker</span><br><span class="line"><span class="keyword">from</span> jobflow.managers.local <span class="keyword">import</span> run_locally</span><br><span class="line"><span class="keyword">from</span> pymatgen.core <span class="keyword">import</span> Structure</span><br><span class="line"></span><br><span class="line">si_structure = Structure(</span><br><span class="line">    lattice=[[<span class="number">0</span>, <span class="number">2.73</span>, <span class="number">2.73</span>], [<span class="number">2.73</span>, <span class="number">0</span>, <span class="number">2.73</span>], [<span class="number">2.73</span>, <span class="number">2.73</span>, <span class="number">0</span>]],</span><br><span class="line">    species=[<span class="string">&quot;Si&quot;</span>, <span class="string">&quot;Si&quot;</span>],</span><br><span class="line">    coords=[[<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>], [<span class="number">0.25</span>, <span class="number">0.25</span>, <span class="number">0.25</span>]],</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">bandstructure_flow = RelaxBandStructureMaker().make(si_structure)</span><br><span class="line"></span><br><span class="line">run_locally(bandstructure_flow, create_folders=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure></div>
+
+<p>算<code>Si</code>​的能带态密度结构，直接按照上面的代码提交任务进行<code>vasp</code>​计算，计算完成后可以在当前路径下找到五个文件夹：</p>
+<p><img src="/2024/11/08/%E4%BA%8C%E3%80%81Atomate2%E5%9F%BA%E6%9C%AC%E8%AE%BE%E7%BD%AE/image-20241101143803-0om1g53.png" alt="image"></p>
+<p>我们找到<code>RelaxBandStructureMaker</code>​的文档注释看一下：</p>
+<p><img src="/2024/11/08/%E4%BA%8C%E3%80%81Atomate2%E5%9F%BA%E6%9C%AC%E8%AE%BE%E7%BD%AE/image-20241101143917-2ifabtu.png" alt="image"></p>
+<p>实际上，<code>RelaxBandStructureMaker</code>​是调用了<code>relax_maker</code>​和<code>band_structure_maker</code>​，然后查看源代码可以发现：</p>
+<p><img src="/2024/11/08/%E4%BA%8C%E3%80%81Atomate2%E5%9F%BA%E6%9C%AC%E8%AE%BE%E7%BD%AE/image-20241101144202-vcm5q25.png" alt="image"></p>
+<p>工作流结构优化部分是调用了<code>DoubleRelaxMaker</code>​，能带结构分析调用了<code>BandStructureMaker</code>​，继续顺藤摸瓜：</p>
+<p><img src="/2024/11/08/%E4%BA%8C%E3%80%81Atomate2%E5%9F%BA%E6%9C%AC%E8%AE%BE%E7%BD%AE/image-20241101144508-743errg.png" alt="image"></p>
+<p><img src="/2024/11/08/%E4%BA%8C%E3%80%81Atomate2%E5%9F%BA%E6%9C%AC%E8%AE%BE%E7%BD%AE/image-20241101144442-0owjoby.png" alt="image"></p>
+<p>可以发现，<code>DoubleRelaxMaker</code>​进行了两个结构优化任务，<code>BandStructureMaker</code>​进行了一个静态自洽计算，两个非自洽计算，这也是为什么计算完成后会有5个计算文件夹。</p>
+<p>计算文件夹命名可以根据时间来区分，即自上而下分别是：第一次结构优化、第二次结构优化、静态自洽、uniform 非自洽计算、line 非自洽计算。</p>
+<p><img src="/2024/11/08/%E4%BA%8C%E3%80%81Atomate2%E5%9F%BA%E6%9C%AC%E8%AE%BE%E7%BD%AE/image-20241101143803-0om1g53.png" alt="image">​</p>
+<p><strong>Note：</strong> 上述uniform 非自洽计算即态密度计算，line 非自洽计算才是能带计算结果。可以在<code>bandstructure_type</code>​中选择计算哪种或者都计算。</p>
+<p>回到计算结果，<code>Atomate2</code>​计算完成后，对于顺利结束的任务，会自动打包为<code>.gz</code>​格式的文件；反之，如果任务有<code>ERROR</code>​或<code>WARNING</code>​之类，则不会打包文件。</p>
+<p>上述计算中，结果优化与静态自洽计算都正常结束，后两步非自洽计算都出现了报错，报错内容可以在每个文件夹中<code>custodian.json</code>​文件中查看：</p>
+<p><img src="/2024/11/08/%E4%BA%8C%E3%80%81Atomate2%E5%9F%BA%E6%9C%AC%E8%AE%BE%E7%BD%AE/image-20241101152919-bey421h.png" alt="image"></p>
+<p>实际上这个<code>error</code>​就是<code>INCAR</code>​中<code>NBANDS</code>​设置有误，但是在实际计算中由于<code>VASP</code>​可以自行调整部分参数：</p>
+<p><img src="/2024/11/08/%E4%BA%8C%E3%80%81Atomate2%E5%9F%BA%E6%9C%AC%E8%AE%BE%E7%BD%AE/image-20241101153256-yqf2d62.png" alt="image"></p>
+<p>实际上计算也是可以正常结束的。</p>
+<p>但是这不意味着在实际使用过程中可以信赖默认的参数，最稳妥以及保险的做法，还是要自定义输入参数！</p>
+<h2 id="自定义输入参数"><a href="#自定义输入参数" class="headerlink" title="自定义输入参数"></a>自定义输入参数</h2><p>通过查看<code>Atomate2</code>​的文档说明，实际上<code>Atomate2</code>​的输入参数也是直接调用的<code>pymatgen</code>​的各类<code>sets</code>​的默认输入，可以去<code>pymatgen</code>​源代码中查看yaml格式文件<a class="link" href="https://github.com/materialsproject/pymatgen/tree/master/src/pymatgen/io/vasp">Link <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>。</p>
+<p>还有一点需要注意，随着<code>VASP</code>​的更新，<code>pymatgen</code>​的<code>sets</code>​的默认参数也会更新。在<code>Atomate2</code>​里面，<code>relax</code>​操作调用的是<code>pymatgen</code>​中的<code>MPSCANRelaxSet</code>​的默认输入，其中部分<code>INCAR</code>​词条的设置只适用于<code>VASP 6+</code>​版本，如果你使用的还是<code>VASP 5.4.4</code>​版本的话，推荐在<code>Atomate2</code>​使用中还是使用<code>MPRelaxSet</code>​，下面会详细说明。</p>
+<p>回到上述<code>Si</code>​单质计算能带态密度工作流的案例，下面将详细的说明在每一步里面如何合理的自定义输入参数：</p>
+<ul>
+<li>relax步骤</li>
+</ul>
+<p>以<code>RelaxMaker</code>​为例，主要是需要区分<code>input_set_generator</code>​和<code>write_input_set_kwargs</code>​的区别，其余的设置都可以采用默认。</p>
+<p><img src="/2024/11/08/%E4%BA%8C%E3%80%81Atomate2%E5%9F%BA%E6%9C%AC%E8%AE%BE%E7%BD%AE/image-20241101155155-6q16vdd.png" alt="image">​</p>
+<p>通俗的来讲，<code>input_set_generator</code>​控制输入文件的设置，可以约等于<code>set</code>​类，如<code>MPRelaxSet</code>​；而<code>write_input_set_kwargs</code>​可传入的参数更多，可以传<code>input_set_generator</code>​、<code>structure</code>​、<code>output_path</code>​等等，自由度更高。但是目前来说，只修改<code>input_set_generator</code>​就可以满足绝大多数使用场景了。</p>
+<p>由于本人使用的是<code>VASP 5.4.4</code>​，这里重新调用了<code>pymatgen</code>​的<code>MPRelaxSet</code>​来生成输入</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># relax</span></span><br><span class="line">relax_input_set = MPRelaxSet(user_incar_settings=&#123;<span class="string">&quot;ENCUT&quot;</span>:<span class="literal">None</span>, <span class="string">&quot;ISPIN&quot;</span>:<span class="number">1</span>, <span class="string">&quot;LCHARG&quot;</span>:<span class="literal">False</span>&#125;)</span><br><span class="line">relax_maker = RelaxMaker(input_set_generator=relax_input_set)</span><br><span class="line"></span><br><span class="line"><span class="comment"># static</span></span><br><span class="line">static_input_set = MPStaticSet(user_incar_settings=&#123;<span class="string">&quot;ENCUT&quot;</span>:<span class="literal">None</span>,  <span class="string">&quot;ISPIN&quot;</span>:<span class="number">1</span>, <span class="string">&quot;LCHARG&quot;</span>:<span class="literal">True</span>&#125;)</span><br><span class="line">static_maker = StaticMaker(input_set_generator=static_input_set)</span><br><span class="line"></span><br><span class="line"><span class="comment"># nonscf</span></span><br><span class="line">nsf_input_set = MPNonSCFSet(user_incar_settings=&#123;<span class="string">&quot;ENCUT&quot;</span>:<span class="literal">None</span>, <span class="string">&quot;NBANDS&quot;</span>:<span class="literal">None</span>, <span class="string">&quot;ISPIN&quot;</span>:<span class="number">1</span>, <span class="string">&quot;LCHARG&quot;</span>:<span class="literal">False</span>&#125;)</span><br><span class="line">nsf_maker = NonSCFMaker(input_set_generator=nsf_input_set)</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>Note：</strong>​<code>relax</code>​步骤只采取了一步优化，所以对应的最后输出的计算文件夹个数只有四个。</p>
+<p>上面针对所有的计算<code>task</code>​的输入进行了自定义，然后就是进行组合：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># bandstrucure_maker</span></span><br><span class="line">band_maker = BandStructureMaker(static_maker=static_maker,bs_maker=nsf_maker)</span><br><span class="line"></span><br><span class="line"><span class="comment"># relaxbandstructure_flow</span></span><br><span class="line">relaxbandstructure_flow = RelaxBandStructureMaker(relax_maker=relax_maker,band_structure_maker=band_maker).make(si_structure)</span><br></pre></td></tr></table></figure></div>
+
+<p>至此，整个工作流的输入实现了自定义。关于<code>sets</code>​类的参数设置可以参考本人之前写的<code>pymatgen</code>​教程。</p>
+<p>完整代码如下：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> atomate2.vasp.jobs.core <span class="keyword">import</span> RelaxMaker, StaticMaker, NonSCFMaker</span><br><span class="line"><span class="keyword">from</span> atomate2.vasp.flows.core <span class="keyword">import</span> RelaxBandStructureMaker, BandStructureMaker</span><br><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.sets <span class="keyword">import</span> MPRelaxSet, MPStaticSet, MPNonSCFSet</span><br><span class="line"><span class="keyword">from</span> jobflow <span class="keyword">import</span> run_locally, JobStore, SETTINGS</span><br><span class="line"><span class="keyword">from</span> pymatgen.core <span class="keyword">import</span> Structure</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line">work_dir = os.getcwd()</span><br><span class="line"></span><br><span class="line">si_structure = Structure(</span><br><span class="line">    lattice=[[<span class="number">0</span>, <span class="number">2.73</span>, <span class="number">2.73</span>], [<span class="number">2.73</span>, <span class="number">0</span>, <span class="number">2.73</span>], [<span class="number">2.73</span>, <span class="number">2.73</span>, <span class="number">0</span>]],</span><br><span class="line">    species=[<span class="string">&quot;Si&quot;</span>, <span class="string">&quot;Si&quot;</span>],</span><br><span class="line">    coords=[[<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>], [<span class="number">0.25</span>, <span class="number">0.25</span>, <span class="number">0.25</span>]],</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 自定义输入设置</span></span><br><span class="line">relax_input_set = MPRelaxSet(user_incar_settings=&#123;<span class="string">&quot;ENCUT&quot;</span>:<span class="literal">None</span>, <span class="string">&quot;ISPIN&quot;</span>:<span class="number">1</span>, <span class="string">&quot;LCHARG&quot;</span>:<span class="literal">False</span>&#125;)</span><br><span class="line">static_input_set = MPStaticSet(user_incar_settings=&#123;<span class="string">&quot;ENCUT&quot;</span>:<span class="literal">None</span>,  <span class="string">&quot;ISPIN&quot;</span>:<span class="number">1</span>, <span class="string">&quot;LCHARG&quot;</span>:<span class="literal">True</span>&#125;)</span><br><span class="line">nsf_input_set = MPNonSCFSet(user_incar_settings=&#123;<span class="string">&quot;ENCUT&quot;</span>:<span class="literal">None</span>, <span class="string">&quot;NBANDS&quot;</span>:<span class="literal">None</span>, <span class="string">&quot;ISPIN&quot;</span>:<span class="number">1</span>, <span class="string">&quot;LCHARG&quot;</span>:<span class="literal">False</span>&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 传入maker</span></span><br><span class="line">relax_maker = RelaxMaker(input_set_generator=relax_input_set)</span><br><span class="line">static_maker = StaticMaker(input_set_generator=static_input_set)</span><br><span class="line">nsf_maker = NonSCFMaker(input_set_generator=nsf_input_set)</span><br><span class="line">band_maker = BandStructureMaker(static_maker=static_maker,bs_maker=nsf_maker)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义工作流</span></span><br><span class="line">relaxbandstructure_flow = RelaxBandStructureMaker(relax_maker=relax_maker,band_structure_maker=band_maker).make(si_structure)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 运行工作流</span></span><br><span class="line">run_locally(relaxbandstructure_flow, create_folders=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure></div>
+
+<p>运行方法：如果是个人电脑上运行，可以直接<code>python relaxband.py</code>​运行上述脚本；如果是在集群上，需要修改下提交脚本，下面以<code>slurm</code>​作业调度系统为例：</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">SBATCH -J relaxband</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">SBATCH -p long</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">SBATCH --ntasks-per-node=32</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">SBATCH --time=2400:00:00</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">SBATCH --nodes=1</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">SBATCH --output=%j.log</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">加载VASP</span></span><br><span class="line">module load /path/vasp</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">进入atomate2环境</span></span><br><span class="line">source activate atomate2</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">运行脚本</span></span><br><span class="line">python relaxband.py &amp;&gt;output</span><br></pre></td></tr></table></figure></div>
+
+<p>计算完成后，当前路径下会生成四个文件夹，分别是：结构优化、静态计算、态密度计算、能带计算：</p>
+<p><img src="/2024/11/08/%E4%BA%8C%E3%80%81Atomate2%E5%9F%BA%E6%9C%AC%E8%AE%BE%E7%BD%AE/image-20241101170219-u2afkrh.png" alt="image"></p>
+<p>工作流的参数自定义大致操作就是这样。学会举一反三，对于其他类型工作流的参数自定义设置也类似，想要进一步的去理解和个性化设置，鼓励各位还是要去看看文档和源代码。</p>
+<h2 id="工作流JSON文件"><a href="#工作流JSON文件" class="headerlink" title="工作流JSON文件"></a>工作流JSON文件</h2><p><code>Atomate2</code>​在工作流计算完成后，会生成<code>doc</code>​文档来记录部分计算结果，具体设置由<code>jobflow.yaml</code>​文件控制。需要说明的是，如果采用云数据库的话，除了<code>doc</code>​文档的话还会有<code>data</code>​文件来储存数据，如上述<code>relaxbandstructure</code>​工作流最后得到态密度和能带可以直接从<code>data</code>​里面读取，而不需要从<code>VASP</code>​的输出文件：<code>OUTCAR</code>​或<code>vasprun.xml</code>​文件中进行后处理。</p>
+<p>但是，如果采用的是本地储存的话，实际上<code>data</code>​文件是为空的，本人也暂时不知道为啥，官方论坛上也暂时检索不到解决办法，具体报错内容为：<code>WARNING Response.stored_data is not supported with local manager</code>​。如果有大佬知道如何解决，可以分享一下。</p>
+<p>但是无论如何，即使没有<code>data</code>​文件，大不了通过处理<code>OUTCAR</code>​或<code>vasprun.xml</code>​来得到相关数据，从结果上来没有什么区别。</p>
+<p>这里简单介绍一下<code>doc</code>​文档，<code>doc</code>​文档的路径即<code>jobflow.yaml</code>​中给定的路径，文件格式为<code>JSON</code>​格式，官网上对文档的结构有详尽的介绍：<a class="link" href="https://materialsproject.github.io/atomate2/user/docs_schemas_emmet.html">Link <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>。这里不赘述。</p>
+<p>主要是针对计算时的操作给出一点建议。如果我们有多个结构需要进行<code>relaxbandstructure</code>​工作流计算，按照上述代码结构批量提交了之后，我们最终得到的<code>doc</code>​文档是所有结构工作流的信息，也就是<code>doc</code>​文档不会去根据任务数量在<code>jobflow.yaml</code>​中定义的路径下针对不同的任务新建不同的<code>doc</code>​，而是在原有的<code>doc</code>​文档末尾添加新的信息，久而久之，<code>doc</code>​文档会非常冗长，可读性差。所以，建议把<code>doc</code>​文档保存在每个工作流目录下，只需要在上述代码中做如下修改：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> atomate2.vasp.jobs.core <span class="keyword">import</span> RelaxMaker, StaticMaker, NonSCFMaker</span><br><span class="line"><span class="keyword">from</span> atomate2.vasp.flows.core <span class="keyword">import</span> RelaxBandStructureMaker, BandStructureMaker</span><br><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.sets <span class="keyword">import</span> MPRelaxSet, MPStaticSet, MPNonSCFSet</span><br><span class="line"><span class="keyword">from</span> jobflow <span class="keyword">import</span> run_locally, JobStore, SETTINGS</span><br><span class="line"><span class="keyword">from</span> pymatgen.core <span class="keyword">import</span> Structure</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line">work_dir = os.getcwd()</span><br><span class="line"></span><br><span class="line">si_structure = Structure(</span><br><span class="line">    lattice=[[<span class="number">0</span>, <span class="number">2.73</span>, <span class="number">2.73</span>], [<span class="number">2.73</span>, <span class="number">0</span>, <span class="number">2.73</span>], [<span class="number">2.73</span>, <span class="number">2.73</span>, <span class="number">0</span>]],</span><br><span class="line">    species=[<span class="string">&quot;Si&quot;</span>, <span class="string">&quot;Si&quot;</span>],</span><br><span class="line">    coords=[[<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>], [<span class="number">0.25</span>, <span class="number">0.25</span>, <span class="number">0.25</span>]],</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 自定义输入设置</span></span><br><span class="line">relax_input_set = MPRelaxSet(user_incar_settings=&#123;<span class="string">&quot;ENCUT&quot;</span>:<span class="literal">None</span>, <span class="string">&quot;ISPIN&quot;</span>:<span class="number">1</span>, <span class="string">&quot;LCHARG&quot;</span>:<span class="literal">False</span>&#125;)</span><br><span class="line">static_input_set = MPStaticSet(user_incar_settings=&#123;<span class="string">&quot;ENCUT&quot;</span>:<span class="literal">None</span>,  <span class="string">&quot;ISPIN&quot;</span>:<span class="number">1</span>, <span class="string">&quot;LCHARG&quot;</span>:<span class="literal">True</span>&#125;)</span><br><span class="line">nsf_input_set = MPNonSCFSet(user_incar_settings=&#123;<span class="string">&quot;ENCUT&quot;</span>:<span class="literal">None</span>, <span class="string">&quot;NBANDS&quot;</span>:<span class="literal">None</span>, <span class="string">&quot;ISPIN&quot;</span>:<span class="number">1</span>, <span class="string">&quot;LCHARG&quot;</span>:<span class="literal">False</span>&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 传入maker</span></span><br><span class="line">relax_maker = RelaxMaker(input_set_generator=relax_input_set)</span><br><span class="line">static_maker = StaticMaker(input_set_generator=static_input_set)</span><br><span class="line">nsf_maker = NonSCFMaker(input_set_generator=nsf_input_set)</span><br><span class="line">band_maker = BandStructureMaker(static_maker=static_maker,bs_maker=nsf_maker)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义工作流</span></span><br><span class="line">relaxbandstructure_flow = RelaxBandStructureMaker(relax_maker=relax_maker,band_structure_maker=band_maker).make(si_structure)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 工作流文件夹</span></span><br><span class="line">relaxband_dir = os.path.join(work_dir, <span class="string">&quot;relaxband&quot;</span>)</span><br><span class="line">os.makedirs(relaxband_dir, exist_ok=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 新建docs和data文件夹存储doc文档和data数据</span></span><br><span class="line">docs_path = os.path.join(relaxband_dir, <span class="string">&quot;docs&quot;</span>)</span><br><span class="line">data_path = os.path.join(relaxband_dir, <span class="string">&quot;data&quot;</span>)</span><br><span class="line">os.makedirs(docs_path, exist_ok=<span class="literal">True</span>)</span><br><span class="line">os.makedirs(data_path, exist_ok=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 替换jobflow.yaml文件中的路径</span></span><br><span class="line">SETTINGS.JOB_STORE.docs_store.paths = [os.path.join(docs_path,<span class="string">&#x27;doc.json&#x27;</span>)]</span><br><span class="line">SETTINGS.JOB_STORE.additional_stores[<span class="string">&#x27;data&#x27;</span>].paths = [os.path.join(data_path,<span class="string">&#x27;data.json&#x27;</span>)]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 运行工作流</span></span><br><span class="line">run_locally(relaxbandstructure_flow, create_folders=<span class="literal">True</span>, root_dir=relaxband_dir)</span><br></pre></td></tr></table></figure></div>
+
+<p>最终可以在工作流文件夹下生成对应的<code>doc</code>​文档和<code>data</code>​数据文件夹，实现每个工作流的信息独立存储：</p>
+<p><img src="/2024/11/08/%E4%BA%8C%E3%80%81Atomate2%E5%9F%BA%E6%9C%AC%E8%AE%BE%E7%BD%AE/image-20241101173348-cjgt78o.png" alt="image"></p>
+<p>‍</p>
+<p><strong>To be continued……</strong></p>
+<p>‍</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>计算工作流——Atomate2基本设置</title>
+    <url>/2024/11/08/Atomate2-2/</url>
+    <content><![CDATA[<p><code>Atomate2</code>​安装过程<a class="link" href="https://materialsproject.github.io/atomate2/user/install.html">官网 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>上介绍的已经非常详细了，唯一需要注意的是云数据库的设置。<code>Atomate2</code>​推荐采用云数据库来存储工作量计算结果，官网给出的例子为使用<code>Mongdb Atlas</code>​。但是由于一些原因，采用云数据库来储存数据，对于个人用户来说不是很友好，特别是国内用户：</p>
+<ul>
+<li>由于“局域网”问题，许多集群可能连接不上<code>Mongdb Atlas</code>​，或者速度比较慢，容易掉线；</li>
+<li>云数据库要花钱购买存储空间，<code>Mongdb Atlas</code>​也只提供500M的免费空间，长期来看也是不够用的，不管你是学生还是社畜，咱自己总不能倒贴上班吧；</li>
+<li>小批量计算没有这个必要，个人用户自己计算的东西，体量实在太小，没必要纠结于按照官网教程来配置数据库，我们主要是使用<code>Atomate2</code>​方便的工作流。</li>
+</ul>
+<p><strong>Note：</strong> 当然，如果你单位有这个条件搭建数据库，那自然是更好的QAQ。</p>
+<p>采用本地读取数据，实际上官网上也给出了相应的介绍，只需要把对应的<code>jobflow.yaml</code>​文件设置成以下格式：</p>
+<p><img src="/2024/11/08/Atomate2-2/image-20241101112554-88e2sbd.png" alt="image"></p>
+<p>‍</p>
+<p>自此，假设你已经完成了<code>pymatgen</code>​的配置（<code>pymatgen</code>​的配置之前出过详细的教程，可查看往期内容），<code>Atomate2</code>​的配置，那么接下来就可以正式进入<code>Atomate2</code>​的实操了。</p>
+<h2 id="Atomate2可运行任务-工作流类型"><a href="#Atomate2可运行任务-工作流类型" class="headerlink" title="Atomate2可运行任务&amp;工作流类型"></a>Atomate2可运行任务&amp;工作流类型</h2><p>下表为<code>Atomate2</code>​已经为你预制的计算类型，实际使用时只需要进行调用即可：</p>
+<p><img src="/2024/11/08/Atomate2-2/image-20241014143658-dfvi8jf.png" alt="image"></p>
+<p>根据任务<code>Type</code>​不同，<code>job</code>​任务的调用为：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> atomate2.vasp.jobs.core <span class="keyword">import</span> *</span><br></pre></td></tr></table></figure></div>
+
+<p><code>flow</code>​任务的调用为：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> atomate2.vasp.flows.core <span class="keyword">import</span> *</span><br></pre></td></tr></table></figure></div>
+
+<p>除此上述“基本”的工作流之外，<code>Atomate2</code>​还有相对复杂的工作流，例如：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> atomate2.vasp.flows.adsorption <span class="keyword">import</span> AdsorptionMaker</span><br></pre></td></tr></table></figure></div>
+
+<p>这是一个计算吸附能的工作流，具体流程为：</p>
+<blockquote>
+<p>The flow consists of the following steps:</p>
+<ol>
+<li>Optimize the molecule structure and calculate its static energy.</li>
+<li>Optimize the bulk structure.</li>
+<li>Generate a slab structure using the optimized bulk structure and calculate its static energy.</li>
+<li>Generate adsorption sites on the slab and calculate corresponding static energy.</li>
+<li>Calculate the adsorption energy by calculating the energy difference between the slab with adsorbed molecule and the sum of the slab without the adsorbed molecule and the molecule.</li>
+</ol>
+</blockquote>
+<p>吸附能工作流相对来说比较复杂，涉及到多步计算以及结构变化操作，工作流中的每一个<code>task</code>​的参数设置都要格外小心，相对于上述“基本”工作流而言，属于“进阶”工作流，如果用好了的话会非常方便，当然也有它的使用局限性，我们后面再介绍。</p>
+<h2 id="工作流的组成"><a href="#工作流的组成" class="headerlink" title="工作流的组成"></a>工作流的组成</h2><p>本小节是本篇内容的核心部分。</p>
+<p><code>Atomate2</code>​给出的工作流中，关键参数是已经提供了默认值的，例如之前给出得例子：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> atomate2.vasp.flows.core <span class="keyword">import</span> RelaxBandStructureMaker</span><br><span class="line"><span class="keyword">from</span> jobflow.managers.local <span class="keyword">import</span> run_locally</span><br><span class="line"><span class="keyword">from</span> pymatgen.core <span class="keyword">import</span> Structure</span><br><span class="line"></span><br><span class="line">si_structure = Structure(</span><br><span class="line">    lattice=[[<span class="number">0</span>, <span class="number">2.73</span>, <span class="number">2.73</span>], [<span class="number">2.73</span>, <span class="number">0</span>, <span class="number">2.73</span>], [<span class="number">2.73</span>, <span class="number">2.73</span>, <span class="number">0</span>]],</span><br><span class="line">    species=[<span class="string">&quot;Si&quot;</span>, <span class="string">&quot;Si&quot;</span>],</span><br><span class="line">    coords=[[<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>], [<span class="number">0.25</span>, <span class="number">0.25</span>, <span class="number">0.25</span>]],</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">bandstructure_flow = RelaxBandStructureMaker().make(si_structure)</span><br><span class="line"></span><br><span class="line">run_locally(bandstructure_flow, create_folders=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure></div>
+
+<p>算<code>Si</code>​的能带态密度结构，直接按照上面的代码提交任务进行<code>vasp</code>​计算，计算完成后可以在当前路径下找到五个文件夹：</p>
+<p><img src="/2024/11/08/Atomate2-2/image-20241101143803-0om1g53.png" alt="image"></p>
+<p>我们找到<code>RelaxBandStructureMaker</code>​的文档注释看一下：</p>
+<p><img src="/2024/11/08/Atomate2-2/image-20241101143917-2ifabtu.png" alt="image"></p>
+<p>实际上，<code>RelaxBandStructureMaker</code>​是调用了<code>relax_maker</code>​和<code>band_structure_maker</code>​，然后查看源代码可以发现：</p>
+<p><img src="/2024/11/08/Atomate2-2/image-20241101144202-vcm5q25.png" alt="image"></p>
+<p>工作流结构优化部分是调用了<code>DoubleRelaxMaker</code>​，能带结构分析调用了<code>BandStructureMaker</code>​，继续顺藤摸瓜：</p>
+<p><img src="/2024/11/08/Atomate2-2/image-20241101144508-743errg.png" alt="image"></p>
+<p><img src="/2024/11/08/Atomate2-2/image-20241101144442-0owjoby.png" alt="image"></p>
+<p>可以发现，<code>DoubleRelaxMaker</code>​进行了两个结构优化任务，<code>BandStructureMaker</code>​进行了一个静态自洽计算，两个非自洽计算，这也是为什么计算完成后会有5个计算文件夹。</p>
+<p>计算文件夹命名可以根据时间来区分，即自上而下分别是：第一次结构优化、第二次结构优化、静态自洽、uniform 非自洽计算、line 非自洽计算。</p>
+<p><img src="/2024/11/08/Atomate2-2/image-20241101143803-0om1g53.png" alt="image">​</p>
+<p><strong>Note：</strong> 上述uniform 非自洽计算即态密度计算，line 非自洽计算才是能带计算结果。可以在<code>bandstructure_type</code>​中选择计算哪种或者都计算。</p>
+<p>回到计算结果，<code>Atomate2</code>​计算完成后，对于顺利结束的任务，会自动打包为<code>.gz</code>​格式的文件；反之，如果任务有<code>ERROR</code>​或<code>WARNING</code>​之类，则不会打包文件。</p>
+<p>上述计算中，结果优化与静态自洽计算都正常结束，后两步非自洽计算都出现了报错，报错内容可以在每个文件夹中<code>custodian.json</code>​文件中查看：</p>
+<p><img src="/2024/11/08/Atomate2-2/image-20241101152919-bey421h.png" alt="image"></p>
+<p>实际上这个<code>error</code>​就是<code>INCAR</code>​中<code>NBANDS</code>​设置有误，但是在实际计算中由于<code>VASP</code>​可以自行调整部分参数：</p>
+<p><img src="/2024/11/08/Atomate2-2/image-20241101153256-yqf2d62.png" alt="image"></p>
+<p>实际上计算也是可以正常结束的。</p>
+<p>但是这不意味着在实际使用过程中可以信赖默认的参数，最稳妥以及保险的做法，还是要自定义输入参数！</p>
+<h2 id="自定义输入参数"><a href="#自定义输入参数" class="headerlink" title="自定义输入参数"></a>自定义输入参数</h2><p>通过查看<code>Atomate2</code>​的文档说明，实际上<code>Atomate2</code>​的输入参数也是直接调用的<code>pymatgen</code>​的各类<code>sets</code>​的默认输入，可以去<code>pymatgen</code>​源代码中查看yaml格式文件<a class="link" href="https://github.com/materialsproject/pymatgen/tree/master/src/pymatgen/io/vasp">Link <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>。</p>
+<p>还有一点需要注意，随着<code>VASP</code>​的更新，<code>pymatgen</code>​的<code>sets</code>​的默认参数也会更新。在<code>Atomate2</code>​里面，<code>relax</code>​操作调用的是<code>pymatgen</code>​中的<code>MPSCANRelaxSet</code>​的默认输入，其中部分<code>INCAR</code>​词条的设置只适用于<code>VASP 6+</code>​版本，如果你使用的还是<code>VASP 5.4.4</code>​版本的话，推荐在<code>Atomate2</code>​使用中还是使用<code>MPRelaxSet</code>​，下面会详细说明。</p>
+<p>回到上述<code>Si</code>​单质计算能带态密度工作流的案例，下面将详细的说明在每一步里面如何合理的自定义输入参数：</p>
+<ul>
+<li>relax步骤</li>
+</ul>
+<p>以<code>RelaxMaker</code>​为例，主要是需要区分<code>input_set_generator</code>​和<code>write_input_set_kwargs</code>​的区别，其余的设置都可以采用默认。</p>
+<p><img src="/2024/11/08/Atomate2-2/image-20241101155155-6q16vdd.png" alt="image"></p>
+<p>通俗的来讲，<code>input_set_generator</code>​控制输入文件的设置，可以约等于<code>set</code>​类，如<code>MPRelaxSet</code>​；而<code>write_input_set_kwargs</code>​可传入的参数更多，可以传<code>input_set_generator</code>​、<code>structure</code>​、<code>output_path</code>​等等，自由度更高。但是目前来说，只修改<code>input_set_generator</code>​就可以满足绝大多数使用场景了。</p>
+<p>由于本人使用的是<code>VASP 5.4.4</code>​，这里重新调用了<code>pymatgen</code>​的<code>MPRelaxSet</code>​来生成输入</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># relax</span></span><br><span class="line">relax_input_set = MPRelaxSet(user_incar_settings=&#123;<span class="string">&quot;ENCUT&quot;</span>:<span class="literal">None</span>, <span class="string">&quot;ISPIN&quot;</span>:<span class="number">1</span>, <span class="string">&quot;LCHARG&quot;</span>:<span class="literal">False</span>&#125;)</span><br><span class="line">relax_maker = RelaxMaker(input_set_generator=relax_input_set)</span><br><span class="line"></span><br><span class="line"><span class="comment"># static</span></span><br><span class="line">static_input_set = MPStaticSet(user_incar_settings=&#123;<span class="string">&quot;ENCUT&quot;</span>:<span class="literal">None</span>,  <span class="string">&quot;ISPIN&quot;</span>:<span class="number">1</span>, <span class="string">&quot;LCHARG&quot;</span>:<span class="literal">True</span>&#125;)</span><br><span class="line">static_maker = StaticMaker(input_set_generator=static_input_set)</span><br><span class="line"></span><br><span class="line"><span class="comment"># nonscf</span></span><br><span class="line">nsf_input_set = MPNonSCFSet(user_incar_settings=&#123;<span class="string">&quot;ENCUT&quot;</span>:<span class="literal">None</span>, <span class="string">&quot;NBANDS&quot;</span>:<span class="literal">None</span>, <span class="string">&quot;ISPIN&quot;</span>:<span class="number">1</span>, <span class="string">&quot;LCHARG&quot;</span>:<span class="literal">False</span>&#125;)</span><br><span class="line">nsf_maker = NonSCFMaker(input_set_generator=nsf_input_set)</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>Note：</strong>​<code>relax</code>​步骤只采取了一步优化，所以对应的最后输出的计算文件夹个数只有四个。</p>
+<p>上面针对所有的计算<code>task</code>​的输入进行了自定义，然后就是进行组合：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># bandstrucure_maker</span></span><br><span class="line">band_maker = BandStructureMaker(static_maker=static_maker,bs_maker=nsf_maker)</span><br><span class="line"></span><br><span class="line"><span class="comment"># relaxbandstructure_flow</span></span><br><span class="line">relaxbandstructure_flow = RelaxBandStructureMaker(relax_maker=relax_maker,band_structure_maker=band_maker).make(si_structure)</span><br></pre></td></tr></table></figure></div>
+
+<p>至此，整个工作流的输入实现了自定义。关于<code>sets</code>​类的参数设置可以参考本人之前写的<code>pymatgen</code>​教程。</p>
+<p>完整代码如下：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> atomate2.vasp.jobs.core <span class="keyword">import</span> RelaxMaker, StaticMaker, NonSCFMaker</span><br><span class="line"><span class="keyword">from</span> atomate2.vasp.flows.core <span class="keyword">import</span> RelaxBandStructureMaker, BandStructureMaker</span><br><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.sets <span class="keyword">import</span> MPRelaxSet, MPStaticSet, MPNonSCFSet</span><br><span class="line"><span class="keyword">from</span> jobflow <span class="keyword">import</span> run_locally, JobStore, SETTINGS</span><br><span class="line"><span class="keyword">from</span> pymatgen.core <span class="keyword">import</span> Structure</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line">work_dir = os.getcwd()</span><br><span class="line"></span><br><span class="line">si_structure = Structure(</span><br><span class="line">    lattice=[[<span class="number">0</span>, <span class="number">2.73</span>, <span class="number">2.73</span>], [<span class="number">2.73</span>, <span class="number">0</span>, <span class="number">2.73</span>], [<span class="number">2.73</span>, <span class="number">2.73</span>, <span class="number">0</span>]],</span><br><span class="line">    species=[<span class="string">&quot;Si&quot;</span>, <span class="string">&quot;Si&quot;</span>],</span><br><span class="line">    coords=[[<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>], [<span class="number">0.25</span>, <span class="number">0.25</span>, <span class="number">0.25</span>]],</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 自定义输入设置</span></span><br><span class="line">relax_input_set = MPRelaxSet(user_incar_settings=&#123;<span class="string">&quot;ENCUT&quot;</span>:<span class="literal">None</span>, <span class="string">&quot;ISPIN&quot;</span>:<span class="number">1</span>, <span class="string">&quot;LCHARG&quot;</span>:<span class="literal">False</span>&#125;)</span><br><span class="line">static_input_set = MPStaticSet(user_incar_settings=&#123;<span class="string">&quot;ENCUT&quot;</span>:<span class="literal">None</span>,  <span class="string">&quot;ISPIN&quot;</span>:<span class="number">1</span>, <span class="string">&quot;LCHARG&quot;</span>:<span class="literal">True</span>&#125;)</span><br><span class="line">nsf_input_set = MPNonSCFSet(user_incar_settings=&#123;<span class="string">&quot;ENCUT&quot;</span>:<span class="literal">None</span>, <span class="string">&quot;NBANDS&quot;</span>:<span class="literal">None</span>, <span class="string">&quot;ISPIN&quot;</span>:<span class="number">1</span>, <span class="string">&quot;LCHARG&quot;</span>:<span class="literal">False</span>&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 传入maker</span></span><br><span class="line">relax_maker = RelaxMaker(input_set_generator=relax_input_set)</span><br><span class="line">static_maker = StaticMaker(input_set_generator=static_input_set)</span><br><span class="line">nsf_maker = NonSCFMaker(input_set_generator=nsf_input_set)</span><br><span class="line">band_maker = BandStructureMaker(static_maker=static_maker,bs_maker=nsf_maker)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义工作流</span></span><br><span class="line">relaxbandstructure_flow = RelaxBandStructureMaker(relax_maker=relax_maker,band_structure_maker=band_maker).make(si_structure)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 运行工作流</span></span><br><span class="line">run_locally(relaxbandstructure_flow, create_folders=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure></div>
+
+<p>运行方法：如果是个人电脑上运行，可以直接<code>python relaxband.py</code>​运行上述脚本；如果是在集群上，需要修改下提交脚本，下面以<code>slurm</code>​作业调度系统为例：</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">SBATCH -J relaxband</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">SBATCH -p long</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">SBATCH --ntasks-per-node=32</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">SBATCH --time=2400:00:00</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">SBATCH --nodes=1</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">SBATCH --output=%j.log</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">加载VASP</span></span><br><span class="line">module load /path/vasp</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">进入atomate2环境</span></span><br><span class="line">source activate atomate2</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">运行脚本</span></span><br><span class="line">python relaxband.py &amp;&gt;output</span><br></pre></td></tr></table></figure></div>
+
+<p>计算完成后，当前路径下会生成四个文件夹，分别是：结构优化、静态计算、态密度计算、能带计算：</p>
+<p><img src="/2024/11/08/Atomate2-2/image-20241101170219-u2afkrh.png" alt="image"></p>
+<p>工作流的参数自定义大致操作就是这样。学会举一反三，对于其他类型工作流的参数自定义设置也类似，想要进一步的去理解和个性化设置，鼓励各位还是要去看看文档和源代码。</p>
+<h2 id="工作流JSON文件"><a href="#工作流JSON文件" class="headerlink" title="工作流JSON文件"></a>工作流JSON文件</h2><p><code>Atomate2</code>​在工作流计算完成后，会生成<code>doc</code>​文档来记录部分计算结果，具体设置由<code>jobflow.yaml</code>​文件控制。需要说明的是，如果采用云数据库的话，除了<code>doc</code>​文档的话还会有<code>data</code>​文件来储存数据，如上述<code>relaxbandstructure</code>​工作流最后得到态密度和能带可以直接从<code>data</code>​里面读取，而不需要从<code>VASP</code>​的输出文件：<code>OUTCAR</code>​或<code>vasprun.xml</code>​文件中进行后处理。</p>
+<p>但是，如果采用的是本地储存的话，实际上<code>data</code>​文件是为空的，本人也暂时不知道为啥，官方论坛上也暂时检索不到解决办法，具体报错内容为：<code>WARNING Response.stored_data is not supported with local manager</code>​。如果有大佬知道如何解决，可以分享一下。</p>
+<p>但是无论如何，即使没有<code>data</code>​文件，大不了通过处理<code>OUTCAR</code>​或<code>vasprun.xml</code>​来得到相关数据，从结果上来没有什么区别。</p>
+<p>这里简单介绍一下<code>doc</code>​文档，<code>doc</code>​文档的路径即<code>jobflow.yaml</code>​中给定的路径，文件格式为<code>JSON</code>​格式，官网上对文档的结构有详尽的介绍：<a class="link" href="https://materialsproject.github.io/atomate2/user/docs_schemas_emmet.html">Link <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>。这里不赘述。</p>
+<p>主要是针对计算时的操作给出一点建议。如果我们有多个结构需要进行<code>relaxbandstructure</code>​工作流计算，按照上述代码结构批量提交了之后，我们最终得到的<code>doc</code>​文档是所有结构工作流的信息，也就是<code>doc</code>​文档不会去根据任务数量在<code>jobflow.yaml</code>​中定义的路径下针对不同的任务新建不同的<code>doc</code>​，而是在原有的<code>doc</code>​文档末尾添加新的信息，久而久之，<code>doc</code>​文档会非常冗长，可读性差。所以，建议把<code>doc</code>​文档保存在每个工作流目录下，只需要在上述代码中做如下修改：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> atomate2.vasp.jobs.core <span class="keyword">import</span> RelaxMaker, StaticMaker, NonSCFMaker</span><br><span class="line"><span class="keyword">from</span> atomate2.vasp.flows.core <span class="keyword">import</span> RelaxBandStructureMaker, BandStructureMaker</span><br><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.sets <span class="keyword">import</span> MPRelaxSet, MPStaticSet, MPNonSCFSet</span><br><span class="line"><span class="keyword">from</span> jobflow <span class="keyword">import</span> run_locally, JobStore, SETTINGS</span><br><span class="line"><span class="keyword">from</span> pymatgen.core <span class="keyword">import</span> Structure</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line">work_dir = os.getcwd()</span><br><span class="line"></span><br><span class="line">si_structure = Structure(</span><br><span class="line">    lattice=[[<span class="number">0</span>, <span class="number">2.73</span>, <span class="number">2.73</span>], [<span class="number">2.73</span>, <span class="number">0</span>, <span class="number">2.73</span>], [<span class="number">2.73</span>, <span class="number">2.73</span>, <span class="number">0</span>]],</span><br><span class="line">    species=[<span class="string">&quot;Si&quot;</span>, <span class="string">&quot;Si&quot;</span>],</span><br><span class="line">    coords=[[<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>], [<span class="number">0.25</span>, <span class="number">0.25</span>, <span class="number">0.25</span>]],</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 自定义输入设置</span></span><br><span class="line">relax_input_set = MPRelaxSet(user_incar_settings=&#123;<span class="string">&quot;ENCUT&quot;</span>:<span class="literal">None</span>, <span class="string">&quot;ISPIN&quot;</span>:<span class="number">1</span>, <span class="string">&quot;LCHARG&quot;</span>:<span class="literal">False</span>&#125;)</span><br><span class="line">static_input_set = MPStaticSet(user_incar_settings=&#123;<span class="string">&quot;ENCUT&quot;</span>:<span class="literal">None</span>,  <span class="string">&quot;ISPIN&quot;</span>:<span class="number">1</span>, <span class="string">&quot;LCHARG&quot;</span>:<span class="literal">True</span>&#125;)</span><br><span class="line">nsf_input_set = MPNonSCFSet(user_incar_settings=&#123;<span class="string">&quot;ENCUT&quot;</span>:<span class="literal">None</span>, <span class="string">&quot;NBANDS&quot;</span>:<span class="literal">None</span>, <span class="string">&quot;ISPIN&quot;</span>:<span class="number">1</span>, <span class="string">&quot;LCHARG&quot;</span>:<span class="literal">False</span>&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 传入maker</span></span><br><span class="line">relax_maker = RelaxMaker(input_set_generator=relax_input_set)</span><br><span class="line">static_maker = StaticMaker(input_set_generator=static_input_set)</span><br><span class="line">nsf_maker = NonSCFMaker(input_set_generator=nsf_input_set)</span><br><span class="line">band_maker = BandStructureMaker(static_maker=static_maker,bs_maker=nsf_maker)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义工作流</span></span><br><span class="line">relaxbandstructure_flow = RelaxBandStructureMaker(relax_maker=relax_maker,band_structure_maker=band_maker).make(si_structure)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 工作流文件夹</span></span><br><span class="line">relaxband_dir = os.path.join(work_dir, <span class="string">&quot;relaxband&quot;</span>)</span><br><span class="line">os.makedirs(relaxband_dir, exist_ok=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 新建docs和data文件夹存储doc文档和data数据</span></span><br><span class="line">docs_path = os.path.join(relaxband_dir, <span class="string">&quot;docs&quot;</span>)</span><br><span class="line">data_path = os.path.join(relaxband_dir, <span class="string">&quot;data&quot;</span>)</span><br><span class="line">os.makedirs(docs_path, exist_ok=<span class="literal">True</span>)</span><br><span class="line">os.makedirs(data_path, exist_ok=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 替换jobflow.yaml文件中的路径</span></span><br><span class="line">SETTINGS.JOB_STORE.docs_store.paths = [os.path.join(docs_path,<span class="string">&#x27;doc.json&#x27;</span>)]</span><br><span class="line">SETTINGS.JOB_STORE.additional_stores[<span class="string">&#x27;data&#x27;</span>].paths = [os.path.join(data_path,<span class="string">&#x27;data.json&#x27;</span>)]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 运行工作流</span></span><br><span class="line">run_locally(relaxbandstructure_flow, create_folders=<span class="literal">True</span>, root_dir=relaxband_dir)</span><br></pre></td></tr></table></figure></div>
+
+<p>最终可以在工作流文件夹下生成对应的<code>doc</code>​文档和<code>data</code>​数据文件夹，实现每个工作流的信息独立存储：</p>
+<p><img src="/2024/11/08/Atomate2-2/image-20241101173348-cjgt78o.png" alt="image"></p>
+<p>‍</p>
+<p><strong>To be continued……</strong></p>
+<p>‍</p>
 ]]></content>
       <categories>
-        <category>toolkit</category>
+        <category>Atomate2</category>
       </categories>
       <tags>
         <tag>VASP</tag>
-        <tag>Smatool</tag>
+        <tag>Atomate2</tag>
+        <tag>workflow</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>计算工作流——初识Atomate2</title>
+    <url>/2024/11/08/Atomate2-1/</url>
+    <content><![CDATA[<p><code>Atomate2</code> ​是一款开源可用来处理复杂庞大计算任务的软件包，开发团队也是大名鼎鼎的劳伦斯伯克利国家实验室的研究人员，耳熟能详的 <code>pymatgen</code>​、<code>Materials Project</code>​、<code>FireWorks</code> ​等也是出自该团队之手。</p>
+<p><code>Atomate2</code> ​环境配置可参考<a class="link" href="https://materialsproject.github.io/atomate2/user/install.html">官网 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>进行。</p>
+<p>在此之前，强烈建议先了解学习一下 <code>pymatgen</code> ​的用法！老司机之前也出过相关介绍。如果在此之前有了解过或使用过 <code>pymatgen</code> ​的朋友，那么 <code>Atomate2</code> ​使用起来应该会更加容易上手，而且用习惯之后，发现 <code>Atomate2</code> ​用起来更加顺手。下面先贴一个官网上的例子：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> atomate2.vasp.jobs.core <span class="keyword">import</span> RelaxMaker</span><br><span class="line"><span class="keyword">from</span> jobflow.managers.local <span class="keyword">import</span> run_locally</span><br><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"></span><br><span class="line">si_structure = Structure(</span><br><span class="line">    lattice=[[<span class="number">0</span>, <span class="number">2.73</span>, <span class="number">2.73</span>], [<span class="number">2.73</span>, <span class="number">0</span>, <span class="number">2.73</span>], [<span class="number">2.73</span>, <span class="number">2.73</span>, <span class="number">0</span>]],</span><br><span class="line">    species=[<span class="string">&quot;Si&quot;</span>, <span class="string">&quot;Si&quot;</span>],</span><br><span class="line">    coords=[[<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>], [<span class="number">0.25</span>, <span class="number">0.25</span>, <span class="number">0.25</span>]],</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">relax_job = RelaxMaker().make(si_structure)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">run_locally(relax_job, create_folders=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure></div>
+
+<p>这段代码很简单，意思是优化 <code>Si</code> ​单质结构，整段代码又三部分组成：</p>
+<ul>
+<li>定义结构</li>
+</ul>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line">si_structure = Structure(</span><br><span class="line">    lattice=[[<span class="number">0</span>, <span class="number">2.73</span>, <span class="number">2.73</span>], [<span class="number">2.73</span>, <span class="number">0</span>, <span class="number">2.73</span>], [<span class="number">2.73</span>, <span class="number">2.73</span>, <span class="number">0</span>]],</span><br><span class="line">    species=[<span class="string">&quot;Si&quot;</span>, <span class="string">&quot;Si&quot;</span>],</span><br><span class="line">    coords=[[<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>], [<span class="number">0.25</span>, <span class="number">0.25</span>, <span class="number">0.25</span>]],</span><br><span class="line">)</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>指定任务&#x2F;工作流</li>
+</ul>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line">relax_job = RelaxMaker().make(si_structure)</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>运行</li>
+</ul>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line">run_locally(relax_job, create_folders=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure></div>
+
+<p>有人会问，如果只用 <code>pymatgen</code> ​能不能实现同样的功能，答案是肯定的：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.sets <span class="keyword">import</span> MPRelaxSet</span><br><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义结构</span></span><br><span class="line">si_structure = Structure(</span><br><span class="line">    lattice=[[<span class="number">0</span>, <span class="number">2.73</span>, <span class="number">2.73</span>], [<span class="number">2.73</span>, <span class="number">0</span>, <span class="number">2.73</span>], [<span class="number">2.73</span>, <span class="number">2.73</span>, <span class="number">0</span>]],</span><br><span class="line">    species=[<span class="string">&quot;Si&quot;</span>, <span class="string">&quot;Si&quot;</span>],</span><br><span class="line">    coords=[[<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>], [<span class="number">0.25</span>, <span class="number">0.25</span>, <span class="number">0.25</span>]],</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">#生成输入文件</span></span><br><span class="line">relax_set = MPRelaxSet(si_structure)</span><br><span class="line">relax_set.write_input(<span class="string">&#x27;./&#x27;</span>)</span><br></pre></td></tr></table></figure></div>
+
+<p>相比于 <code>Atomate2</code> ​的代码，如果仅仅从单个的计算任务来说，<code>pymatgen</code> ​差别不大，都是读结构，进行单次计算。</p>
+<p>但是对于多步计算，如多步优化，能带态密度等计算，<code>pymatgen</code> ​该如何实现，一般来说，我们需要把每一步的计算输入相关的代码都写好，比如计算 <code>Si</code> ​的能带：</p>
+<ul>
+<li>结构优化</li>
+</ul>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line">relax_set = MPRelaxSet(si_structure)</span><br><span class="line">relax_set.write_input(<span class="string">&#x27;relax&#x27;</span>)</span><br></pre></td></tr></table></figure></div>
+
+<p>运行 <code>vasp</code> ​计算</p>
+<ul>
+<li>静态计算</li>
+</ul>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 读取优化的结果</span></span><br><span class="line">static_set = MPStaticSet.from_prev_calc(prev_dir=<span class="string">&#x27;relax&#x27;</span>)</span><br><span class="line">static_set.write_input(<span class="string">&#x27;static&#x27;</span>)</span><br></pre></td></tr></table></figure></div>
+
+<p>运行 <code>vasp</code> ​计算</p>
+<ul>
+<li>能带计算</li>
+</ul>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 读取静态计算的结果</span></span><br><span class="line">nonscf_set = MPNonScfSet.from_prev_calc(prev_dir=<span class="string">&#x27;static&#x27;</span>)</span><br><span class="line">nonscf_set.write_input(<span class="string">&#x27;band&#x27;</span>)</span><br></pre></td></tr></table></figure></div>
+
+<p>运行 <code>vasp</code> ​计算</p>
+<p>只使用 <code>pymatgen</code>​，从提交任务的次数来说，需要提交三次 <code>vasp</code> ​任务，而且整个计算过程是中断的，每一次计算都需要人力去手动提交，比较麻烦。而且如果你使用的是公用集群，且恰好集群用的人比较多，计算资源比较紧张，那么你很难保证上一步计算完成后，手动提交的下一步任务能马上开始计算，可能要排很久的队，这样一来，计算周期就不可控的变长了。</p>
+<p>如果要使用 <code>Atomate2</code> ​来完成上述计算任务的话，代码会非常简单明了：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> atomate2.vasp.flows.core <span class="keyword">import</span> RelaxBandStructureMaker</span><br><span class="line"><span class="keyword">from</span> jobflow.managers.local <span class="keyword">import</span> run_locally</span><br><span class="line"><span class="keyword">from</span> pymatgen.core <span class="keyword">import</span> Structure</span><br><span class="line"></span><br><span class="line">si_structure = Structure(</span><br><span class="line">    lattice=[[<span class="number">0</span>, <span class="number">2.73</span>, <span class="number">2.73</span>], [<span class="number">2.73</span>, <span class="number">0</span>, <span class="number">2.73</span>], [<span class="number">2.73</span>, <span class="number">2.73</span>, <span class="number">0</span>]],</span><br><span class="line">    species=[<span class="string">&quot;Si&quot;</span>, <span class="string">&quot;Si&quot;</span>],</span><br><span class="line">    coords=[[<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>], [<span class="number">0.25</span>, <span class="number">0.25</span>, <span class="number">0.25</span>]],</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">bandstructure_flow = RelaxBandStructureMaker().make(si_structure)</span><br><span class="line"></span><br><span class="line">run_locally(bandstructure_flow, create_folders=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure></div>
+
+<p>上述代码省略了可自定义的 <code>INCAR</code>​、<code>KPOINTS</code> ​等参数设置。</p>
+<p>有 <code>pymatgen</code> ​代码对比，相当于 <code>bandstructure_flow = RelaxBandStructureMaker().make(si_structure)</code> ​这一行代码包含了 <code>pymatgen</code> ​三个分步计算过程，从代码的结构上看更加的简洁易懂，而且最关键的是自动控制任务的进行，只需要提交一次任务即可。相当于把单个独立的子任务串联了起来，这便是“工作流”了。</p>
+<p>后面会逐步来介绍如何使用 <code>Atomate2</code> ​来调用&#x2F;自定义工作流来高效进行计算。</p>
+<p>‍</p>
+]]></content>
+      <categories>
+        <category>Atomate2</category>
+      </categories>
+      <tags>
+        <tag>VASP</tag>
+        <tag>Atomate2</tag>
+        <tag>workflow</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>计算工作流——Atomate2自定义工作流</title>
+    <url>/2024/11/08/Atomate2-3/</url>
+    <content><![CDATA[<p><code>Atomate2</code>​除了直接调用现成的工作流，我们还可以根据个人需求自定义任务个数以及工作流走向。具体操作也非常简单，只需要在<code>Flow</code>​中按照计算顺序传入任务即可，如果我们需要优化一个结构并进行静态计算：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> jobflow <span class="keyword">import</span> Flow</span><br><span class="line"><span class="keyword">from</span> atomate2.vasp.jobs.core <span class="keyword">import</span> RelaxMaker, StaticMaker</span><br><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"></span><br><span class="line">si_structure = Structure.from_file(<span class="string">&quot;Si.cif&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># create a relax job</span></span><br><span class="line">relax_job = RelaxMaker().make(structure=si_structure)</span><br><span class="line"></span><br><span class="line"><span class="comment"># create a static job that will use only the structure from the relaxation</span></span><br><span class="line">static_job = StaticMaker().make(structure=relax_job.output.structure)</span><br><span class="line"></span><br><span class="line"><span class="comment"># create a static job that will use additional outputs from the relaxation</span></span><br><span class="line">static_job = StaticMaker().make(</span><br><span class="line">    structure=relax_job.output.structure, prev_dir=relax_job.output.dir_name</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># create a flow including the two jobs and set the output to be that of the static</span></span><br><span class="line">my_flow = Flow([relax_job, static_job], output=static_job.output)</span><br></pre></td></tr></table></figure></div>
+
+<p>上面是官网的例子，通过<code>Flow</code>​方法把两个任务按照顺序组合起来，既可以实现结构优化完自动开始静态计算。</p>
+<p>此外，根据实际计算中，我们是否需要续算，或者读取上一步的计算结果，可以在<code>make()</code>​方法中定义：</p>
+<ul>
+<li><code>structure</code>​：读取上一步计算的优化结构的语法为<code>prev_job.output.structure</code>​</li>
+<li><code>prev_dir</code>​：读取上一步计算的文件夹，主要是可用于继承<code>INCAR</code>​设置，或复制读取<code>CHGCAR</code>​和<code>WAVECAR</code>​文件。</li>
+</ul>
+<p>适用的用法即静态计算中读取弛豫计算的结构，非自洽计算中读取静态计算的<code>CHGCAR</code>​等。</p>
+<p>因此，上述的<code>my_flow</code>​根据需求可以继续增加任务，如继续计算态密度：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="code"><pre><span class="line">......</span><br><span class="line">dos_job = NonSCFMaker().make(structure=static_job.output.structure, prev_dir=static_job.output.dir_name)</span><br><span class="line"></span><br><span class="line">my_flow = Flow([relax_job, static_job, dos_job], output=dos_job.output)</span><br></pre></td></tr></table></figure></div>
+
+<p>至此，<code>Atomate2</code>​的基本用法就大致介绍完了~~~~~~~~</p>
+]]></content>
+      <categories>
+        <category>Atomate2</category>
+      </categories>
+      <tags>
+        <tag>VASP</tag>
+        <tag>Atomate2</tag>
+        <tag>workflow</tag>
       </tags>
   </entry>
 </search>
