@@ -26,7 +26,7 @@ date: 2024-06-13 00:00:00
 
 下面是生成从结构优化到态密度计算的完整代码：
 
-{% folding yellow::参考代码 %}
+{% label 参考代码 blue %}
 
 ```python
 from pymatgen.io.vasp.sets import MPRelaxSet, MPStaticSet, MPNonSCFSet
@@ -79,8 +79,6 @@ DOS = MPNonSCFSet.from_prev_calc(
 DOS.write_input('./dos')
 ```
 
-{% endfolding %}
-
 分析态密度的结果需要读`vasprun.xml`文件，这里我们需要导入`Vasprun`模块：
 
 ```python
@@ -132,7 +130,7 @@ print(total_dos)
 total_dos.to_csv('total_dos.csv', index=False)
 ```
 
-{% note info %}
+
 
 上述代码第14行`'Density': total_densities[Spin.up]`只指定了自旋向上的态。是因为体系无磁性，`MPNonSCFSet`读`static`文件夹自动生成输入是把`ISPIN`关掉了，所以这里的`Spin.up`的数值就是总的`Density`的数值。同理，对于有磁性的体系，这一行代码可以写成：
 
@@ -140,7 +138,7 @@ total_dos.to_csv('total_dos.csv', index=False)
 total_dos = pd.DataFrame({'Energy': energy, 'Spin_Up': total_densities[Spin.up], 'Spin_Dn': total_densities[Spin.down]})
 ```
 
-{% endnote %}
+
 
 ##### 元素总态密度
 

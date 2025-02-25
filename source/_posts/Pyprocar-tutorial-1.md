@@ -120,7 +120,7 @@ pyprocar.bandsplot(
 
 绘图参数是在此基础上调整图片的线宽，字体大小等，同样也只需要设置有限个参数就可以得到很好的图片了。
 
-{% folding blue:: 绘图参数 %}
+{% label 绘图参数 blue %}
 
 > spin_colors : {'description': 'The colors for the plot lines.', 'value': ['blue', 'red']}
 >
@@ -183,8 +183,6 @@ pyprocar.bandsplot(
 > figure_size : {'description': 'The size of the figure (width, height) in inches.', 'value': [9, 6]}
 >
 > dpi : {'description': "The resolution in dots per inch. If 'figure', use the figure's dpi value.", 'value': 'figure'}
-
-{% endfolding %}
 
 #### 轨道投影能带图
 

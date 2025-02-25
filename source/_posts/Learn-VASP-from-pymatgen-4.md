@@ -125,11 +125,7 @@ flowchart LR
 
   我们之前说过，好的结构是好结果的关键，那么其中重要的步骤就是优化过程。对于复杂结构：异质结、磁性体系、超大模型等，采用`MPRelaxSet`模块进行粗收敛来初步判断结构建模以及参数设置是否合理，同时不失为一个节省计算总时长的好办法。
 
-{% note info %}
-
 如果需要对应`Materials project`上的结构数据，势函数的种类选择也要对应，这里先提一下留意一下，后面详细说明。
-
-{% endnote %}
 
 ##### MPScanRelaxSet介绍
 
@@ -220,7 +216,7 @@ with MPRester(api_key) as mpr:
 
 结构准备好了之后，就可以直接生成输入文件了，下面是完整代码：
 
-{% folding yellow::参考代码 %}
+{% label 参考代码  blue%}
 
 ```python
 from pymatgen.io.vasp.sets import MPRelaxSet
@@ -263,8 +259,6 @@ with MPRester(api_key) as mpr:
     print("文件成功保存到3")
 ```
 
-{% endfolding %}
-
 运行
 
 ![Sirelax_input](Learn-VASP-from-pymatgen-4/Sirelax_input.png)
@@ -287,11 +281,9 @@ with MPRester(api_key) as mpr:
 
 之前的代码中，`MPRelaxSet`中我们只提供了结构，如果是用于自定义INCAR参数，还可以继续添加`user_incar_settings`来覆盖默认的设置，这里不需要写完整的所有INCAR设置，只需要写你想要改变的词条。
 
-{% note info %}
-
 `INCAR`词条有默认的设置，即使不写入`INCAR`里面也会在计算中采用默认的设置，详情默认设置的值以及解释见[VASP官网]([The VASP Manual - VASP Wiki](https://www.vasp.at/wiki/index.php/The_VASP_Manual))
 
-{% endnote %}
+
 
 语法如下：
 
@@ -364,11 +356,7 @@ relax_new = MPRelaxSet(
 )
 ```
 
-{% note info %}
-
-强烈推荐1和2方法
-
-{% endnote %}
+{% label 强烈推荐1和2方法 blue %}
 
 - 修改`MPRelaxSet`默认KPOINTS设置
 

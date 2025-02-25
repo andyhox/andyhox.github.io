@@ -62,11 +62,7 @@ print("static_calc is ready!")
 >
 > - For the calculations of the DOS and very accurate total-energy calculations (no relaxation in metals), use the tetrahedron method (ISMEAR=-5).
 
-{% note info %}
-
 **上述INCAR的设置为MPStaticSet的默认设置，针对具体性质计算，需要调整的词条参数不同**
-
-{% endnote %}
 
 #### 态密度计算
 
@@ -93,21 +89,13 @@ print("DOS_calc is ready!")
 
 态密度计算仅读`CHGCAR`即可，即只用复制`CHGCAR`至态密度计算文件夹。
 
-{% note info %}
-
 **如果使用`MPNonSCFSet`的`from_prev_calc`方法，默认会复制上一步自洽计算的`CHGCAR`文件到当前文件夹；如果只用`MPNonSCFSet`，则需要指定结构文件`struct`，以及自行把`CHGCAR`复制到当前目录。**
-
-{% endnote %}
 
 ##### 自定义参数设置
 
 此外，本小节主要介绍`DOS`计算，默认的INCAR参数中，部分的设置是不太合理的，或者说不利于后续的数据分析。
 
-{% note info %}
-
 **前面提到，`VASP`对许多词条的值有默认值，如果不在`INCAR`中覆写，计算采用的就是默认值**
-
-{% endnote %}
 
 - `EMIN`：态密度能量下区间（默认值：`lowest KS-eigenvalue - Δ`）
 - `EMAX`：态密度能量上区间（默认值：`lowest KS-eigenvalue - Δ`）
@@ -122,11 +110,7 @@ print("DOS_calc is ready!")
 
 总的来说，计算前先确定`LORBIT`的数值来决定是否需要分轨道的数据，然后再确定`ISPIN`、`EMIN`、`EMAX`、`NEDOS`的数值来考虑作图需求。
 
-{% note info %}
-
-磁性体系必须打开`ISPIN`
-
-{% endnote %}
+{% label 磁性体系必须打开`ISPIN` blue %}
 
 ##### KPOINTS文件
 
@@ -149,11 +133,7 @@ nonscf_dos.write_input('./dos')
 print("DOS_calc is ready!")
 ```
 
-{% note info %}
-
 态密度计算的K网格要足够大才算的准，在普通结构优化的K点个数2倍以上，大体系算不动可适量降低。
-
-{% endnote %}
 
 #### 总结
 

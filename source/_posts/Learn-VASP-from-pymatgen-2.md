@@ -25,9 +25,7 @@ excerpt: "Learn VASP from pymatgen"
 
 然后开始配置pymatgen相关环境，[官网](https://pymatgen.org/installation.html)的安装教程已经相对详细了。但是考虑到本系列是“计算小白硬学VASP”，主打的就是我奶奶看了都会提交VASP任务，这里我就手把手，step by step 地走一遍配置过程。
 
-{% note info %}
-后续操作均在Linux环境下进行，个人工作站请在工作站上面操作，超算中心请在账号家目录下进行。
-{% endnote %}
+{% label 后续操作均在Linux环境下进行，个人工作站请在工作站上面操作，超算中心请在账号家目录下进行。blue %}
 
 ## 安装Miniconda
 
@@ -38,14 +36,15 @@ Miniconda是一个开源的Python发行版本，它包含了conda、Python、pip
 ![Linux_version 安装包](Learn-VASP-from-pymatgen-2/1_linux_pkg.png)
 
 ### 进入到安装包目录下bash命令安装
-	```shell
-	bash Miniconda3-latest-Linux-x86_64.sh
-	```
+```shell
+bash Miniconda3-latest-Linux-x86_64.sh
+```
 
 ### 验证Miniconda是否安装成功
-	```shell
-	conda --version # 或conda -V
-	```
+```shell
+conda --version # 或conda -V
+
+```
 如果安装成功，会显示conda的版本号。
 ![Linux_version conda版本](Learn-VASP-from-pymatgen-2/2_check_miniconda_installation.png)
 

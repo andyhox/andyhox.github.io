@@ -303,7 +303,7 @@ with MPRester(api_key) as mpr:
 结果如下，可以自行对照检验：
 ![ex1_result](Learn-VASP-from-pymatgen-3/17_ex1_results.png)
 
-{% folding yellow::参考代码 %}
+{% label 参考代码 blue %}
 
 ```python
 import pandas as pd
@@ -338,8 +338,6 @@ df = pd.DataFrame(data)  # 转换为DataFrame格式
 print(df)
 ```
 
-{% endfolding %}
-
 ### 导出检索结果
 
 DateFrame格式的材料信息，可以方便的进行分析和处理，但是如果需要将结果导出为其他格式，比如csv文件，这时候就需要用到pandas的to_csv()方法，上述代码最后加入如下一行代码即可：
@@ -359,7 +357,8 @@ print("Export result to result.csv")
 ### 下载结构cif文件
 
 如果下载上述csv文件的所有结构的cif文件，可以运行如下代码：
-{% folding yellow::该代码会下载4000+个cif结构，请谨慎运行！！ %}
+{% label 该代码会下载4000+个cif结构，请谨慎运行！！ blue %}
+
 ```python
 import pandas as pd
 from mp_api.client import MPRester
@@ -399,8 +398,6 @@ print("Export result to result.csv")
         structure = mpr.get_structure_by_material_id(material_id, final=True)
         structure.to(f"{material_id}.cif")
 ```
-{% endfolding %}
-
 如果只需要下载指定MP编号的cif文件，可以调用`get_structure_by_material_id`方法储存结构信息并写入到本地，这里我们下载`mp-149`的cif文件，代码如下：
 
 ```python
