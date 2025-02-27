@@ -427,7 +427,7 @@ copy:
 
 # Need to install the hexo-wordcount plugin
 wordcount:
-  enable: false
+  enable: true
   # Display the word count of the article in post meta
   post_wordcount: true
   # Display the time to read the article in post meta
@@ -526,7 +526,7 @@ comments:
   # Leave it empty if you don't need comments
   # Choose: Disqus/Disqusjs/Livere/Gitalk/Valine/Waline/Utterances/Facebook Comments/Twikoo/Giscus/Remark42/Artalk
   # Format of two comments system : Disqus,Waline
-  use:
+  use: Disqus
   # Display the comment name next to the button
   text: true
   # Lazyload: The comment system will be load when comment element enters the browser's viewport.
@@ -540,9 +540,9 @@ comments:
 # Disqus
 # https://disqus.com/
 disqus:
-  shortname:
+  shortname: withox
   # For newest comments widget
-  apikey:
+  apikey: DWyqGL5cMyR3GQM0HJ9geFGLm1fXauiVcqcbmKnV6F73VtpmV4M0m0hiRDS1v82w
 
 # Alternative Disqus - Render comments with Disqus API
 # https://github.com/SukkaW/DisqusJS
