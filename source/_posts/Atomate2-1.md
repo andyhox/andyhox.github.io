@@ -1,18 +1,15 @@
 ---
 title: 计算工作流——初识Atomate2
+date: 2024-11-08 00:00:00
 tags:
   - VASP
   - Atomate2
-  - workflow
-author: 炫酷老司机
+copyright_author: 炫酷老司机
 categories:
   - Atomate2
-sticky: 17
-copyright: 欢迎个人转载、使用、转贴等，但请获得作者同意且注明出处！
-comment: true
 cover: /images/toolkit.png
-excerpt: Be lazy, stay efficient, and enjoy your coffee break!
-date: 2024-11-08 00:00:00
+description: Atomte2系列教程
+
 ---
 
 `Atomate2` ​是一款开源可用来处理复杂庞大计算任务的软件包，开发团队也是大名鼎鼎的劳伦斯伯克利国家实验室的研究人员，耳熟能详的 `pymatgen`​、`Materials Project`​、`FireWorks` ​等也是出自该团队之手。

@@ -1,20 +1,18 @@
 ---
 title: 计算工具系列 —— Pyprocar库
+date: 2024-06-20 00:00:00
 tags:
   - VASP
   - Pyprocar
   - Band
   - DOS
-author: 炫酷老司机
+copyright_author: 炫酷老司机
 categories:
   - toolkit
-sticky: 9
-copyright: 欢迎个人转载、使用、转贴等，但请获得作者同意且注明出处！
 comment: true
 mathjax: true
 cover: /images/toolkit.png
-excerpt: Be lazy, stay efficient, and enjoy your coffee break!
-date: 2024-06-20 00:00:00
+description: Be lazy, stay efficient, and enjoy your coffee break!
 ---
 
 

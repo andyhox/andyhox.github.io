@@ -1,16 +1,14 @@
 ---
 title: Chap.1  计算小白硬学VASP —— 前言
 date: 2024-05-29 00:00:00
-author: 炫酷老司机
+copyright_author: 炫酷老司机
 tags:
   - VASP
   - pymatgen
 categories:
   - Learn VASP from pymatgen
-sticky: 1
-copyright: 欢迎个人转载、使用、转贴等，但请获得作者同意且注明出处！
 cover: /images/wallhaven-gpkd77_3840x2160.png
-excerpt: "Learn VASP from pymatgen"
+description: Learn VASP from pymatgen系列教程
 ---
 
 ***¡Hola a todos!***

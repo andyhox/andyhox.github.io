@@ -1,18 +1,14 @@
 ---
 title: 计算工作流——Atomate2自定义工作流
+date: 2024-11-10 00:00:00
 tags:
   - VASP
   - Atomate2
-  - workflow
-author: 炫酷老司机
+copyright_author: 炫酷老司机
 categories:
   - Atomate2
-sticky: 19
-copyright: 欢迎个人转载、使用、转贴等，但请获得作者同意且注明出处！
-comment: true
 cover: /images/toolkit.png
-excerpt: Be lazy, stay efficient, and enjoy your coffee break!
-date: 2024-11-08 00:00:00
+description: Atomte2系列教程
 ---
 
 `Atomate2`​除了直接调用现成的工作流，我们还可以根据个人需求自定义任务个数以及工作流走向。具体操作也非常简单，只需要在`Flow`​中按照计算顺序传入任务即可，如果我们需要优化一个结构并进行静态计算：

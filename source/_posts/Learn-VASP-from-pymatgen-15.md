@@ -1,17 +1,14 @@
 ---
 title: Chap.15  计算小白硬学VASP —— 各类结构“Transformation”使用说明（二）
+date: 2024-08-16 00:00:00
 tags:
   - VASP
   - pymatgen
-author: 炫酷老司机
+copyright_author: 炫酷老司机
 categories:
   - Learn VASP from pymatgen
-sticky: 15
-copyright: 欢迎个人转载、使用、转贴等，但请获得作者同意且注明出处！
-comment: true
 cover: /images/wallhaven-gpkd77_3840x2160.png
-excerpt: Learn VASP from pymatgen
-date: 2024-08-16 00:00:00
+description: Learn VASP from pymatgen系列教程
 ---
 
 

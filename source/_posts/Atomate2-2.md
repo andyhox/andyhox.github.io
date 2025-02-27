@@ -1,18 +1,14 @@
 ---
 title: 计算工作流——Atomate2基本设置
+date: 2024-11-09 00:00:00
 tags:
   - VASP
   - Atomate2
-  - workflow
-author: 炫酷老司机
+copyright_author: 炫酷老司机
 categories:
   - Atomate2
-sticky: 18
-copyright: 欢迎个人转载、使用、转贴等，但请获得作者同意且注明出处！
-comment: true
 cover: /images/toolkit.png
-excerpt: Be lazy, stay efficient, and enjoy your coffee break!
-date: 2024-11-08 00:00:00
+description: Atomte2系列教程
 ---
 
 `Atomate2`​安装过程[官网](https://materialsproject.github.io/atomate2/user/install.html)上介绍的已经非常详细了，唯一需要注意的是云数据库的设置。`Atomate2`​推荐采用云数据库来存储工作量计算结果，官网给出的例子为使用`Mongdb Atlas`​。但是由于一些原因，采用云数据库来储存数据，对于个人用户来说不是很友好，特别是国内用户：

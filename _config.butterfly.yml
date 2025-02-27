@@ -35,11 +35,11 @@ menu:
 
 code_blocks:
   # Code block theme: darker / pale night / light / ocean / false
-  theme: light
-  macStyle: false
+  theme: false
+  macStyle: true
   # Code block height limit (unit: px)
-  height_limit: false
-  word_wrap: false
+  height_limit: 100
+  word_wrap: true
 
   # Toolbar
   copy: true
@@ -62,7 +62,7 @@ social:
 favicon: /img/favicon.ico
 
 avatar:
-  img: /img/avatar.jpg
+  img: /img/avatar.ico
   effect: false
 
 # Disable all banner images
@@ -291,7 +291,7 @@ aside:
       enable: true
       icon: fab fa-github
       text: Follow Me
-      link: https://github.com/andyhox
+      link: 
   card_announcement:
     enable: true
     content: This is my Blog

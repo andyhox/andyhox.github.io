@@ -1,18 +1,14 @@
 ---
 title: Chap.7  计算小白硬学VASP —— 材料性质计算—>态密度分析（2）
+date: 2024-06-17 00:00:00
 tags:
   - VASP
   - pymatgen
-  - Materials Project
-author: 炫酷老司机
+copyright_author: 炫酷老司机
 categories:
   - Learn VASP from pymatgen
-sticky: 7
-copyright: 欢迎个人转载、使用、转贴等，但请获得作者同意且注明出处！
-comment: true
 cover: /images/wallhaven-gpkd77_3840x2160.png
-excerpt: Learn VASP from pymatgen
-date: 2024-06-17 00:00:00
+description: Learn VASP from pymatgen系列教程
 ---
 
 
