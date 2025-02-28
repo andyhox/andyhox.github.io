@@ -1,1103 +1,216 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="keywords" content="Hexo Theme Redefine">
-    
-    <meta name="author" content="炫酷老司机">
-    <!-- preconnect -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    
-    <!--- Seo Part-->
-    
-    <link rel="canonical" href="https://andyhox.github.io/2024/06/11/learn-vasp-from-pymatgen-5/"/>
-    <meta name="robots" content="index,follow">
-    <meta name="googlebot" content="index,follow">
-    <meta name="revisit-after" content="1 days">
-    
-        <meta name="description" content="Learn VASP from pymatgen">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Chap.5  计算小白硬学VASP —— 材料性质计算—&gt;态密度">
-<meta property="og:url" content="https://andyhox.github.io/2024/06/11/Learn-VASP-from-pymatgen-5/index.html">
-<meta property="og:site_name" content="Andy">
-<meta property="og:description" content="Learn VASP from pymatgen">
-<meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://andyhox.github.io/2024/06/11/Learn-VASP-from-pymatgen-5/staticVSrelax.png">
-<meta property="og:image" content="https://andyhox.github.io/2024/06/11/Learn-VASP-from-pymatgen-5/dos_default_input.png">
-<meta property="article:published_time" content="2024-06-11T08:00:00.000Z">
-<meta property="article:modified_time" content="2024-06-13T14:27:46.805Z">
-<meta property="article:author" content="andyhoo">
-<meta property="article:tag" content="VASP">
-<meta property="article:tag" content="pymatgen">
-<meta property="article:tag" content="Materials Project">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://andyhox.github.io/2024/06/11/Learn-VASP-from-pymatgen-5/staticVSrelax.png">
-    
-    
-        <!-- Google tag (gtag.js) -->
-        <script src="https://www.googletagmanager.com/gtag/js?id=G-XD3VSCSSYQ"></script>
-        <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-
-        gtag('config', 'G-XD3VSCSSYQ');
-        </script>
-    
-    <!--- Icon Part-->
-    <link rel="icon" type="image/png" href="/images/redefine-favicon.svg" sizes="192x192">
-    <link rel="apple-touch-icon" sizes="180x180" href="/images/redefine-favicon.svg">
-    <meta name="theme-color" content="#A31F34">
-    <link rel="shortcut icon" href="/images/redefine-favicon.svg">
-    <!--- Page Info-->
-    
-    <title>
-        
-            Chap.5  计算小白硬学VASP —— 材料性质计算—&gt;态密度 -
-        
-        A&amp;H
-    </title>
-
-    
-<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
-
-
-    <!--- Inject Part-->
-    
-
-    
-        <style>
-    :root {
-        --preloader-background-color: #fff;
-        --preloader-text-color: #000;
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Chap.5 计算小白硬学VASP —— 材料性质计算—&gt;态密度 | AH</title><meta name="author" content="炫酷老司机,andyhoo0716@gmail.com"><meta name="copyright" content="炫酷老司机"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Learn VASP from pymatgen系列教程"><meta property="og:type" content="article"><meta property="og:title" content="Chap.5  计算小白硬学VASP —— 材料性质计算—&gt;态密度"><meta property="og:url" content="https://www.withox.cn/2024/06/11/Learn-VASP-from-pymatgen-5/index.html"><meta property="og:site_name" content="AH"><meta property="og:description" content="Learn VASP from pymatgen系列教程"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://www.withox.cn/images/wallhaven-gpkd77_3840x2160.png"><meta property="article:published_time" content="2024-06-10T16:00:00.000Z"><meta property="article:modified_time" content="2025-02-27T13:19:51.213Z"><meta property="article:author" content="炫酷老司机"><meta property="article:tag" content="VASP"><meta property="article:tag" content="pymatgen"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://www.withox.cn/images/wallhaven-gpkd77_3840x2160.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Chap.5  计算小白硬学VASP —— 材料性质计算—>态密度",
+  "url": "https://www.withox.cn/2024/06/11/Learn-VASP-from-pymatgen-5/",
+  "image": "https://www.withox.cn/images/wallhaven-gpkd77_3840x2160.png",
+  "datePublished": "2024-06-10T16:00:00.000Z",
+  "dateModified": "2025-02-27T13:19:51.213Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "炫酷老司机",
+      "url": "https://www.withox.cn/"
     }
-
-    @media (prefers-color-scheme: dark) {
-        :root {
-            --preloader-background-color: #202124;
-            --preloader-text-color: #fff;
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.ico"><link rel="canonical" href="https://www.withox.cn/2024/06/11/Learn-VASP-from-pymatgen-5/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"><link rel="preconnect" href="//busuanzi.ibruce.info"><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>(() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
         }
+        return value
+      }
     }
 
-    @media (prefers-color-scheme: light) {
-        :root {
-            --preloader-background-color: #fff;
-            --preloader-text-color: #000;
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
         }
-    }
-
-    @media (max-width: 600px) {
-        .ml13 {
-            font-size: 2.6rem !important; /* Adjust this value as needed */
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
         }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
     }
-
-    .preloader {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem; /* Tailwind 'gap-4' is 1rem */
-        align-items: center;
-        justify-content: center;
-        position: fixed;
-        padding: 12px;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh; /* 'h-screen' is 100% of the viewport height */
-        background-color: var(--preloader-background-color);
-        z-index: 1100; /* 'z-[1100]' sets the z-index */
-        transition: opacity 0.2s ease-in-out;
-    }
-
-    .ml13 {
-        font-size: 3.2rem;
-        /* text-transform: uppercase; */
-        color: var(--preloader-text-color);
-        letter-spacing: -1px;
-        font-weight: 500;
-        font-family: 'Chillax-Variable', sans-serif;
-        text-align: center;
-    }
-
-    .ml13 .word {
-        display: inline-flex;
-        flex-wrap: wrap;
-        white-space: nowrap;
-    }
-
-    .ml13 .letter {
-        display: inline-block;
-        line-height: 1em;
-    }
-</style>
-
-<div class="preloader">
-    
-<script src="/js/libs/anime.min.js"></script>
-
-    <h1 class="ml13">
-        A&amp;H
-    </h1>
-    <script>
-        var textWrapper = document.querySelector('.ml13');
-        // Split text into words
-        var words = textWrapper.textContent.trim().split(' ');
-
-        // Clear the existing content
-        textWrapper.innerHTML = '';
-
-        // Wrap each word and its letters in spans
-        words.forEach(function(word) {
-            var wordSpan = document.createElement('span');
-            wordSpan.classList.add('word');
-            wordSpan.innerHTML = word.replace(/\S/g, "<span class='letter'>$&</span>");
-            textWrapper.appendChild(wordSpan);
-            textWrapper.appendChild(document.createTextNode(' ')); // Add space between words
-        });
-
-
-        anime.timeline({loop: true})
-            .add({
-                targets: '.ml13 .letter',
-                translateY: [100,0],
-                translateZ: 0,
-                opacity: [0,1],
-                easing: "easeOutExpo",
-                duration: 1400,
-                delay: (el, i) => 300 + 30 * i
-            }).add({
-            targets: '.ml13 .letter',
-            translateY: [0,-100],
-            opacity: [1,0],
-            easing: "easeInExpo",
-            duration: 1200,
-            delay: (el, i) => 100 + 30 * i
-        });
-
-        let themeStatus = JSON.parse(localStorage.getItem('REDEFINE-THEME-STATUS'))?.isDark;
-
-        // If the theme status is not found in local storage, check the preferred color scheme
-        if (themeStatus === undefined || themeStatus === null) {
-            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                themeStatus = 'dark';
-            } else {
-                themeStatus = 'light';
-            }
-        }
-
-        // Now you can use the themeStatus variable in your code
-        if (themeStatus) {
-            document.documentElement.style.setProperty('--preloader-background-color', '#202124');
-            document.documentElement.style.setProperty('--preloader-text-color', '#fff');
-        } else {
-            document.documentElement.style.setProperty('--preloader-background-color', '#fff');
-            document.documentElement.style.setProperty('--preloader-text-color', '#000');
-        }
-
-        window.addEventListener('load', function () {
-            hidePreloaderAfterTimeout(1000); // Hide after 1000 milliseconds once the window has loaded
-        });
-
-        // Backup failsafe: Hide preloader after a maximum of 5000 milliseconds, regardless of the window load event
-        hidePreloaderAfterTimeout(5000);
-
-        function hidePreloaderAfterTimeout(delay) {
-            setTimeout(function () {
-                var preloader = document.querySelector('.preloader');
-                preloader.style.opacity = '0';
-                setTimeout(function () {
-                    preloader.style.display = 'none';
-                }, 200);
-            }, delay);
-        }
-    </script>
-</div>
-    
-
-    
-<link rel="stylesheet" href="/css/style.css">
-
-
-    
-        
-<link rel="stylesheet" href="/assets/build/styles.css">
-
-    
-
-    
-<link rel="stylesheet" href="/fonts/fonts.css">
-
-    
-<link rel="stylesheet" href="/fonts/Satoshi/satoshi.css">
-
-    <!--- Font Part-->
-    
-    
-    
-    
-
-
-    <script id="hexo-configurations">
-    window.config = {"hostname":"andyhox.github.io","root":"/","language":"zh-CN","path":"search.xml"};
-    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"left","image_caption":false,"link_icon":true,"title_alignment":"left","headings_top_spacing":{"h1":"5rem","h2":"4rem","h3":"2.8rem","h4":"2.5rem","h5":"2.2rem","h6":"2rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":5,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":false,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":true,"open_graph":true,"google_analytics":{"enable":true,"id":"G-XD3VSCSSYQ"}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-4lky22_1920x1080.png","dark":"/images/wallhaven-1pprk1_1920x1080.png"},"title":[" "],"subtitle":{"text":[" "],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#000000","dark":"#000000"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":true,"style":"default","links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":"andyhoo0716@gmail.com"},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":true,"version":"9.3.0"}},"version":"2.6.2","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"categories":{"path":"/categories","icon":"fa-regular fa-folder"}},"search":{"enable":true,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":{"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"Tags":{"path":"/tags","icon":"fa-regular fa-tags"},"Categories":{"path":"/categories","icon":"fa-regular fa-folder"}}},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2024/05/29 00:00:00"};
-    window.lang_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"};
-    window.data = {"masonry":false};
-  </script>
-    
-    <!--- Fontawesome Part-->
-    
-<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
-
-    
-<link rel="stylesheet" href="/fontawesome/brands.min.css">
-
-    
-<link rel="stylesheet" href="/fontawesome/solid.min.css">
-
-    
-<link rel="stylesheet" href="/fontawesome/regular.min.css">
-
-    
-    
-    
-    
-<meta name="generator" content="Hexo 7.2.0"></head>
-
-
-<body>
-<div class="progress-bar-container">
-    
-
-    
-        <span class="pjax-progress-bar"></span>
-<!--        <span class="swup-progress-icon">-->
-<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
-<!--        </span>-->
-    
-</div>
-
-
-<main class="page-container" id="swup">
-
-    
-
-    <div class="main-content-container">
-
-
-        <div class="main-content-header">
-            <header class="navbar-container px-6 md:px-12">
-
-    <div class="navbar-content ">
-        <div class="left">
-            
-            <a class="logo-title" href="/">
-                
-                A&amp;H
-                
-            </a>
-        </div>
-
-        <div class="right">
-            <!-- PC -->
-            <div class="desktop">
-                <ul class="navbar-list">
-                    
-                        
-                            
-
-                            <li class="navbar-item">
-                                <!-- Menu -->
-                                <a class=""
-                                   href="/"
-                                        >
-                                    <i class="fa-regular fa-house fa-fw"></i>
-                                    首页
-                                    
-                                </a>
-
-                                <!-- Submenu -->
-                                
-                            </li>
-                    
-                        
-                            
-
-                            <li class="navbar-item">
-                                <!-- Menu -->
-                                <a class=""
-                                   href="/archives"
-                                        >
-                                    <i class="fa-regular fa-archive fa-fw"></i>
-                                    归档
-                                    
-                                </a>
-
-                                <!-- Submenu -->
-                                
-                            </li>
-                    
-                        
-                            
-
-                            <li class="navbar-item">
-                                <!-- Menu -->
-                                <a class=""
-                                   href="/categories"
-                                        >
-                                    <i class="fa-regular fa-folder fa-fw"></i>
-                                    分类
-                                    
-                                </a>
-
-                                <!-- Submenu -->
-                                
-                            </li>
-                    
-                    
-                        <li class="navbar-item search search-popup-trigger">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                        </li>
-                    
-                </ul>
-            </div>
-            <!-- Mobile -->
-            <div class="mobile">
-                
-                    <div class="icon-item search search-popup-trigger"><i class="fa-solid fa-magnifying-glass"></i>
-                    </div>
-                
-                <div class="icon-item navbar-bar">
-                    <div class="navbar-bar-middle"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Mobile sheet -->
-    <div class="navbar-drawer h-screen w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
-        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
-            
-                
-                    
-
-                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
-                        
-                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
-                           href="/"
-                        >
-                            <span>
-                                首页
-                            </span>
-                            
-                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
-                            
-                        </a>
-                        
-
-                        
-                    </li>
-            
-                
-                    
-
-                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
-                        
-                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
-                           href="/archives"
-                        >
-                            <span>
-                                归档
-                            </span>
-                            
-                                <i class="fa-regular fa-archive fa-sm fa-fw"></i>
-                            
-                        </a>
-                        
-
-                        
-                    </li>
-            
-                
-                    
-
-                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
-                        
-                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
-                           href="/categories"
-                        >
-                            <span>
-                                分类
-                            </span>
-                            
-                                <i class="fa-regular fa-folder fa-sm fa-fw"></i>
-                            
-                        </a>
-                        
-
-                        
-                    </li>
-            
-
-            
-            
-                
-                    
-                    
-                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
-                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
-                           href="/tags"
-                        >
-                            <span>Tags</span>
-                            <i class="fa-regular fa-tags fa-sm fa-fw"></i>
-                        </a>
-                    </li>
-                
-                    
-                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
-                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
-                           href="/categories"
-                        >
-                            <span>Categories</span>
-                            <i class="fa-regular fa-folder fa-sm fa-fw"></i>
-                        </a>
-                    </li>
-                
-            
-        </ul>
-
-        <div class="statistics flex justify-around my-2.5">
-    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
-        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">5</div>
-        <div class="label text-third-text-color text-sm">标签</div>
-    </a>
-    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
-        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">1</div>
-        <div class="label text-third-text-color text-sm">分类</div>
-    </a>
-    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
-        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">6</div>
-        <div class="label text-third-text-color text-sm">文章</div>
-    </a>
-</div>
-    </div>
-
-    <div class="window-mask"></div>
-
-</header>
-
-
-        </div>
-
-        <div class="main-content-body">
-
-            
-
-            <div class="main-content">
-
-                
-                    <div class="post-page-container flex relative justify-between box-border w-full h-full">
-    <div class="article-content-container">
-
-        <div class="article-title relative w-full">
-            
-                
-                
-                <img src="/images/wallhaven-gpkd77_3840x2160.png" alt="Chap.5  计算小白硬学VASP —— 材料性质计算—&gt;态密度" class="w-full h-60 sm:h-72 md:h-80 object-cover sm:rounded-t-large dark:brightness-75"/>
-                
-                <div class="w-full flex items-center absolute bottom-0 justify-start">
-                    <h1 class="article-title-cover text-center mx-6 my-6 text-second-text-color bg-background-color-transparent px-4 py-3 text-3xl sm:text-4xl md:text-5xl font-bold backdrop-blur-lg rounded-xl border border-border-color ">Chap.5  计算小白硬学VASP —— 材料性质计算—&gt;态密度</h1>
-                </div>
-            
-            </div>
-
-        
-            <div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
-                <div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
-                    <img src="/images/avatar.jpg">
-                </div>
-                <div class="info flex flex-col justify-between">
-                    <div class="author flex items-center">
-                        <span class="name text-default-text-color text-lg font-semibold">炫酷老司机</span>
-                        
-                            <span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv1</span>
-                        
-                    </div>
-                    <div class="meta-info">
-                        <div class="article-meta-info">
-    <span class="article-date article-meta-item">
-        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
-        <span class="desktop">2024-06-11 16:00</span>
-        <span class="mobile">2024-06-11 16:00</span>
-        <span class="hover-info">创建</span>
-    </span>
-    
-        <span class="article-date article-meta-item">
-            <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2024-06-13 22:27:46</span>
-            <span class="mobile">2024-06-13 22:27:46</span>
-            <span class="hover-info">更新</span>
-        </span>
-    
-
-    
-        <span class="article-categories article-meta-item">
-            <i class="fa-regular fa-folders"></i>&nbsp;
-            <ul>
-                
-                
-                    
-                        
-                        <li>
-                            <a href="/categories/Learn-VASP-from-pymatgen/">Learn VASP from pymatgen</a>&nbsp;
-                        </li>
-                    
-                    
-                
-            </ul>
-        </span>
-    
-    
-        <span class="article-tags article-meta-item">
-            <i class="fa-regular fa-tags"></i>&nbsp;
-            <ul>
-                
-                    <li>
-                        <a href="/tags/VASP/">VASP</a>&nbsp;
-                    </li>
-                
-                    <li>
-                        | <a href="/tags/pymatgen/">pymatgen</a>&nbsp;
-                    </li>
-                
-                    <li>
-                        | <a href="/tags/Materials-Project/">Materials Project</a>&nbsp;
-                    </li>
-                
-            </ul>
-        </span>
-    
-
-    
-    
-        <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>1.6k 字</span>
-        </span>
-    
-    
-        <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>6 分钟</span>
-        </span>
-    
-    
-        <span class="article-pv article-meta-item">
-            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
-        </span>
-    
-</div>
-
-                    </div>
-                </div>
-            </div>
-        
-
-        
-
-
-        <div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
-            <p><em><strong>¡Hola a todos!</strong></em></p>
-<p>上一章我们主要分享了结构优化的输入文件的生成，以及自定义输入文件参数；本章简单介绍下，对于Bulk模型来说，各类性质计算的输入文章生成，以及参数设置要点。</p>
-<h4 id="简单自洽计算"><a href="#简单自洽计算" class="headerlink" title="简单自洽计算"></a>简单自洽计算</h4><p>性质计算的前提是进行结构优化得到稳定的结构。对于不同的性质计算，计算的步骤往往需要多步进行，例如态密度计算，需要先进行自洽计算得到电荷、波函数文件，然后再进行一步非自洽计算。</p>
-<p>首先介绍下普通的自洽计算，用于得到电荷、波函数文件。</p>
-<h5 id="调用MPStaticSet"><a href="#调用MPStaticSet" class="headerlink" title="调用MPStaticSet"></a>调用MPStaticSet</h5><p>自洽计算的输入文件生成可以调用<code>MPStaticSet</code>模块，以<code>Si</code>为例，默认生成输入文件如下：</p>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.sets <span class="keyword">import</span> MPStaticSet</span><br><span class="line"></span><br><span class="line">static = MPStaticSet.from_prev_calc(</span><br><span class="line">    <span class="comment"># 上一步优化的文件夹</span></span><br><span class="line">    prev_calc_dir=<span class="string">&#x27;./relax&#x27;</span>,</span><br><span class="line">    user_potcar_functional=<span class="string">&#x27;PBE_54&#x27;</span></span><br><span class="line">	)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">static.write_input(<span class="string">&#x27;./static&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;static_calc is ready!&quot;</span>)</span><br></pre></td></tr></table></figure></div>
-
-<p>从用法上来说<code>MPStaticSet</code>的用法跟<code>MPRelaxSet</code>类似。但是这里细心的可以发现，这里老司机并没有提供结构文件，而是用了<code>from_prev_calc</code>方法，顾名思义就是读取前一步计算的文件进行计算，这里读取的就是之前优化计算的文件夹。</p>
-<p>该方法通用于所有<code>set</code>类的模块，例如之前介绍的<code>MPRelaxSet</code>模块也可以使用，区别就是现在需要提供的是你希望读取的上一步计算的路径。该操作简而言之就是<code>VASP</code>中的续算操作。</p>
-<p>运行上述代码后，可以得到如下<code>static</code>的<code>INCAR</code>：</p>
-<p><img src="/2024/06/11/Learn-VASP-from-pymatgen-5/staticVSrelax.png" alt="staticVSrelax"></p>
-<p>与优化的<code>INCAR</code>对比可以发现，主要是修改了与优化有关的参数：<code>IBRION</code>、<code>NSW</code>；关于<code>ISMEAR</code>参数，<code>VASP</code>提供了比较友好的经验选择方法：</p>
-<blockquote>
-<ul>
-<li><p>If you have no a priori knowledge of your system, for instance, if you do not know whether your system is an insulator, semiconductor or metal then always use Gaussian smearing ISMEAR&#x3D;0 in combination with a small <a class="link" target="_blank" rel="noopener" href="https://www.vasp.at/wiki/index.php/SIGMA">SIGMA <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>&#x3D;0.03-0.05.</p>
-</li>
-<li><p>For semiconductors or insulators, use the tetrahedron method (ISMEAR&#x3D;-5), if the cell is too large (or if you use only a single or two <strong>k</strong> points) use ISMEAR&#x3D;0 in combination with a small <a class="link" target="_blank" rel="noopener" href="https://www.vasp.at/wiki/index.php/SIGMA">SIGMA <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>&#x3D;0.03-0.05.</p>
-</li>
-<li><p>For relaxations <em>in metals</em>, use ISMEAR&#x3D;1 or ISMEAR&#x3D;2 and an appropriate <a class="link" target="_blank" rel="noopener" href="https://www.vasp.at/wiki/index.php/SIGMA">SIGMA <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a> value (the entropy term should be less than 1 meV per atom). For metals a reasonable value is often SIGMA&#x3D; 0.2 (which is the default).</p>
-</li>
-<li><p>For the calculations of the DOS and very accurate total-energy calculations (no relaxation in metals), use the tetrahedron method (ISMEAR&#x3D;-5).</p>
-</li>
-</ul>
-</blockquote>
-
-  <div class="note p-4 mb-4 rounded-small info">
-    <p><strong>上述INCAR的设置为MPStaticSet的默认设置，针对具体性质计算，需要调整的词条参数不同</strong></p>
-
-  </div>
-
-<h4 id="态密度计算"><a href="#态密度计算" class="headerlink" title="态密度计算"></a>态密度计算</h4><p>态密度计算需要先进行一步自洽计算，然后进行一步非自洽计算得到最终的态密度数据。在第一步的自洽计算我们只需要得到电荷文件<code>CHGCAR</code>和<code>CHG</code>就可以了（<code>WAVECAR</code>文件较大，且态密度非自洽计算可以不读<code>WAVECAR</code>），而上一步<code>MPStaticSet</code>默认输出电荷文件（<code>LCHARG = True</code>)，所以自洽计算的参数不用过多调整。下面主要介绍非自洽计算用到的模块。</p>
-<h5 id="调用MPNonSCFSet"><a href="#调用MPNonSCFSet" class="headerlink" title="调用MPNonSCFSet"></a>调用MPNonSCFSet</h5><p>我们可以先看下<code>MPNonSCFSet</code>模块默认生成的<code>INCAR</code>是什么样的：</p>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.sets <span class="keyword">import</span> MPNonSCFSet</span><br><span class="line"></span><br><span class="line">nonscf_dos = MPNonSCFSet.from_prev_calc(prev_calc_dir=<span class="string">&#x27;./static&#x27;</span>, user_potcar_functional=<span class="string">&#x27;PBE_54&#x27;</span>)</span><br><span class="line"></span><br><span class="line">nonscf_dos.write_input(<span class="string">&#x27;./dos&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;DOS_calc is ready!&quot;</span>)</span><br></pre></td></tr></table></figure></div>
-
-<p>运行代码：</p>
-<p><img src="/2024/06/11/Learn-VASP-from-pymatgen-5/dos_default_input.png" alt="dos_default_input"></p>
-<p>默认的<code>INCAR</code>中增加<code>ICHARG</code>词条，当<code>ICHARG≥10</code>时，计算过程中电荷密度不进行自洽更新，<code>CHGCAR</code>和<code>CHG</code>文件内容不变，即非自洽计算。</p>
-<p>态密度计算仅读<code>CHGCAR</code>即可，即只用复制<code>CHGCAR</code>至态密度计算文件夹。</p>
-
-  <div class="note p-4 mb-4 rounded-small info">
-    <p><strong>如果使用<code>MPNonSCFSet</code>的<code>from_prev_calc</code>方法，默认会复制上一步自洽计算的<code>CHGCAR</code>文件到当前文件夹；如果只用<code>MPNonSCFSet</code>，则需要指定结构文件<code>struct</code>，以及自行把<code>CHGCAR</code>复制到当前目录。</strong></p>
-
-  </div>
-
-<h5 id="自定义参数设置"><a href="#自定义参数设置" class="headerlink" title="自定义参数设置"></a>自定义参数设置</h5><p>此外，本小节主要介绍<code>DOS</code>计算，默认的INCAR参数中，部分的设置是不太合理的，或者说不利于后续的数据分析。</p>
-
-  <div class="note p-4 mb-4 rounded-small info">
-    <p><strong>前面提到，<code>VASP</code>对许多词条的值有默认值，如果不在<code>INCAR</code>中覆写，计算采用的就是默认值</strong></p>
-
-  </div>
-
-<ul>
-<li><code>EMIN</code>：态密度能量下区间（默认值：<code>lowest KS-eigenvalue - Δ</code>）</li>
-<li><code>EMAX</code>：态密度能量上区间（默认值：<code>lowest KS-eigenvalue - Δ</code>）</li>
-<li><code>NEDOS</code>：态密度的网格点数（默认值：301）</li>
-<li><code>ISPIN</code>：是否考虑电子自旋</li>
-</ul>
-<p>上述的三个参数根据作图需求进行调整，比如态密度图主要是分析费米能级附近的占据情况，实际计算时，默认的能量区间可能非常大，同时<code>NEDOS</code>的数值是确定的，所以会一定程度降低费米能级附近的精度。因此，如果你只需要费米能级附近的信息，可以在<code>INCAR</code>中指定能量区间，如<code>EMIN=-8</code>、<code>EMAX=8</code>，然后选取适当的<code>NEDOS</code>(推荐2001)，这样的话精度是比较合适的，作图也不会因为<code>NEDOS</code>数量过少而出现锯齿线条。<code>ISPIN</code>本身是控制体系是否考虑自旋，一般认为是与磁性计算有关，但是在态密度计算中，是否考虑自旋影响最后输出的数据是否把自旋向上的轨道与自旋向下的轨道区分开。</p>
-<ul>
-<li><code>LORBIT</code>：决定投影轨道的形式（常用设置为10和11）</li>
-</ul>
-<p><code>LORBIT=10</code>时，态密度投影的轨道只包含s&#x2F;p&#x2F;d&#x2F;f轨道；<code>LORBIT=11</code>时，态密度除了输出总的轨道信息，还会投影到分轨道上，如<code>px</code>、<code>py</code>、<code>pz</code>等。</p>
-<p>总的来说，计算前先确定<code>LORBIT</code>的数值来决定是否需要分轨道的数据，然后再确定<code>ISPIN</code>、<code>EMIN</code>、<code>EMAX</code>、<code>NEDOS</code>的数值来考虑作图需求。</p>
-
-  <div class="note p-4 mb-4 rounded-small info">
-    <p>磁性体系必须打开<code>ISPIN</code></p>
-
-  </div>
-
-<h5 id="KPOINTS文件"><a href="#KPOINTS文件" class="headerlink" title="KPOINTS文件"></a>KPOINTS文件</h5><p><code>MPNonSCFSet</code>模块默认生成的<code>KPOINTS</code>文件中的K点写法是<code>line-mode</code>，该方法一般用于能带结构的计算。因此在态密度计算中，我们可以写常规的K点进行覆盖：</p>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.sets <span class="keyword">import</span> MPNonSCFSet</span><br><span class="line"></span><br><span class="line">kpoints = &#123;</span><br><span class="line">    <span class="string">&quot;length&quot;</span>:<span class="number">100</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">nonscf_dos = MPNonSCFSet.from_prev_calc(</span><br><span class="line">    prev_calc_dir=<span class="string">&#x27;./static&#x27;</span>, </span><br><span class="line">    user_potcar_functional=<span class="string">&#x27;PBE_54&#x27;</span>,</span><br><span class="line">    user_kpoints_settings=kpoints,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">nonscf_dos.write_input(<span class="string">&#x27;./dos&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;DOS_calc is ready!&quot;</span>)</span><br></pre></td></tr></table></figure></div>
-
-
-  <div class="note p-4 mb-4 rounded-small info">
-    <p>态密度计算的K网格要足够大才算的准，在普通结构优化的K点个数2倍以上，大体系算不动可适量降低。</p>
-
-  </div>
-
-<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>态密度计算就介绍到这，各位多多练习~~~~</p>
-<p><em><strong>¡Muchas gracias!</strong></em></p>
-
-        </div>
-
-        
-            <div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
-                <div class="article-copyright-info-container">
-    <ul>
-        <li><strong>标题:</strong> Chap.5  计算小白硬学VASP —— 材料性质计算—&gt;态密度</li>
-        <li><strong>作者:</strong> 炫酷老司机</li>
-        <li><strong>创建于
-                :</strong> 2024-06-11 16:00:00</li>
-        
-            <li>
-                <strong>更新于
-                    :</strong> 2024-06-13 22:27:46
-            </li>
-        
-        <li>
-            <strong>链接:</strong> https://andyhox.github.io/2024/06/11/Learn-VASP-from-pymatgen-5/
-        </li>
-        <li>
-            <strong>
-                版权声明:
-            </strong>
-            
-
-            
-                欢迎个人转载、使用、转贴等，但请获得作者同意且注明出处！
-            
-        </li>
-    </ul>
-</div>
-
-            </div>
-        
-
-        
-            <ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
-                
-                    <li class="tag-item mx-0.5">
-                        <a href="/tags/VASP/">#VASP</a>&nbsp;
-                    </li>
-                
-                    <li class="tag-item mx-0.5">
-                        <a href="/tags/pymatgen/">#pymatgen</a>&nbsp;
-                    </li>
-                
-                    <li class="tag-item mx-0.5">
-                        <a href="/tags/Materials-Project/">#Materials Project</a>&nbsp;
-                    </li>
-                
-            </ul>
-        
-
-        
-
-        
-            <div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
-                
-                    <div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
-                        <a class="prev"
-                        rel="prev"
-                        href="/2024/06/13/Learn-VASP-from-pymatgen-6/"
-                        >
-                            <span class="left arrow-icon flex justify-center items-center">
-                                <i class="fa-solid fa-chevron-left"></i>
-                            </span>
-                            <span class="title flex justify-center items-center">
-                                <span class="post-nav-title-item">Chap.6  计算小白硬学VASP —— 材料性质计算—&gt;态密度分析(1)</span>
-                                <span class="post-nav-item">上一篇</span>
-                            </span>
-                        </a>
-                    </div>
-                
-                
-                    <div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
-                        <a class="next"
-                        rel="next"
-                        href="/2024/06/04/Learn-VASP-from-pymatgen-4/"
-                        >
-                            <span class="title flex justify-center items-center">
-                                <span class="post-nav-title-item">Chap.4  计算小白硬学VASP —— MPRelaxSet用法</span>
-                                <span class="post-nav-item">下一篇</span>
-                            </span>
-                            <span class="right arrow-icon flex justify-center items-center">
-                                <i class="fa-solid fa-chevron-right"></i>
-                            </span>
-                        </a>
-                    </div>
-                
-            </div>
-        
-
-
-        
-    </div>
-
-    
-        <div class="toc-content-container">
-            <div class="post-toc-wrap">
-    <div class="post-toc">
-        <div class="toc-title">此页目录</div>
-        <div class="page-title">Chap.5  计算小白硬学VASP —— 材料性质计算—&gt;态密度</div>
-        <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E8%87%AA%E6%B4%BD%E8%AE%A1%E7%AE%97"><span class="nav-text">简单自洽计算</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%B0%83%E7%94%A8MPStaticSet"><span class="nav-text">调用MPStaticSet</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%80%81%E5%AF%86%E5%BA%A6%E8%AE%A1%E7%AE%97"><span class="nav-text">态密度计算</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%B0%83%E7%94%A8MPNonSCFSet"><span class="nav-text">调用MPNonSCFSet</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%8F%82%E6%95%B0%E8%AE%BE%E7%BD%AE"><span class="nav-text">自定义参数设置</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#KPOINTS%E6%96%87%E4%BB%B6"><span class="nav-text">KPOINTS文件</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol>
-
-    </div>
-</div>
-        </div>
-    
-</div>
-
-
-
-                
-
-            </div>
-
-            
-
-        </div>
-
-        <div class="main-content-footer">
-            <footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
-    <div class="info-container py-3 text-center">
-        
-        <div class="text-center">
-            &copy;
-            
-              <span>2024</span>
-              -
-            
-            2024&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">炫酷老司机</a>
-            
-                
-                <p class="post-count space-x-0.5">
-                    <span>
-                        共 6 篇文章
-                    </span>
-                    
-                        <span>
-                            共 12k 字
-                        </span>
-                    
-                </p>
-            
-        </div>
-        
-            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
-            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
-                
-                    <span id="busuanzi_container_site_uv" class="lg:!block">
-                        <span class="text-sm">访问人数</span>
-                        <span id="busuanzi_value_site_uv"></span>
-                    </span>
-                
-                
-                    <span id="busuanzi_container_site_pv" class="lg:!block">
-                        <span class="text-sm">总访问量</span>
-                        <span id="busuanzi_value_site_pv"></span>
-                    </span>
-                
-            </div>
-        
-        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
-            <span class="lg:block text-sm">由 <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a> 驱动</span>
-            <span class="text-sm lg:block">主题&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.6.2</a></span>
-        </div>
-        
-        
-            <div>
-                博客已运行 <span class="odometer" id="runtime_days" ></span> 天 <span class="odometer" id="runtime_hours"></span> 小时 <span class="odometer" id="runtime_minutes"></span> 分钟 <span class="odometer" id="runtime_seconds"></span> 秒
-            </div>
-        
-        
-            <script data-swup-reload-script>
-                try {
-                    function odometer_init() {
-                    const elements = document.querySelectorAll('.odometer');
-                    elements.forEach(el => {
-                        new Odometer({
-                            el,
-                            format: '( ddd).dd',
-                            duration: 200
-                        });
-                    });
-                    }
-                    odometer_init();
-                } catch (error) {}
-            </script>
-        
-        
-        
-    </div>  
-</footer>
-        </div>
-    </div>
-
-    
-        <div class="post-tools">
-            <div class="post-tools-container">
-    <ul class="article-tools-list">
-        <!-- TOC aside toggle -->
-        
-            <li class="right-bottom-tools page-aside-toggle">
-                <i class="fa-regular fa-outdent"></i>
-            </li>
-        
-
-        <!-- go comment -->
-        
-    </ul>
-</div>
-
-        </div>
-    
-
-    <div class="right-side-tools-container">
-        <div class="side-tools-container">
-    <ul class="hidden-tools-list">
-        <li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
-            <i class="fa-regular fa-magnifying-glass-plus"></i>
-        </li>
-
-        <li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
-            <i class="fa-regular fa-magnifying-glass-minus"></i>
-        </li>
-
-        <li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
-            <i class="fa-regular fa-moon"></i>
-        </li>
-
-        <!-- rss -->
-        
-
-        
-
-        <li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
-            <i class="fa-regular fa-arrow-down"></i>
-        </li>
-    </ul>
-
-    <ul class="visible-tools-list">
-        <li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
-            <i class="fa-regular fa-cog fa-spin"></i>
-        </li>
-        
-            <li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
-                <i class="arrow-up fas fa-arrow-up"></i>
-                <span class="percent"></span>
-            </li>
-        
-        
-    </ul>
-</div>
-
-    </div>
-
-    <div class="image-viewer-container">
-    <img src="">
-</div>
-
-
-    
-        <div class="search-pop-overlay">
-    <div class="popup search-popup">
-        <div class="search-header">
-          <span class="search-input-field-pre">
-            <i class="fa-solid fa-keyboard"></i>
-          </span>
-            <div class="search-input-container">
-                <input autocomplete="off"
-                       autocorrect="off"
-                       autocapitalize="off"
-                       placeholder="搜索..."
-                       spellcheck="false"
-                       type="search"
-                       class="search-input"
-                >
-            </div>
-            <span class="popup-btn-close">
-                <i class="fa-solid fa-times"></i>
-            </span>
-        </div>
-        <div id="search-result">
-            <div id="no-result">
-                <i class="fa-solid fa-spinner fa-spin-pulse fa-5x fa-fw"></i>
-            </div>
-        </div>
-    </div>
-</div>
-
-    
-
-</main>
-
-
-    
-<script src="/js/libs/Swup.min.js"></script>
-
-<script src="/js/libs/SwupSlideTheme.min.js"></script>
-
-<script src="/js/libs/SwupScriptsPlugin.min.js"></script>
-
-<script src="/js/libs/SwupProgressPlugin.min.js"></script>
-
-<script src="/js/libs/SwupScrollPlugin.min.js"></script>
-
-<script src="/js/libs/SwupPreloadPlugin.min.js"></script>
-
-<script>
-    const swup = new Swup({
-        plugins: [
-            new SwupScriptsPlugin({
-                optin: true,
-            }),
-            new SwupProgressPlugin(),
-            new SwupScrollPlugin({
-                offset: 80,
-            }),
-            new SwupSlideTheme({
-                mainElement: ".main-content-body",
-            }),
-            new SwupPreloadPlugin(),
-        ],
-        containers: ["#swup"],
-    });
-</script>
-
-
-
-
-
-
-
-<script src="/js/tools/imageViewer.js" type="module"></script>
-
-<script src="/js/utils.js" type="module"></script>
-
-<script src="/js/main.js" type="module"></script>
-
-<script src="/js/layouts/navbarShrink.js" type="module"></script>
-
-<script src="/js/tools/scrollTopBottom.js" type="module"></script>
-
-<script src="/js/tools/lightDarkSwitch.js" type="module"></script>
-
-<script src="/js/layouts/categoryList.js" type="module"></script>
-
-
-
-    
-<script src="/js/tools/localSearch.js" type="module"></script>
-
-
-
-
-    
-<script src="/js/tools/codeBlock.js" type="module"></script>
-
-
-
-
-
-
-    
-<script src="/js/tools/runtime.js"></script>
-
-    
-<script src="/js/libs/odometer.min.js"></script>
-
-    
-<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
-
-
-
-
   
-<script src="/js/libs/Typed.min.js"></script>
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
 
-  
-<script src="/js/plugins/typed.js" type="module"></script>
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
 
-
-
-
+      const theme = saveToLocal.get('theme')
     
-<script src="/js/libs/mermaid.min.js"></script>
-
-    
-<script src="/js/plugins/mermaid.js"></script>
-
-
-
-
-
-
-
-<div class="post-scripts" data-swup-reload-script>
-    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
         
-<script src="/js/tools/tocToggle.js" type="module"></script>
-
-<script src="/js/layouts/toc.js" type="module"></script>
-
-<script src="/js/plugins/tabs.js" type="module"></script>
-
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
     
-</div>
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":100,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE={title:"Chap.5  计算小白硬学VASP —— 材料性质计算—>态密度",isHighlightShrink:!1,isToc:!0,pageType:"post"}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image:url(/img/background.png)"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.ico" onerror='this.onerror=null,this.src="/img/friend_404.gif"' alt="avatar"></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">21</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">11</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-graduation-cap"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-heart"></i><span> 爱好</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/game/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></li><li><a class="site-page child" href="/ride/"><i class="fa-fw fas fa-bicycle"></i><span> 骑行</span></a></li><li><a class="site-page child" href="/food/"><i class="fa-fw fas fa-utensils"></i><span> 美食</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">AH</span></a><a class="nav-page-title" href="/"><span class="site-name">Chap.5 计算小白硬学VASP —— 材料性质计算—&gt;态密度</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-graduation-cap"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-heart"></i><span> 爱好</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/game/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></li><li><a class="site-page child" href="/ride/"><i class="fa-fw fas fa-bicycle"></i><span> 骑行</span></a></li><li><a class="site-page child" href="/food/"><i class="fa-fw fas fa-utensils"></i><span> 美食</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Chap.5 计算小白硬学VASP —— 材料性质计算—&gt;态密度</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-06-10T16:00:00.000Z" title="发表于 2024-06-11 00:00:00">2024-06-11</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-02-27T13:19:51.213Z" title="更新于 2025-02-27 21:19:51">2025-02-27</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Learn-VASP-from-pymatgen/">Learn VASP from pymatgen</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.6k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>5分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><p><em><strong>¡Hola a todos!</strong></em></p><p>上一章我们主要分享了结构优化的输入文件的生成，以及自定义输入文件参数；本章简单介绍下，对于Bulk模型来说，各类性质计算的输入文章生成，以及参数设置要点。</p><h4 id="简单自洽计算"><a href="#简单自洽计算" class="headerlink" title="简单自洽计算"></a>简单自洽计算</h4><p>性质计算的前提是进行结构优化得到稳定的结构。对于不同的性质计算，计算的步骤往往需要多步进行，例如态密度计算，需要先进行自洽计算得到电荷、波函数文件，然后再进行一步非自洽计算。</p><p>首先介绍下普通的自洽计算，用于得到电荷、波函数文件。</p><h5 id="调用MPStaticSet"><a href="#调用MPStaticSet" class="headerlink" title="调用MPStaticSet"></a>调用MPStaticSet</h5><p>自洽计算的输入文件生成可以调用<code>MPStaticSet</code>模块，以<code>Si</code>为例，默认生成输入文件如下：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.sets <span class="keyword">import</span> MPStaticSet</span><br><span class="line"></span><br><span class="line">static = MPStaticSet.from_prev_calc(</span><br><span class="line">    <span class="comment"># 上一步优化的文件夹</span></span><br><span class="line">    prev_calc_dir=<span class="string">&#x27;./relax&#x27;</span>,</span><br><span class="line">    user_potcar_functional=<span class="string">&#x27;PBE_54&#x27;</span></span><br><span class="line">	)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">static.write_input(<span class="string">&#x27;./static&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;static_calc is ready!&quot;</span>)</span><br></pre></td></tr></table></figure><p>从用法上来说<code>MPStaticSet</code>的用法跟<code>MPRelaxSet</code>类似。但是这里细心的可以发现，这里老司机并没有提供结构文件，而是用了<code>from_prev_calc</code>方法，顾名思义就是读取前一步计算的文件进行计算，这里读取的就是之前优化计算的文件夹。</p><p>该方法通用于所有<code>set</code>类的模块，例如之前介绍的<code>MPRelaxSet</code>模块也可以使用，区别就是现在需要提供的是你希望读取的上一步计算的路径。该操作简而言之就是<code>VASP</code>中的续算操作。</p><p>运行上述代码后，可以得到如下<code>static</code>的<code>INCAR</code>：</p><p><img src="/2024/06/11/Learn-VASP-from-pymatgen-5/staticVSrelax.png" alt="staticVSrelax"></p><p>与优化的<code>INCAR</code>对比可以发现，主要是修改了与优化有关的参数：<code>IBRION</code>、<code>NSW</code>；关于<code>ISMEAR</code>参数，<code>VASP</code>提供了比较友好的经验选择方法：</p><blockquote><ul><li><p>If you have no a priori knowledge of your system, for instance, if you do not know whether your system is an insulator, semiconductor or metal then always use Gaussian smearing ISMEAR&#x3D;0 in combination with a small <a target="_blank" rel="noopener" href="https://www.vasp.at/wiki/index.php/SIGMA">SIGMA</a>&#x3D;0.03-0.05.</p></li><li><p>For semiconductors or insulators, use the tetrahedron method (ISMEAR&#x3D;-5), if the cell is too large (or if you use only a single or two <strong>k</strong> points) use ISMEAR&#x3D;0 in combination with a small <a target="_blank" rel="noopener" href="https://www.vasp.at/wiki/index.php/SIGMA">SIGMA</a>&#x3D;0.03-0.05.</p></li><li><p>For relaxations <em>in metals</em>, use ISMEAR&#x3D;1 or ISMEAR&#x3D;2 and an appropriate <a target="_blank" rel="noopener" href="https://www.vasp.at/wiki/index.php/SIGMA">SIGMA</a> value (the entropy term should be less than 1 meV per atom). For metals a reasonable value is often SIGMA&#x3D; 0.2 (which is the default).</p></li><li><p>For the calculations of the DOS and very accurate total-energy calculations (no relaxation in metals), use the tetrahedron method (ISMEAR&#x3D;-5).</p></li></ul></blockquote><p><strong>上述INCAR的设置为MPStaticSet的默认设置，针对具体性质计算，需要调整的词条参数不同</strong></p><h4 id="态密度计算"><a href="#态密度计算" class="headerlink" title="态密度计算"></a>态密度计算</h4><p>态密度计算需要先进行一步自洽计算，然后进行一步非自洽计算得到最终的态密度数据。在第一步的自洽计算我们只需要得到电荷文件<code>CHGCAR</code>和<code>CHG</code>就可以了（<code>WAVECAR</code>文件较大，且态密度非自洽计算可以不读<code>WAVECAR</code>），而上一步<code>MPStaticSet</code>默认输出电荷文件（<code>LCHARG = True</code>)，所以自洽计算的参数不用过多调整。下面主要介绍非自洽计算用到的模块。</p><h5 id="调用MPNonSCFSet"><a href="#调用MPNonSCFSet" class="headerlink" title="调用MPNonSCFSet"></a>调用MPNonSCFSet</h5><p>我们可以先看下<code>MPNonSCFSet</code>模块默认生成的<code>INCAR</code>是什么样的：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.sets <span class="keyword">import</span> MPNonSCFSet</span><br><span class="line"></span><br><span class="line">nonscf_dos = MPNonSCFSet.from_prev_calc(prev_calc_dir=<span class="string">&#x27;./static&#x27;</span>, user_potcar_functional=<span class="string">&#x27;PBE_54&#x27;</span>)</span><br><span class="line"></span><br><span class="line">nonscf_dos.write_input(<span class="string">&#x27;./dos&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;DOS_calc is ready!&quot;</span>)</span><br></pre></td></tr></table></figure><p>运行代码：</p><p><img src="/2024/06/11/Learn-VASP-from-pymatgen-5/dos_default_input.png" alt="dos_default_input"></p><p>默认的<code>INCAR</code>中增加<code>ICHARG</code>词条，当<code>ICHARG≥10</code>时，计算过程中电荷密度不进行自洽更新，<code>CHGCAR</code>和<code>CHG</code>文件内容不变，即非自洽计算。</p><p>态密度计算仅读<code>CHGCAR</code>即可，即只用复制<code>CHGCAR</code>至态密度计算文件夹。</p><p><strong>如果使用<code>MPNonSCFSet</code>的<code>from_prev_calc</code>方法，默认会复制上一步自洽计算的<code>CHGCAR</code>文件到当前文件夹；如果只用<code>MPNonSCFSet</code>，则需要指定结构文件<code>struct</code>，以及自行把<code>CHGCAR</code>复制到当前目录。</strong></p><h5 id="自定义参数设置"><a href="#自定义参数设置" class="headerlink" title="自定义参数设置"></a>自定义参数设置</h5><p>此外，本小节主要介绍<code>DOS</code>计算，默认的INCAR参数中，部分的设置是不太合理的，或者说不利于后续的数据分析。</p><p><strong>前面提到，<code>VASP</code>对许多词条的值有默认值，如果不在<code>INCAR</code>中覆写，计算采用的就是默认值</strong></p><ul><li><code>EMIN</code>：态密度能量下区间（默认值：<code>lowest KS-eigenvalue - Δ</code>）</li><li><code>EMAX</code>：态密度能量上区间（默认值：<code>lowest KS-eigenvalue - Δ</code>）</li><li><code>NEDOS</code>：态密度的网格点数（默认值：301）</li><li><code>ISPIN</code>：是否考虑电子自旋</li></ul><p>上述的三个参数根据作图需求进行调整，比如态密度图主要是分析费米能级附近的占据情况，实际计算时，默认的能量区间可能非常大，同时<code>NEDOS</code>的数值是确定的，所以会一定程度降低费米能级附近的精度。因此，如果你只需要费米能级附近的信息，可以在<code>INCAR</code>中指定能量区间，如<code>EMIN=-8</code>、<code>EMAX=8</code>，然后选取适当的<code>NEDOS</code>(推荐2001)，这样的话精度是比较合适的，作图也不会因为<code>NEDOS</code>数量过少而出现锯齿线条。<code>ISPIN</code>本身是控制体系是否考虑自旋，一般认为是与磁性计算有关，但是在态密度计算中，是否考虑自旋影响最后输出的数据是否把自旋向上的轨道与自旋向下的轨道区分开。</p><ul><li><code>LORBIT</code>：决定投影轨道的形式（常用设置为10和11）</li></ul><p><code>LORBIT=10</code>时，态密度投影的轨道只包含s&#x2F;p&#x2F;d&#x2F;f轨道；<code>LORBIT=11</code>时，态密度除了输出总的轨道信息，还会投影到分轨道上，如<code>px</code>、<code>py</code>、<code>pz</code>等。</p><p>总的来说，计算前先确定<code>LORBIT</code>的数值来决定是否需要分轨道的数据，然后再确定<code>ISPIN</code>、<code>EMIN</code>、<code>EMAX</code>、<code>NEDOS</code>的数值来考虑作图需求。</p><mark class="hl-label blue">磁性体系必须打开`ISPIN`</mark><h5 id="KPOINTS文件"><a href="#KPOINTS文件" class="headerlink" title="KPOINTS文件"></a>KPOINTS文件</h5><p><code>MPNonSCFSet</code>模块默认生成的<code>KPOINTS</code>文件中的K点写法是<code>line-mode</code>，该方法一般用于能带结构的计算。因此在态密度计算中，我们可以写常规的K点进行覆盖：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.sets <span class="keyword">import</span> MPNonSCFSet</span><br><span class="line"></span><br><span class="line">kpoints = &#123;</span><br><span class="line">    <span class="string">&quot;length&quot;</span>:<span class="number">100</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">nonscf_dos = MPNonSCFSet.from_prev_calc(</span><br><span class="line">    prev_calc_dir=<span class="string">&#x27;./static&#x27;</span>, </span><br><span class="line">    user_potcar_functional=<span class="string">&#x27;PBE_54&#x27;</span>,</span><br><span class="line">    user_kpoints_settings=kpoints,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">nonscf_dos.write_input(<span class="string">&#x27;./dos&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;DOS_calc is ready!&quot;</span>)</span><br></pre></td></tr></table></figure><p>态密度计算的K网格要足够大才算的准，在普通结构优化的K点个数2倍以上，大体系算不动可适量降低。</p><h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>态密度计算就介绍到这，各位多多练习~~~~</p><p><em><strong>¡Muchas gracias!</strong></em></p></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://www.withox.cn">炫酷老司机</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://www.withox.cn/2024/06/11/Learn-VASP-from-pymatgen-5/">https://www.withox.cn/2024/06/11/Learn-VASP-from-pymatgen-5/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://www.withox.cn" target="_blank">AH</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/VASP/">VASP</a><a class="post-meta__tags" href="/tags/pymatgen/">pymatgen</a></div><div class="post-share"><div class="social-share" data-image="/images/wallhaven-gpkd77_3840x2160.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload='this.media="all"'><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2024/06/04/Learn-VASP-from-pymatgen-4/" title="Chap.4  计算小白硬学VASP —— MPRelaxSet用法"><img class="cover" src="/images/wallhaven-gpkd77_3840x2160.png" onerror='onerror=null,src="/img/404.jpg"' alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Chap.4 计算小白硬学VASP —— MPRelaxSet用法</div></div><div class="info-2"><div class="info-item-1">¡Hola a todos! VASP计算运行流程简单示意图： flowchart LR input vasp(vasp) converged(converged) raw_data(raw_data) subgraph prep_input 1([INCAR])-->input 2([KPOINTS])-->input 3([POSCAR])-->input 4([POTCAR])-->input 5([sub_job.script])-->input end input-->vasp subgraph vasp_black_box vasp---relax([relax])-->converged vasp---scf_calc([scf_calc])-->converged vasp---nonscf_calc([nonscf_calc])-->converged ...</div></div></div></a><a class="pagination-related" href="/2024/06/13/Learn-VASP-from-pymatgen-6/" title="Chap.6  计算小白硬学VASP —— 材料性质计算—&gt;态密度分析(1)"><img class="cover" src="/images/wallhaven-gpkd77_3840x2160.png" onerror='onerror=null,src="/img/404.jpg"' alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Chap.6 计算小白硬学VASP —— 材料性质计算—>态密度分析(1)</div></div><div class="info-2"><div class="info-item-1">¡Hola a todos! 本章介绍如何使用pymatgen对态密度结果进行分析。 案例1：Si态密度先从一个简单的案例入手，了解下pymatgen怎么从VASP的计算结构中分析态密度数据。 下面是生成从结构优化到态密度计算的完整代码： 参考代码 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748from pymatgen.io.vasp.sets import MPRelaxSet, MPStaticSet, MPNonSCFSetfrom mp_api.client import MPResterapi_key = &quot;your key&quot;with MPRester(api_key) as mpr: struct = mpr.get_structure_by_material_id(&quot;mp-149&quot;) struct.to(filename=&quot;./SiPOSCAR&quot;) #...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2024/05/29/Learn-VASP-from-pymatgen-1/" title="Chap.1  计算小白硬学VASP —— 前言"><img class="cover" src="/images/wallhaven-gpkd77_3840x2160.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-05-29</div><div class="info-item-2">Chap.1 计算小白硬学VASP —— 前言</div></div><div class="info-2"><div class="info-item-1">¡Hola a todos! 我是炫酷老司机，欢迎来到《计算小白硬学VASP》系列。 本系列不涉及DFT理论！不涉及DFT理论！不涉及DFT理论！主要目的是通过实例学习如何让VASP跑起来，不需要记INCAR, POTCAR, KPOINTS, POSCAR, CONTCAR等各种文件。 配合上好大哥——pymatgen，实现各种计算类型输入文件生成脚本化，计算流程以及计算结果处理自动化，尽可能解放双手，告别vim。 本人非大佬，普通DFT民工一名，不涉及教学，只分享经验，欢迎指正，不喜勿喷，共同进步。 ¡Muchas gracias!</div></div></div></a><a class="pagination-related" href="/2024/06/28/Learn-VASP-from-pymatgen-10/" title="Chap.10  计算小白硬学VASP —— 材料性质计算—&gt;能带态密度图汇总"><img class="cover" src="/images/wallhaven-gpkd77_3840x2160.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-06-28</div><div class="info-item-2">Chap.10 计算小白硬学VASP —— 材料性质计算—&gt;能带态密度图汇总</div></div><div class="info-2"><div class="info-item-1">¡Hola a todos! 本章介绍如何把能带态密度画在一起，也就是常见的能带图在左，态密度图垂直在右分布。这里需要调用的模块为BSDOSPlotter()。 代码如下： 123456789101112131415from pymatgen.electronic_structure.plotter import BSDOSPlotterfrom pymatgen.io.vasp.outputs import Vasprun# 读取dos计算vasprun.xml文件dos_vasprun = Vasprun(&quot;../ZrNiSn_primitive/dos/vasprun.xml&quot;)dos = dos_vasprun.complete_dos# 读取band计算vasprun.xml文件band_vasprun = Vasprun(&quot;../ZrNiSn_primitive/band/vasprun.xml&quot;)band = band_vasprun.get_band_structure(line_mode=True)#...</div></div></div></a><a class="pagination-related" href="/2024/08/07/Learn-VASP-from-pymatgen-13/" title="Chap.13  计算小白硬学VASP —— 自动搜索表面吸附位点并生成吸附结构"><img class="cover" src="/images/wallhaven-gpkd77_3840x2160.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-08-07</div><div class="info-item-2">Chap.13 计算小白硬学VASP —— 自动搜索表面吸附位点并生成吸附结构</div></div><div class="info-2"><div class="info-item-1">¡Hola a todos! 本章介绍如何在slab模型表面自动搜索吸附位点并生成吸附模型。 AdsorbateSiteFinder搜索吸附位点AdsorbateSiteFinder模块主要用于搜索slab模型表面潜在的吸附位点，主要分为三大类：ontop、bridge、hollow。首先导入AdsorbateSiteFinder模块： 1from pymatgen.analysis.adsorption import AdsorbateSiteFinder slab模型以Si(111)面为例，关于如何自动切slab模型可以参考往期内容。 模型： 12345678910from pymatgen.analysis.adsorption import AdsorbateSiteFinderfrom pymatgen.core.structure import Structure# 读取结构Si_111 = Structure.from_file(&quot;./Si_111.cif&quot;)# 实例化asf = AdsorbateSiteFinder(Si_111)#...</div></div></div></a><a class="pagination-related" href="/2024/08/05/Learn-VASP-from-pymatgen-11/" title="Chap.11  计算小白硬学VASP —— 构建slab模型"><img class="cover" src="/images/wallhaven-gpkd77_3840x2160.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-08-05</div><div class="info-item-2">Chap.11 计算小白硬学VASP —— 构建slab模型</div></div><div class="info-2"><div class="info-item-1">¡Hola a todos! 本章介绍如何构建slab模型。 首先切面用到的miller index针对的是bulk模型的惯用胞（conventional cell）而不是原胞（primtive cell），这与之前计算能带是刚好相反的。 所以，在进行切面操作时，要确保你的bulk模型是惯用胞，可以用pymatgen的功能来帮助实现。 直接从Materials project下载结构 如果是从MP上下载结构，我们需要把conventional_cell = True打开： 1234567from mp_api.client import MPResterapi_key = &quot;your key&quot;with MPRester(api_key) as mpr: Si = mpr.get_structure_by_material_id(&quot;mp-149&quot;,conventional_unit_cell=True) ...</div></div></div></a><a class="pagination-related" href="/2024/08/09/Learn-VASP-from-pymatgen-14/" title="Chap.14  计算小白硬学VASP —— 各类结构“Transformation”使用说明（一）"><img class="cover" src="/images/wallhaven-gpkd77_3840x2160.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-08-09</div><div class="info-item-2">Chap.14 计算小白硬学VASP —— 各类结构“Transformation”使用说明（一）</div></div><div class="info-2"><div class="info-item-1">¡Hola a todos! 本章开始，主要介绍pymatgen中standard_transformations中各类Transformation的使用说明。 AutoOxiStateDecorationTransformation该类主要是自动平衡结构中的价态信息，以LiFePO4结构为例，初始结构信息如下： 1234from pymatgen.core.structure import StructureLFP = Structure.from_file(&quot;./LiFePO4.vasp&quot;)print(LFP) 运行代码： 123456789101112131415161718192021222324252627282930313233343536Full Formula (Li4 Fe4 P4 O16)Reduced Formula: LiFePO4abc : 4.654917 5.970755 10.236196angles: 90.000000 90.000000 90.000000pbc : True ...</div></div></div></a><a class="pagination-related" href="/2024/08/06/Learn-VASP-from-pymatgen-12/" title="Chap.12  计算小白硬学VASP —— 构建异质结模型"><img class="cover" src="/images/wallhaven-gpkd77_3840x2160.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-08-06</div><div class="info-item-2">Chap.12 计算小白硬学VASP —— 构建异质结模型</div></div><div class="info-2"><div class="info-item-1">¡Hola a todos! 本章介绍如何自动构建异质结模型。 CoherentInterfaceBuilder &amp; ZSLGeneratorpymatgen中自动构建异质结模型需要调用CoherentInterfaceBuilder和ZSLGenerator。其中前者是用于生成interfaces，而后者主要是用于定义晶面的匹配度。导入方法为： 12from pymatgen.analysis.interfaces.coherent_interfaces import CoherentInterfaceBuilderfrom pymatgen.analysis.interfaces.zsl import ZSLGenerator 首先介绍ZSLGenerator，原理见：Lattice match: An application to...</div></div></div></a></div></div><hr class="custom-hr"><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="disqus_thread"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.ico" onerror='this.onerror=null,this.src="/img/friend_404.gif"' alt="avatar"></div><div class="author-info-name">炫酷老司机</div><div class="author-info-description">因为太懒，所以懒得写</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">21</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">11</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><a id="card-info-btn"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AE%80%E5%8D%95%E8%87%AA%E6%B4%BD%E8%AE%A1%E7%AE%97"><span class="toc-number">1.</span> <span class="toc-text">简单自洽计算</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%B0%83%E7%94%A8MPStaticSet"><span class="toc-number">1.1.</span> <span class="toc-text">调用MPStaticSet</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%80%81%E5%AF%86%E5%BA%A6%E8%AE%A1%E7%AE%97"><span class="toc-number">2.</span> <span class="toc-text">态密度计算</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%B0%83%E7%94%A8MPNonSCFSet"><span class="toc-number">2.1.</span> <span class="toc-text">调用MPNonSCFSet</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%8F%82%E6%95%B0%E8%AE%BE%E7%BD%AE"><span class="toc-number">2.2.</span> <span class="toc-text">自定义参数设置</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#KPOINTS%E6%96%87%E4%BB%B6"><span class="toc-number">2.3.</span> <span class="toc-text">KPOINTS文件</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/02/28/FireWorks-intro/" title="FireWorks——材料计算工作流的归属？"><img src="/images/imgtop.png" onerror='this.onerror=null,this.src="/img/404.jpg"' alt="FireWorks——材料计算工作流的归属？"></a><div class="content"><a class="title" href="/2025/02/28/FireWorks-intro/" title="FireWorks——材料计算工作流的归属？">FireWorks——材料计算工作流的归属？</a><time datetime="2025-02-28T09:49:13.000Z" title="发表于 2025-02-28 17:49:13">2025-02-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/11/10/Atomate2-3/" title="计算工作流——Atomate2自定义工作流"><img src="/images/toolkit.png" onerror='this.onerror=null,this.src="/img/404.jpg"' alt="计算工作流——Atomate2自定义工作流"></a><div class="content"><a class="title" href="/2024/11/10/Atomate2-3/" title="计算工作流——Atomate2自定义工作流">计算工作流——Atomate2自定义工作流</a><time datetime="2024-11-09T16:00:00.000Z" title="发表于 2024-11-10 00:00:00">2024-11-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/11/09/Atomate2-2/" title="计算工作流——Atomate2基本设置"><img src="/images/toolkit.png" onerror='this.onerror=null,this.src="/img/404.jpg"' alt="计算工作流——Atomate2基本设置"></a><div class="content"><a class="title" href="/2024/11/09/Atomate2-2/" title="计算工作流——Atomate2基本设置">计算工作流——Atomate2基本设置</a><time datetime="2024-11-08T16:00:00.000Z" title="发表于 2024-11-09 00:00:00">2024-11-09</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/11/08/Atomate2-1/" title="计算工作流——初识Atomate2"><img src="/images/toolkit.png" onerror='this.onerror=null,this.src="/img/404.jpg"' alt="计算工作流——初识Atomate2"></a><div class="content"><a class="title" href="/2024/11/08/Atomate2-1/" title="计算工作流——初识Atomate2">计算工作流——初识Atomate2</a><time datetime="2024-11-07T16:00:00.000Z" title="发表于 2024-11-08 00:00:00">2024-11-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/08/19/Learn-VASP-from-pymatgen-16/" title="Chap.16  计算小白硬学VASP —— 各类结构“Transformation”使用说明（三）"><img src="/images/wallhaven-gpkd77_3840x2160.png" onerror='this.onerror=null,this.src="/img/404.jpg"' alt="Chap.16  计算小白硬学VASP —— 各类结构“Transformation”使用说明（三）"></a><div class="content"><a class="title" href="/2024/08/19/Learn-VASP-from-pymatgen-16/" title="Chap.16  计算小白硬学VASP —— 各类结构“Transformation”使用说明（三）">Chap.16 计算小白硬学VASP —— 各类结构“Transformation”使用说明（三）</a><time datetime="2024-08-18T16:00:00.000Z" title="发表于 2024-08-19 00:00:00">2024-08-19</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2024 - 2025 By 炫酷老司机</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.3</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
 
+  const disqusReset = conf => {
+    window.DISQUS && window.DISQUS.reset({
+      reload: true,
+      config: conf
+    })
+  }
 
-</body>
-</html>
+  const loadDisqus = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyDisqus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    window.disqus_identifier = isShuoshuo ? path : '/2024/06/11/Learn-VASP-from-pymatgen-5/'
+    window.disqus_url = isShuoshuo ? location.origin + path : 'https://www.withox.cn/2024/06/11/Learn-VASP-from-pymatgen-5/'
+
+    const disqus_config = function () {
+      this.page.url = disqus_url
+      this.page.identifier = disqus_identifier
+      this.page.title = 'Chap.5  计算小白硬学VASP —— 材料性质计算—>态密度'
+    }
+
+    if (window.DISQUS) disqusReset(disqus_config)
+    else {
+      const script = document.createElement('script')
+      script.src = 'https://withox.disqus.com/embed.js'
+      script.setAttribute('data-timestamp', +new Date())
+      document.head.appendChild(script)
+    }
+
+    btf.addGlobalFn('themeChange', () => disqusReset(disqus_config), 'disqus')
+  }
+
+  const getCount = async() => {
+    try {
+      const eleGroup = document.querySelector('#post-meta .disqus-comment-count')
+      if (!eleGroup) return
+      const cleanedLinks = eleGroup.href.replace(/#post-comment$/, '')
+
+      const res = await fetch(`https://disqus.com/api/3.0/threads/set.json?forum=withox&api_key=DWyqGL5cMyR3GQM0HJ9geFGLm1fXauiVcqcbmKnV6F73VtpmV4M0m0hiRDS1v82w&thread:link=${cleanedLinks}`,{
+        method: 'GET'
+      })
+      const result = await res.json()
+
+      const count = result.response.length ? result.response[0].posts : 0
+      eleGroup.textContent = count
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Disqus' === 'Disqus'
+      ? window.shuoshuoComment = { loadComment: loadDisqus }
+      : window.loadOtherComment = loadDisqus
+    return
+  }
+
+  if ('Disqus' === 'Disqus' || !false) {
+    if (false) btf.loadComment(document.getElementById('disqus_thread'), loadDisqus)
+    else {
+      loadDisqus()
+      
+    }
+  } else {
+    window.loadOtherComment = loadDisqus
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span> 数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"></div></div><hr><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

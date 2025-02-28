@@ -1,0 +1,216 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>计算工作流——初识Atomate2 | AH</title><meta name="author" content="炫酷老司机,andyhoo0716@gmail.com"><meta name="copyright" content="炫酷老司机"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Atomte2系列教程"><meta property="og:type" content="article"><meta property="og:title" content="计算工作流——初识Atomate2"><meta property="og:url" content="https://www.withox.cn/2024/11/08/Atomate2-1/index.html"><meta property="og:site_name" content="AH"><meta property="og:description" content="Atomte2系列教程"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://www.withox.cn/images/toolkit.png"><meta property="article:published_time" content="2024-11-07T16:00:00.000Z"><meta property="article:modified_time" content="2025-02-27T13:19:51.139Z"><meta property="article:author" content="炫酷老司机"><meta property="article:tag" content="VASP"><meta property="article:tag" content="Atomate2"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://www.withox.cn/images/toolkit.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "计算工作流——初识Atomate2",
+  "url": "https://www.withox.cn/2024/11/08/Atomate2-1/",
+  "image": "https://www.withox.cn/images/toolkit.png",
+  "datePublished": "2024-11-07T16:00:00.000Z",
+  "dateModified": "2025-02-27T13:19:51.139Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "炫酷老司机",
+      "url": "https://www.withox.cn/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.ico"><link rel="canonical" href="https://www.withox.cn/2024/11/08/Atomate2-1/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"><link rel="preconnect" href="//busuanzi.ibruce.info"><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>(() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":100,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE={title:"计算工作流——初识Atomate2",isHighlightShrink:!1,isToc:!1,pageType:"post"}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image:url(/img/background.png)"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.ico" onerror='this.onerror=null,this.src="/img/friend_404.gif"' alt="avatar"></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">21</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">11</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-graduation-cap"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-heart"></i><span> 爱好</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/game/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></li><li><a class="site-page child" href="/ride/"><i class="fa-fw fas fa-bicycle"></i><span> 骑行</span></a></li><li><a class="site-page child" href="/food/"><i class="fa-fw fas fa-utensils"></i><span> 美食</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">AH</span></a><a class="nav-page-title" href="/"><span class="site-name">计算工作流——初识Atomate2</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-graduation-cap"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-heart"></i><span> 爱好</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/game/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></li><li><a class="site-page child" href="/ride/"><i class="fa-fw fas fa-bicycle"></i><span> 骑行</span></a></li><li><a class="site-page child" href="/food/"><i class="fa-fw fas fa-utensils"></i><span> 美食</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">计算工作流——初识Atomate2</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-11-07T16:00:00.000Z" title="发表于 2024-11-08 00:00:00">2024-11-08</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-02-27T13:19:51.139Z" title="更新于 2025-02-27 21:19:51">2025-02-27</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Atomate2/">Atomate2</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">952</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>3分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><p><code>Atomate2</code> ​是一款开源可用来处理复杂庞大计算任务的软件包，开发团队也是大名鼎鼎的劳伦斯伯克利国家实验室的研究人员，耳熟能详的 <code>pymatgen</code>​、<code>Materials Project</code>​、<code>FireWorks</code> ​等也是出自该团队之手。</p><p><code>Atomate2</code> ​环境配置可参考<a target="_blank" rel="noopener" href="https://materialsproject.github.io/atomate2/user/install.html">官网</a>进行。</p><p>在此之前，强烈建议先了解学习一下 <code>pymatgen</code> ​的用法！老司机之前也出过相关介绍。如果在此之前有了解过或使用过 <code>pymatgen</code> ​的朋友，那么 <code>Atomate2</code> ​使用起来应该会更加容易上手，而且用习惯之后，发现 <code>Atomate2</code> ​用起来更加顺手。下面先贴一个官网上的例子：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> atomate2.vasp.jobs.core <span class="keyword">import</span> RelaxMaker</span><br><span class="line"><span class="keyword">from</span> jobflow.managers.local <span class="keyword">import</span> run_locally</span><br><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"></span><br><span class="line">si_structure = Structure(</span><br><span class="line">    lattice=[[<span class="number">0</span>, <span class="number">2.73</span>, <span class="number">2.73</span>], [<span class="number">2.73</span>, <span class="number">0</span>, <span class="number">2.73</span>], [<span class="number">2.73</span>, <span class="number">2.73</span>, <span class="number">0</span>]],</span><br><span class="line">    species=[<span class="string">&quot;Si&quot;</span>, <span class="string">&quot;Si&quot;</span>],</span><br><span class="line">    coords=[[<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>], [<span class="number">0.25</span>, <span class="number">0.25</span>, <span class="number">0.25</span>]],</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">relax_job = RelaxMaker().make(si_structure)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">run_locally(relax_job, create_folders=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure><p>这段代码很简单，意思是优化 <code>Si</code> ​单质结构，整段代码又三部分组成：</p><ul><li>定义结构</li></ul><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">si_structure = Structure(</span><br><span class="line">    lattice=[[<span class="number">0</span>, <span class="number">2.73</span>, <span class="number">2.73</span>], [<span class="number">2.73</span>, <span class="number">0</span>, <span class="number">2.73</span>], [<span class="number">2.73</span>, <span class="number">2.73</span>, <span class="number">0</span>]],</span><br><span class="line">    species=[<span class="string">&quot;Si&quot;</span>, <span class="string">&quot;Si&quot;</span>],</span><br><span class="line">    coords=[[<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>], [<span class="number">0.25</span>, <span class="number">0.25</span>, <span class="number">0.25</span>]],</span><br><span class="line">)</span><br></pre></td></tr></table></figure><ul><li>指定任务&#x2F;工作流</li></ul><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">relax_job = RelaxMaker().make(si_structure)</span><br></pre></td></tr></table></figure><ul><li>运行</li></ul><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">run_locally(relax_job, create_folders=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure><p>有人会问，如果只用 <code>pymatgen</code> ​能不能实现同样的功能，答案是肯定的：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.sets <span class="keyword">import</span> MPRelaxSet</span><br><span class="line"><span class="keyword">from</span> pymatgen.core.structure <span class="keyword">import</span> Structure</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义结构</span></span><br><span class="line">si_structure = Structure(</span><br><span class="line">    lattice=[[<span class="number">0</span>, <span class="number">2.73</span>, <span class="number">2.73</span>], [<span class="number">2.73</span>, <span class="number">0</span>, <span class="number">2.73</span>], [<span class="number">2.73</span>, <span class="number">2.73</span>, <span class="number">0</span>]],</span><br><span class="line">    species=[<span class="string">&quot;Si&quot;</span>, <span class="string">&quot;Si&quot;</span>],</span><br><span class="line">    coords=[[<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>], [<span class="number">0.25</span>, <span class="number">0.25</span>, <span class="number">0.25</span>]],</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">#生成输入文件</span></span><br><span class="line">relax_set = MPRelaxSet(si_structure)</span><br><span class="line">relax_set.write_input(<span class="string">&#x27;./&#x27;</span>)</span><br></pre></td></tr></table></figure><p>相比于 <code>Atomate2</code> ​的代码，如果仅仅从单个的计算任务来说，<code>pymatgen</code> ​差别不大，都是读结构，进行单次计算。</p><p>但是对于多步计算，如多步优化，能带态密度等计算，<code>pymatgen</code> ​该如何实现，一般来说，我们需要把每一步的计算输入相关的代码都写好，比如计算 <code>Si</code> ​的能带：</p><ul><li>结构优化</li></ul><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">relax_set = MPRelaxSet(si_structure)</span><br><span class="line">relax_set.write_input(<span class="string">&#x27;relax&#x27;</span>)</span><br></pre></td></tr></table></figure><p>运行 <code>vasp</code> ​计算</p><ul><li>静态计算</li></ul><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 读取优化的结果</span></span><br><span class="line">static_set = MPStaticSet.from_prev_calc(prev_dir=<span class="string">&#x27;relax&#x27;</span>)</span><br><span class="line">static_set.write_input(<span class="string">&#x27;static&#x27;</span>)</span><br></pre></td></tr></table></figure><p>运行 <code>vasp</code> ​计算</p><ul><li>能带计算</li></ul><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 读取静态计算的结果</span></span><br><span class="line">nonscf_set = MPNonScfSet.from_prev_calc(prev_dir=<span class="string">&#x27;static&#x27;</span>)</span><br><span class="line">nonscf_set.write_input(<span class="string">&#x27;band&#x27;</span>)</span><br></pre></td></tr></table></figure><p>运行 <code>vasp</code> ​计算</p><p>只使用 <code>pymatgen</code>​，从提交任务的次数来说，需要提交三次 <code>vasp</code> ​任务，而且整个计算过程是中断的，每一次计算都需要人力去手动提交，比较麻烦。而且如果你使用的是公用集群，且恰好集群用的人比较多，计算资源比较紧张，那么你很难保证上一步计算完成后，手动提交的下一步任务能马上开始计算，可能要排很久的队，这样一来，计算周期就不可控的变长了。</p><p>如果要使用 <code>Atomate2</code> ​来完成上述计算任务的话，代码会非常简单明了：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> atomate2.vasp.flows.core <span class="keyword">import</span> RelaxBandStructureMaker</span><br><span class="line"><span class="keyword">from</span> jobflow.managers.local <span class="keyword">import</span> run_locally</span><br><span class="line"><span class="keyword">from</span> pymatgen.core <span class="keyword">import</span> Structure</span><br><span class="line"></span><br><span class="line">si_structure = Structure(</span><br><span class="line">    lattice=[[<span class="number">0</span>, <span class="number">2.73</span>, <span class="number">2.73</span>], [<span class="number">2.73</span>, <span class="number">0</span>, <span class="number">2.73</span>], [<span class="number">2.73</span>, <span class="number">2.73</span>, <span class="number">0</span>]],</span><br><span class="line">    species=[<span class="string">&quot;Si&quot;</span>, <span class="string">&quot;Si&quot;</span>],</span><br><span class="line">    coords=[[<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>], [<span class="number">0.25</span>, <span class="number">0.25</span>, <span class="number">0.25</span>]],</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">bandstructure_flow = RelaxBandStructureMaker().make(si_structure)</span><br><span class="line"></span><br><span class="line">run_locally(bandstructure_flow, create_folders=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure><p>上述代码省略了可自定义的 <code>INCAR</code>​、<code>KPOINTS</code> ​等参数设置。</p><p>有 <code>pymatgen</code> ​代码对比，相当于 <code>bandstructure_flow = RelaxBandStructureMaker().make(si_structure)</code> ​这一行代码包含了 <code>pymatgen</code> ​三个分步计算过程，从代码的结构上看更加的简洁易懂，而且最关键的是自动控制任务的进行，只需要提交一次任务即可。相当于把单个独立的子任务串联了起来，这便是“工作流”了。</p><p>后面会逐步来介绍如何使用 <code>Atomate2</code> ​来调用&#x2F;自定义工作流来高效进行计算。</p><p>‍</p></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://www.withox.cn">炫酷老司机</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://www.withox.cn/2024/11/08/Atomate2-1/">https://www.withox.cn/2024/11/08/Atomate2-1/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://www.withox.cn" target="_blank">AH</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/VASP/">VASP</a><a class="post-meta__tags" href="/tags/Atomate2/">Atomate2</a></div><div class="post-share"><div class="social-share" data-image="/images/toolkit.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload='this.media="all"'><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2024/08/19/Learn-VASP-from-pymatgen-16/" title="Chap.16  计算小白硬学VASP —— 各类结构“Transformation”使用说明（三）"><img class="cover" src="/images/wallhaven-gpkd77_3840x2160.png" onerror='onerror=null,src="/img/404.jpg"' alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Chap.16 计算小白硬学VASP —— 各类结构“Transformation”使用说明（三）</div></div><div class="info-2"><div class="info-item-1">¡Hola a todos! 上一章介绍了怎么构建disordered分数占据结构，本章介绍怎么从disordered分数占据结构中生成可以直接计算的结构。 OrderDisorderedStructureTransformation上一章以LiFePO4为例，在8aO位点替换掺杂S元素，生成的disordered结构如下： 123456789101112131415161718192021222324252627282930313233343536Full Formula (Li4 Fe4 P4 S0.8 O15.2)Reduced Formula: Li4Fe4P4S0.8O15.2abc : 10.236196 5.970755 4.654917angles: 90.000000 90.000000 90.000000pbc : True True TrueSites (28) # SP a b c--- ...</div></div></div></a><a class="pagination-related" href="/2024/11/09/Atomate2-2/" title="计算工作流——Atomate2基本设置"><img class="cover" src="/images/toolkit.png" onerror='onerror=null,src="/img/404.jpg"' alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">计算工作流——Atomate2基本设置</div></div><div class="info-2"><div class="info-item-1">Atomate2​安装过程官网上介绍的已经非常详细了，唯一需要注意的是云数据库的设置。Atomate2​推荐采用云数据库来存储工作量计算结果，官网给出的例子为使用Mongdb Atlas​。但是由于一些原因，采用云数据库来储存数据，对于个人用户来说不是很友好，特别是国内用户： 由于“局域网”问题，许多集群可能连接不上Mongdb Atlas​，或者速度比较慢，容易掉线； 云数据库要花钱购买存储空间，Mongdb Atlas​也只提供500M的免费空间，长期来看也是不够用的，不管你是学生还是社畜，咱自己总不能倒贴上班吧； 小批量计算没有这个必要，个人用户自己计算的东西，体量实在太小，没必要纠结于按照官网教程来配置数据库，我们主要是使用Atomate2​方便的工作流。 Note：...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2024/11/09/Atomate2-2/" title="计算工作流——Atomate2基本设置"><img class="cover" src="/images/toolkit.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-11-09</div><div class="info-item-2">计算工作流——Atomate2基本设置</div></div><div class="info-2"><div class="info-item-1">Atomate2​安装过程官网上介绍的已经非常详细了，唯一需要注意的是云数据库的设置。Atomate2​推荐采用云数据库来存储工作量计算结果，官网给出的例子为使用Mongdb Atlas​。但是由于一些原因，采用云数据库来储存数据，对于个人用户来说不是很友好，特别是国内用户： 由于“局域网”问题，许多集群可能连接不上Mongdb Atlas​，或者速度比较慢，容易掉线； 云数据库要花钱购买存储空间，Mongdb Atlas​也只提供500M的免费空间，长期来看也是不够用的，不管你是学生还是社畜，咱自己总不能倒贴上班吧； 小批量计算没有这个必要，个人用户自己计算的东西，体量实在太小，没必要纠结于按照官网教程来配置数据库，我们主要是使用Atomate2​方便的工作流。 Note：...</div></div></div></a><a class="pagination-related" href="/2024/11/10/Atomate2-3/" title="计算工作流——Atomate2自定义工作流"><img class="cover" src="/images/toolkit.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-11-10</div><div class="info-item-2">计算工作流——Atomate2自定义工作流</div></div><div class="info-2"><div class="info-item-1">Atomate2​除了直接调用现成的工作流，我们还可以根据个人需求自定义任务个数以及工作流走向。具体操作也非常简单，只需要在Flow​中按照计算顺序传入任务即可，如果我们需要优化一个结构并进行静态计算： 12345678910111213141516171819from jobflow import Flowfrom atomate2.vasp.jobs.core import RelaxMaker, StaticMakerfrom pymatgen.core.structure import Structuresi_structure = Structure.from_file(&quot;Si.cif&quot;)# create a relax jobrelax_job = RelaxMaker().make(structure=si_structure)# create a static job that will use only the structure from the relaxationstatic_job =...</div></div></div></a><a class="pagination-related" href="/2024/05/29/Learn-VASP-from-pymatgen-1/" title="Chap.1  计算小白硬学VASP —— 前言"><img class="cover" src="/images/wallhaven-gpkd77_3840x2160.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-05-29</div><div class="info-item-2">Chap.1 计算小白硬学VASP —— 前言</div></div><div class="info-2"><div class="info-item-1">¡Hola a todos! 我是炫酷老司机，欢迎来到《计算小白硬学VASP》系列。 本系列不涉及DFT理论！不涉及DFT理论！不涉及DFT理论！主要目的是通过实例学习如何让VASP跑起来，不需要记INCAR, POTCAR, KPOINTS, POSCAR, CONTCAR等各种文件。 配合上好大哥——pymatgen，实现各种计算类型输入文件生成脚本化，计算流程以及计算结果处理自动化，尽可能解放双手，告别vim。 本人非大佬，普通DFT民工一名，不涉及教学，只分享经验，欢迎指正，不喜勿喷，共同进步。 ¡Muchas gracias!</div></div></div></a><a class="pagination-related" href="/2024/06/28/Learn-VASP-from-pymatgen-10/" title="Chap.10  计算小白硬学VASP —— 材料性质计算—&gt;能带态密度图汇总"><img class="cover" src="/images/wallhaven-gpkd77_3840x2160.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-06-28</div><div class="info-item-2">Chap.10 计算小白硬学VASP —— 材料性质计算—&gt;能带态密度图汇总</div></div><div class="info-2"><div class="info-item-1">¡Hola a todos! 本章介绍如何把能带态密度画在一起，也就是常见的能带图在左，态密度图垂直在右分布。这里需要调用的模块为BSDOSPlotter()。 代码如下： 123456789101112131415from pymatgen.electronic_structure.plotter import BSDOSPlotterfrom pymatgen.io.vasp.outputs import Vasprun# 读取dos计算vasprun.xml文件dos_vasprun = Vasprun(&quot;../ZrNiSn_primitive/dos/vasprun.xml&quot;)dos = dos_vasprun.complete_dos# 读取band计算vasprun.xml文件band_vasprun = Vasprun(&quot;../ZrNiSn_primitive/band/vasprun.xml&quot;)band = band_vasprun.get_band_structure(line_mode=True)#...</div></div></div></a><a class="pagination-related" href="/2024/08/07/Learn-VASP-from-pymatgen-13/" title="Chap.13  计算小白硬学VASP —— 自动搜索表面吸附位点并生成吸附结构"><img class="cover" src="/images/wallhaven-gpkd77_3840x2160.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-08-07</div><div class="info-item-2">Chap.13 计算小白硬学VASP —— 自动搜索表面吸附位点并生成吸附结构</div></div><div class="info-2"><div class="info-item-1">¡Hola a todos! 本章介绍如何在slab模型表面自动搜索吸附位点并生成吸附模型。 AdsorbateSiteFinder搜索吸附位点AdsorbateSiteFinder模块主要用于搜索slab模型表面潜在的吸附位点，主要分为三大类：ontop、bridge、hollow。首先导入AdsorbateSiteFinder模块： 1from pymatgen.analysis.adsorption import AdsorbateSiteFinder slab模型以Si(111)面为例，关于如何自动切slab模型可以参考往期内容。 模型： 12345678910from pymatgen.analysis.adsorption import AdsorbateSiteFinderfrom pymatgen.core.structure import Structure# 读取结构Si_111 = Structure.from_file(&quot;./Si_111.cif&quot;)# 实例化asf = AdsorbateSiteFinder(Si_111)#...</div></div></div></a><a class="pagination-related" href="/2024/08/05/Learn-VASP-from-pymatgen-11/" title="Chap.11  计算小白硬学VASP —— 构建slab模型"><img class="cover" src="/images/wallhaven-gpkd77_3840x2160.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-08-05</div><div class="info-item-2">Chap.11 计算小白硬学VASP —— 构建slab模型</div></div><div class="info-2"><div class="info-item-1">¡Hola a todos! 本章介绍如何构建slab模型。 首先切面用到的miller index针对的是bulk模型的惯用胞（conventional cell）而不是原胞（primtive cell），这与之前计算能带是刚好相反的。 所以，在进行切面操作时，要确保你的bulk模型是惯用胞，可以用pymatgen的功能来帮助实现。 直接从Materials project下载结构 如果是从MP上下载结构，我们需要把conventional_cell = True打开： 1234567from mp_api.client import MPResterapi_key = &quot;your key&quot;with MPRester(api_key) as mpr: Si = mpr.get_structure_by_material_id(&quot;mp-149&quot;,conventional_unit_cell=True) ...</div></div></div></a></div></div><hr class="custom-hr"><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="disqus_thread"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.ico" onerror='this.onerror=null,this.src="/img/friend_404.gif"' alt="avatar"></div><div class="author-info-name">炫酷老司机</div><div class="author-info-description">因为太懒，所以懒得写</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">21</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">11</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><a id="card-info-btn"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/02/28/FireWorks-intro/" title="FireWorks——材料计算工作流的归属？"><img src="/images/imgtop.png" onerror='this.onerror=null,this.src="/img/404.jpg"' alt="FireWorks——材料计算工作流的归属？"></a><div class="content"><a class="title" href="/2025/02/28/FireWorks-intro/" title="FireWorks——材料计算工作流的归属？">FireWorks——材料计算工作流的归属？</a><time datetime="2025-02-28T09:49:13.000Z" title="发表于 2025-02-28 17:49:13">2025-02-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/11/10/Atomate2-3/" title="计算工作流——Atomate2自定义工作流"><img src="/images/toolkit.png" onerror='this.onerror=null,this.src="/img/404.jpg"' alt="计算工作流——Atomate2自定义工作流"></a><div class="content"><a class="title" href="/2024/11/10/Atomate2-3/" title="计算工作流——Atomate2自定义工作流">计算工作流——Atomate2自定义工作流</a><time datetime="2024-11-09T16:00:00.000Z" title="发表于 2024-11-10 00:00:00">2024-11-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/11/09/Atomate2-2/" title="计算工作流——Atomate2基本设置"><img src="/images/toolkit.png" onerror='this.onerror=null,this.src="/img/404.jpg"' alt="计算工作流——Atomate2基本设置"></a><div class="content"><a class="title" href="/2024/11/09/Atomate2-2/" title="计算工作流——Atomate2基本设置">计算工作流——Atomate2基本设置</a><time datetime="2024-11-08T16:00:00.000Z" title="发表于 2024-11-09 00:00:00">2024-11-09</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/11/08/Atomate2-1/" title="计算工作流——初识Atomate2"><img src="/images/toolkit.png" onerror='this.onerror=null,this.src="/img/404.jpg"' alt="计算工作流——初识Atomate2"></a><div class="content"><a class="title" href="/2024/11/08/Atomate2-1/" title="计算工作流——初识Atomate2">计算工作流——初识Atomate2</a><time datetime="2024-11-07T16:00:00.000Z" title="发表于 2024-11-08 00:00:00">2024-11-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/08/19/Learn-VASP-from-pymatgen-16/" title="Chap.16  计算小白硬学VASP —— 各类结构“Transformation”使用说明（三）"><img src="/images/wallhaven-gpkd77_3840x2160.png" onerror='this.onerror=null,this.src="/img/404.jpg"' alt="Chap.16  计算小白硬学VASP —— 各类结构“Transformation”使用说明（三）"></a><div class="content"><a class="title" href="/2024/08/19/Learn-VASP-from-pymatgen-16/" title="Chap.16  计算小白硬学VASP —— 各类结构“Transformation”使用说明（三）">Chap.16 计算小白硬学VASP —— 各类结构“Transformation”使用说明（三）</a><time datetime="2024-08-18T16:00:00.000Z" title="发表于 2024-08-19 00:00:00">2024-08-19</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2024 - 2025 By 炫酷老司机</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.3</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+
+  const disqusReset = conf => {
+    window.DISQUS && window.DISQUS.reset({
+      reload: true,
+      config: conf
+    })
+  }
+
+  const loadDisqus = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyDisqus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    window.disqus_identifier = isShuoshuo ? path : '/2024/11/08/Atomate2-1/'
+    window.disqus_url = isShuoshuo ? location.origin + path : 'https://www.withox.cn/2024/11/08/Atomate2-1/'
+
+    const disqus_config = function () {
+      this.page.url = disqus_url
+      this.page.identifier = disqus_identifier
+      this.page.title = '计算工作流——初识Atomate2'
+    }
+
+    if (window.DISQUS) disqusReset(disqus_config)
+    else {
+      const script = document.createElement('script')
+      script.src = 'https://withox.disqus.com/embed.js'
+      script.setAttribute('data-timestamp', +new Date())
+      document.head.appendChild(script)
+    }
+
+    btf.addGlobalFn('themeChange', () => disqusReset(disqus_config), 'disqus')
+  }
+
+  const getCount = async() => {
+    try {
+      const eleGroup = document.querySelector('#post-meta .disqus-comment-count')
+      if (!eleGroup) return
+      const cleanedLinks = eleGroup.href.replace(/#post-comment$/, '')
+
+      const res = await fetch(`https://disqus.com/api/3.0/threads/set.json?forum=withox&api_key=DWyqGL5cMyR3GQM0HJ9geFGLm1fXauiVcqcbmKnV6F73VtpmV4M0m0hiRDS1v82w&thread:link=${cleanedLinks}`,{
+        method: 'GET'
+      })
+      const result = await res.json()
+
+      const count = result.response.length ? result.response[0].posts : 0
+      eleGroup.textContent = count
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Disqus' === 'Disqus'
+      ? window.shuoshuoComment = { loadComment: loadDisqus }
+      : window.loadOtherComment = loadDisqus
+    return
+  }
+
+  if ('Disqus' === 'Disqus' || !false) {
+    if (false) btf.loadComment(document.getElementById('disqus_thread'), loadDisqus)
+    else {
+      loadDisqus()
+      
+    }
+  } else {
+    window.loadOtherComment = loadDisqus
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span> 数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"></div></div><hr><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

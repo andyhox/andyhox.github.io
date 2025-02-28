@@ -1,1198 +1,216 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="keywords" content="Hexo Theme Redefine">
-    
-    <meta name="author" content="炫酷老司机">
-    <!-- preconnect -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    
-    <!--- Seo Part-->
-    
-    <link rel="canonical" href="https://andyhox.github.io/2024/05/30/learn-vasp-from-pymatgen-3/"/>
-    <meta name="robots" content="index,follow">
-    <meta name="googlebot" content="index,follow">
-    <meta name="revisit-after" content="1 days">
-    
-        <meta name="description" content="Learn VASP from pymatgen">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Chap.3  计算小白硬学VASP —— 学会使用Materials Project">
-<meta property="og:url" content="https://andyhox.github.io/2024/05/30/Learn-VASP-from-pymatgen-3/index.html">
-<meta property="og:site_name" content="Andy">
-<meta property="og:description" content="Learn VASP from pymatgen">
-<meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://andyhox.github.io/2024/05/30/Learn-VASP-from-pymatgen-3/0_MP_login.png">
-<meta property="og:image" content="https://andyhox.github.io/2024/05/30/Learn-VASP-from-pymatgen-3/1_MP_homepage.png">
-<meta property="og:image" content="https://andyhox.github.io/2024/05/30/Learn-VASP-from-pymatgen-3/3_MP_search_type.png">
-<meta property="og:image" content="https://andyhox.github.io/2024/05/30/Learn-VASP-from-pymatgen-3/4_MP_Si.png">
-<meta property="og:image" content="https://andyhox.github.io/2024/05/30/Learn-VASP-from-pymatgen-3/5_MP_Si_info1.png">
-<meta property="og:image" content="https://andyhox.github.io/2024/05/30/Learn-VASP-from-pymatgen-3/6_MP_Si_info2.png">
-<meta property="og:image" content="https://andyhox.github.io/2024/05/30/Learn-VASP-from-pymatgen-3/7_MP_Si_info3.png">
-<meta property="og:image" content="https://andyhox.github.io/2024/05/30/Learn-VASP-from-pymatgen-3/8_MP_Si_info4.png">
-<meta property="og:image" content="https://andyhox.github.io/2024/05/30/Learn-VASP-from-pymatgen-3/2_MP_api_key.png">
-<meta property="og:image" content="https://andyhox.github.io/2024/05/30/Learn-VASP-from-pymatgen-3/9_mp_api_install.png">
-<meta property="og:image" content="https://andyhox.github.io/2024/05/30/Learn-VASP-from-pymatgen-3/10_case1.png">
-<meta property="og:image" content="https://andyhox.github.io/2024/05/30/Learn-VASP-from-pymatgen-3/11_search_details.png">
-<meta property="og:image" content="https://andyhox.github.io/2024/05/30/Learn-VASP-from-pymatgen-3/12_prindocs.png">
-<meta property="og:image" content="https://andyhox.github.io/2024/05/30/Learn-VASP-from-pymatgen-3/13_Si.png">
-<meta property="og:image" content="https://andyhox.github.io/2024/05/30/Learn-VASP-from-pymatgen-3/14_contain_SiO.png">
-<meta property="og:image" content="https://andyhox.github.io/2024/05/30/Learn-VASP-from-pymatgen-3/15_contain_SiO_num2.png">
-<meta property="og:image" content="https://andyhox.github.io/2024/05/30/Learn-VASP-from-pymatgen-3/16_contain_SiO_3.png">
-<meta property="og:image" content="https://andyhox.github.io/2024/05/30/Learn-VASP-from-pymatgen-3/17_ex1_results.png">
-<meta property="og:image" content="https://andyhox.github.io/2024/05/30/Learn-VASP-from-pymatgen-3/18_csv_result.png">
-<meta property="article:published_time" content="2024-05-30T08:00:00.000Z">
-<meta property="article:modified_time" content="2024-06-11T13:23:04.946Z">
-<meta property="article:author" content="andyhoo">
-<meta property="article:tag" content="VASP">
-<meta property="article:tag" content="pymatgen">
-<meta property="article:tag" content="Materials Project">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://andyhox.github.io/2024/05/30/Learn-VASP-from-pymatgen-3/0_MP_login.png">
-    
-    
-        <!-- Google tag (gtag.js) -->
-        <script src="https://www.googletagmanager.com/gtag/js?id=G-XD3VSCSSYQ"></script>
-        <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-
-        gtag('config', 'G-XD3VSCSSYQ');
-        </script>
-    
-    <!--- Icon Part-->
-    <link rel="icon" type="image/png" href="/images/redefine-favicon.svg" sizes="192x192">
-    <link rel="apple-touch-icon" sizes="180x180" href="/images/redefine-favicon.svg">
-    <meta name="theme-color" content="#A31F34">
-    <link rel="shortcut icon" href="/images/redefine-favicon.svg">
-    <!--- Page Info-->
-    
-    <title>
-        
-            Chap.3  计算小白硬学VASP —— 学会使用Materials Project -
-        
-        A&amp;H
-    </title>
-
-    
-<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
-
-
-    <!--- Inject Part-->
-    
-
-    
-        <style>
-    :root {
-        --preloader-background-color: #fff;
-        --preloader-text-color: #000;
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Chap.3 计算小白硬学VASP —— 学会使用Materials Project | AH</title><meta name="author" content="炫酷老司机,andyhoo0716@gmail.com"><meta name="copyright" content="炫酷老司机"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Learn VASP from pymatgen系列教程"><meta property="og:type" content="article"><meta property="og:title" content="Chap.3  计算小白硬学VASP —— 学会使用Materials Project"><meta property="og:url" content="https://www.withox.cn/2024/05/30/Learn-VASP-from-pymatgen-3/index.html"><meta property="og:site_name" content="AH"><meta property="og:description" content="Learn VASP from pymatgen系列教程"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://www.withox.cn/images/wallhaven-gpkd77_3840x2160.png"><meta property="article:published_time" content="2024-05-30T08:00:00.000Z"><meta property="article:modified_time" content="2025-02-27T13:19:51.205Z"><meta property="article:author" content="炫酷老司机"><meta property="article:tag" content="VASP"><meta property="article:tag" content="pymatgen"><meta property="article:tag" content="Materials Project"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://www.withox.cn/images/wallhaven-gpkd77_3840x2160.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Chap.3  计算小白硬学VASP —— 学会使用Materials Project",
+  "url": "https://www.withox.cn/2024/05/30/Learn-VASP-from-pymatgen-3/",
+  "image": "https://www.withox.cn/images/wallhaven-gpkd77_3840x2160.png",
+  "datePublished": "2024-05-30T08:00:00.000Z",
+  "dateModified": "2025-02-27T13:19:51.205Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "炫酷老司机",
+      "url": "https://www.withox.cn/"
     }
-
-    @media (prefers-color-scheme: dark) {
-        :root {
-            --preloader-background-color: #202124;
-            --preloader-text-color: #fff;
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.ico"><link rel="canonical" href="https://www.withox.cn/2024/05/30/Learn-VASP-from-pymatgen-3/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"><link rel="preconnect" href="//busuanzi.ibruce.info"><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>(() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
         }
+        return value
+      }
     }
 
-    @media (prefers-color-scheme: light) {
-        :root {
-            --preloader-background-color: #fff;
-            --preloader-text-color: #000;
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
         }
-    }
-
-    @media (max-width: 600px) {
-        .ml13 {
-            font-size: 2.6rem !important; /* Adjust this value as needed */
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
         }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
     }
-
-    .preloader {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem; /* Tailwind 'gap-4' is 1rem */
-        align-items: center;
-        justify-content: center;
-        position: fixed;
-        padding: 12px;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh; /* 'h-screen' is 100% of the viewport height */
-        background-color: var(--preloader-background-color);
-        z-index: 1100; /* 'z-[1100]' sets the z-index */
-        transition: opacity 0.2s ease-in-out;
-    }
-
-    .ml13 {
-        font-size: 3.2rem;
-        /* text-transform: uppercase; */
-        color: var(--preloader-text-color);
-        letter-spacing: -1px;
-        font-weight: 500;
-        font-family: 'Chillax-Variable', sans-serif;
-        text-align: center;
-    }
-
-    .ml13 .word {
-        display: inline-flex;
-        flex-wrap: wrap;
-        white-space: nowrap;
-    }
-
-    .ml13 .letter {
-        display: inline-block;
-        line-height: 1em;
-    }
-</style>
-
-<div class="preloader">
-    
-<script src="/js/libs/anime.min.js"></script>
-
-    <h1 class="ml13">
-        A&amp;H
-    </h1>
-    <script>
-        var textWrapper = document.querySelector('.ml13');
-        // Split text into words
-        var words = textWrapper.textContent.trim().split(' ');
-
-        // Clear the existing content
-        textWrapper.innerHTML = '';
-
-        // Wrap each word and its letters in spans
-        words.forEach(function(word) {
-            var wordSpan = document.createElement('span');
-            wordSpan.classList.add('word');
-            wordSpan.innerHTML = word.replace(/\S/g, "<span class='letter'>$&</span>");
-            textWrapper.appendChild(wordSpan);
-            textWrapper.appendChild(document.createTextNode(' ')); // Add space between words
-        });
-
-
-        anime.timeline({loop: true})
-            .add({
-                targets: '.ml13 .letter',
-                translateY: [100,0],
-                translateZ: 0,
-                opacity: [0,1],
-                easing: "easeOutExpo",
-                duration: 1400,
-                delay: (el, i) => 300 + 30 * i
-            }).add({
-            targets: '.ml13 .letter',
-            translateY: [0,-100],
-            opacity: [1,0],
-            easing: "easeInExpo",
-            duration: 1200,
-            delay: (el, i) => 100 + 30 * i
-        });
-
-        let themeStatus = JSON.parse(localStorage.getItem('REDEFINE-THEME-STATUS'))?.isDark;
-
-        // If the theme status is not found in local storage, check the preferred color scheme
-        if (themeStatus === undefined || themeStatus === null) {
-            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                themeStatus = 'dark';
-            } else {
-                themeStatus = 'light';
-            }
-        }
-
-        // Now you can use the themeStatus variable in your code
-        if (themeStatus) {
-            document.documentElement.style.setProperty('--preloader-background-color', '#202124');
-            document.documentElement.style.setProperty('--preloader-text-color', '#fff');
-        } else {
-            document.documentElement.style.setProperty('--preloader-background-color', '#fff');
-            document.documentElement.style.setProperty('--preloader-text-color', '#000');
-        }
-
-        window.addEventListener('load', function () {
-            hidePreloaderAfterTimeout(1000); // Hide after 1000 milliseconds once the window has loaded
-        });
-
-        // Backup failsafe: Hide preloader after a maximum of 5000 milliseconds, regardless of the window load event
-        hidePreloaderAfterTimeout(5000);
-
-        function hidePreloaderAfterTimeout(delay) {
-            setTimeout(function () {
-                var preloader = document.querySelector('.preloader');
-                preloader.style.opacity = '0';
-                setTimeout(function () {
-                    preloader.style.display = 'none';
-                }, 200);
-            }, delay);
-        }
-    </script>
-</div>
-    
-
-    
-<link rel="stylesheet" href="/css/style.css">
-
-
-    
-        
-<link rel="stylesheet" href="/assets/build/styles.css">
-
-    
-
-    
-<link rel="stylesheet" href="/fonts/fonts.css">
-
-    
-<link rel="stylesheet" href="/fonts/Satoshi/satoshi.css">
-
-    <!--- Font Part-->
-    
-    
-    
-    
-
-
-    <script id="hexo-configurations">
-    window.config = {"hostname":"andyhox.github.io","root":"/","language":"zh-CN","path":"search.xml"};
-    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"left","image_caption":false,"link_icon":true,"title_alignment":"left","headings_top_spacing":{"h1":"5rem","h2":"4rem","h3":"2.8rem","h4":"2.5rem","h5":"2.2rem","h6":"2rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":5,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":false,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":true,"open_graph":true,"google_analytics":{"enable":true,"id":"G-XD3VSCSSYQ"}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-4lky22_1920x1080.png","dark":"/images/wallhaven-1pprk1_1920x1080.png"},"title":[" "],"subtitle":{"text":[" "],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#000000","dark":"#000000"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":true,"style":"default","links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":"andyhoo0716@gmail.com"},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":true,"version":"9.3.0"}},"version":"2.6.2","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"categories":{"path":"/categories","icon":"fa-regular fa-folder"}},"search":{"enable":true,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":{"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"Tags":{"path":"/tags","icon":"fa-regular fa-tags"},"Categories":{"path":"/categories","icon":"fa-regular fa-folder"}}},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2024/05/29 00:00:00"};
-    window.lang_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"};
-    window.data = {"masonry":false};
-  </script>
-    
-    <!--- Fontawesome Part-->
-    
-<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
-
-    
-<link rel="stylesheet" href="/fontawesome/brands.min.css">
-
-    
-<link rel="stylesheet" href="/fontawesome/solid.min.css">
-
-    
-<link rel="stylesheet" href="/fontawesome/regular.min.css">
-
-    
-    
-    
-    
-<meta name="generator" content="Hexo 7.2.0"></head>
-
-
-<body>
-<div class="progress-bar-container">
-    
-
-    
-        <span class="pjax-progress-bar"></span>
-<!--        <span class="swup-progress-icon">-->
-<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
-<!--        </span>-->
-    
-</div>
-
-
-<main class="page-container" id="swup">
-
-    
-
-    <div class="main-content-container">
-
-
-        <div class="main-content-header">
-            <header class="navbar-container px-6 md:px-12">
-
-    <div class="navbar-content ">
-        <div class="left">
-            
-            <a class="logo-title" href="/">
-                
-                A&amp;H
-                
-            </a>
-        </div>
-
-        <div class="right">
-            <!-- PC -->
-            <div class="desktop">
-                <ul class="navbar-list">
-                    
-                        
-                            
-
-                            <li class="navbar-item">
-                                <!-- Menu -->
-                                <a class=""
-                                   href="/"
-                                        >
-                                    <i class="fa-regular fa-house fa-fw"></i>
-                                    首页
-                                    
-                                </a>
-
-                                <!-- Submenu -->
-                                
-                            </li>
-                    
-                        
-                            
-
-                            <li class="navbar-item">
-                                <!-- Menu -->
-                                <a class=""
-                                   href="/archives"
-                                        >
-                                    <i class="fa-regular fa-archive fa-fw"></i>
-                                    归档
-                                    
-                                </a>
-
-                                <!-- Submenu -->
-                                
-                            </li>
-                    
-                        
-                            
-
-                            <li class="navbar-item">
-                                <!-- Menu -->
-                                <a class=""
-                                   href="/categories"
-                                        >
-                                    <i class="fa-regular fa-folder fa-fw"></i>
-                                    分类
-                                    
-                                </a>
-
-                                <!-- Submenu -->
-                                
-                            </li>
-                    
-                    
-                        <li class="navbar-item search search-popup-trigger">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                        </li>
-                    
-                </ul>
-            </div>
-            <!-- Mobile -->
-            <div class="mobile">
-                
-                    <div class="icon-item search search-popup-trigger"><i class="fa-solid fa-magnifying-glass"></i>
-                    </div>
-                
-                <div class="icon-item navbar-bar">
-                    <div class="navbar-bar-middle"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Mobile sheet -->
-    <div class="navbar-drawer h-screen w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
-        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
-            
-                
-                    
-
-                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
-                        
-                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
-                           href="/"
-                        >
-                            <span>
-                                首页
-                            </span>
-                            
-                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
-                            
-                        </a>
-                        
-
-                        
-                    </li>
-            
-                
-                    
-
-                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
-                        
-                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
-                           href="/archives"
-                        >
-                            <span>
-                                归档
-                            </span>
-                            
-                                <i class="fa-regular fa-archive fa-sm fa-fw"></i>
-                            
-                        </a>
-                        
-
-                        
-                    </li>
-            
-                
-                    
-
-                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
-                        
-                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
-                           href="/categories"
-                        >
-                            <span>
-                                分类
-                            </span>
-                            
-                                <i class="fa-regular fa-folder fa-sm fa-fw"></i>
-                            
-                        </a>
-                        
-
-                        
-                    </li>
-            
-
-            
-            
-                
-                    
-                    
-                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
-                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
-                           href="/tags"
-                        >
-                            <span>Tags</span>
-                            <i class="fa-regular fa-tags fa-sm fa-fw"></i>
-                        </a>
-                    </li>
-                
-                    
-                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
-                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
-                           href="/categories"
-                        >
-                            <span>Categories</span>
-                            <i class="fa-regular fa-folder fa-sm fa-fw"></i>
-                        </a>
-                    </li>
-                
-            
-        </ul>
-
-        <div class="statistics flex justify-around my-2.5">
-    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
-        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">5</div>
-        <div class="label text-third-text-color text-sm">标签</div>
-    </a>
-    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
-        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">1</div>
-        <div class="label text-third-text-color text-sm">分类</div>
-    </a>
-    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
-        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">6</div>
-        <div class="label text-third-text-color text-sm">文章</div>
-    </a>
-</div>
-    </div>
-
-    <div class="window-mask"></div>
-
-</header>
-
-
-        </div>
-
-        <div class="main-content-body">
-
-            
-
-            <div class="main-content">
-
-                
-                    <div class="post-page-container flex relative justify-between box-border w-full h-full">
-    <div class="article-content-container">
-
-        <div class="article-title relative w-full">
-            
-                
-                
-                <img src="/images/wallhaven-gpkd77_3840x2160.png" alt="Chap.3  计算小白硬学VASP —— 学会使用Materials Project" class="w-full h-60 sm:h-72 md:h-80 object-cover sm:rounded-t-large dark:brightness-75"/>
-                
-                <div class="w-full flex items-center absolute bottom-0 justify-start">
-                    <h1 class="article-title-cover text-center mx-6 my-6 text-second-text-color bg-background-color-transparent px-4 py-3 text-3xl sm:text-4xl md:text-5xl font-bold backdrop-blur-lg rounded-xl border border-border-color ">Chap.3  计算小白硬学VASP —— 学会使用Materials Project</h1>
-                </div>
-            
-            </div>
-
-        
-            <div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
-                <div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
-                    <img src="/images/avatar.jpg">
-                </div>
-                <div class="info flex flex-col justify-between">
-                    <div class="author flex items-center">
-                        <span class="name text-default-text-color text-lg font-semibold">炫酷老司机</span>
-                        
-                            <span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv1</span>
-                        
-                    </div>
-                    <div class="meta-info">
-                        <div class="article-meta-info">
-    <span class="article-date article-meta-item">
-        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
-        <span class="desktop">2024-05-30 16:00</span>
-        <span class="mobile">2024-05-30 16:00</span>
-        <span class="hover-info">创建</span>
-    </span>
-    
-        <span class="article-date article-meta-item">
-            <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2024-06-11 21:23:04</span>
-            <span class="mobile">2024-06-11 21:23:04</span>
-            <span class="hover-info">更新</span>
-        </span>
-    
-
-    
-        <span class="article-categories article-meta-item">
-            <i class="fa-regular fa-folders"></i>&nbsp;
-            <ul>
-                
-                
-                    
-                        
-                        <li>
-                            <a href="/categories/Learn-VASP-from-pymatgen/">Learn VASP from pymatgen</a>&nbsp;
-                        </li>
-                    
-                    
-                
-            </ul>
-        </span>
-    
-    
-        <span class="article-tags article-meta-item">
-            <i class="fa-regular fa-tags"></i>&nbsp;
-            <ul>
-                
-                    <li>
-                        <a href="/tags/VASP/">VASP</a>&nbsp;
-                    </li>
-                
-                    <li>
-                        | <a href="/tags/pymatgen/">pymatgen</a>&nbsp;
-                    </li>
-                
-                    <li>
-                        | <a href="/tags/Materials-Project/">Materials Project</a>&nbsp;
-                    </li>
-                
-            </ul>
-        </span>
-    
-
-    
-    
-        <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>3.4k 字</span>
-        </span>
-    
-    
-        <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>14 分钟</span>
-        </span>
-    
-    
-        <span class="article-pv article-meta-item">
-            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
-        </span>
-    
-</div>
-
-                    </div>
-                </div>
-            </div>
-        
-
-        
-
-
-        <div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
-            <p><em><strong>¡Hola a todos!</strong></em></p>
-<p>很遗憾的告诉各位，本章还没有开始涉及到VASP的计算。</p>
-<p><strong>Why????</strong></p>
-<p>根据老司机以往的使用经验，做计算最关键的不是了解各种输入参数的意义，不是高超的编程能力，不是各种计算流程信手拈来，而是一个靠谱的结构。往往一个靠谱的结构，你的计算就已经成功了90%，这么说一点也不为过。一个“垃圾”结构，你往往算了几天、一周、一个月，得到的结果都不见得令人满意。</p>
-<p>如何得到一个靠谱的结构，或者说到哪里去找一个靠谱的结构，这里不得不介绍一下本期嘉宾——<a class="link" target="_blank" rel="noopener" href="https://next-gen.materialsproject.org/">Materials Project <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>网站（下面简称MP）。截至到今天，MP提供了超过15万个无机化合物的结构信息以及性质，其中有实验已经发现的材料，也有纯计算预测的新材料。每一种化合物的计算源文件都可以免费下载本地，特别适合小白们自学VASP。</p>
-<p><strong>当然，最重要的一点是，免费！免费！免费！Free~~~~~~~</strong></p>
-<p>你只需要邮箱登录后就可以尽情使用</p>
-<p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/0_MP_login.png" alt="Materials Project_login"></p>
-<p>登录后进入主页，开始今天的MP学习之旅。</p>
-<p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/1_MP_homepage.png" alt="MP_home"></p>
-<h2 id="Materials-Project网页端"><a href="#Materials-Project网页端" class="headerlink" title="Materials Project网页端"></a>Materials Project网页端</h2><h3 id="材料检索"><a href="#材料检索" class="headerlink" title="材料检索"></a>材料检索</h3><p>MP上面材料的检索方式有三种:</p>
-<p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/3_MP_search_type.png" alt="MP_search_type"></p>
-<ul>
-<li><code>Only Elements</code>: 仅包含选定元素，如输入<code>Si</code>检索出来的结构只是单质硅；</li>
-<li><code>At least Elements</code>: 至少包含选定元素，如输入<code>Si</code>检索出来的结构既有单质硅，也有含<code>Si</code>的化合物：<code>SiO</code>、<code>SiO2</code>等；</li>
-<li><code>Formula</code>: 输入完整的分子式，如输入<code>SiO2</code>，检索出来的结构只有<code>SiO2</code>。</li>
-</ul>
-<p>这里我们用<code>Only Elements</code>检索<code>Si</code>，可以得到一系列的<code>Si</code>单质结构。</p>
-<p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/4_MP_Si.png" alt="MP_search_Si"></p>
-<p>这么多<code>Si</code>单质结构，到底哪个是我们想要的呢？我们可以根据<code>Crystal System</code>、<code>Spacegroup</code>等信息筛选，这里我们以第一个<code>Si</code>结构为例，了解一下MP上面提供了哪些信息。</p>
-<h3 id="页面信息"><a href="#页面信息" class="headerlink" title="页面信息"></a>页面信息</h3><p><code>Summary</code>一栏基本提供了晶体结构的常见基本信息：MP编号(mp-149)、空间群信息、能带信息、磁性信息、实验上是否得到等。</p>
-
-  <div class="note p-4 mb-4 rounded-small info">
-    <p>MP编号相当于材料的身份证，是Materials Project网站上每一个材料的唯一标识符，在后续会用到。</p>
-
-  </div>
-
-<p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/5_MP_Si_info1.png" alt="MP_Si_info1"></p>
-<p>继续往下拉还可以看到具体的晶格常数信息，能带态密度图、模拟光谱信息等。</p>
-<ul>
-<li>晶格常数信息</li>
-</ul>
-<p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/6_MP_Si_info2.png" alt="MP_Si_info2"></p>
-<ul>
-<li>能带态密度图</li>
-</ul>
-<p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/7_MP_Si_info3.png" alt="MP_Si_info3"></p>
-<ul>
-<li>模拟光谱</li>
-</ul>
-<p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/8_MP_Si_info4.png" alt="MP_Si_info4"></p>
-<p>MP上面还有很多其他信息，大家可以自行探索，这里就不一一介绍了。</p>
-<h2 id="MP-API接口"><a href="#MP-API接口" class="headerlink" title="MP-API接口"></a>MP-API接口</h2><p>MP网页端的优势在于可以直观地看到材料的结构，但是从获取信息的角度来说，效率还是太低了。因此，MP还提供了API接口，可以方便地大批量获取到材料的结构、性质等各种信息。尤其适用于data mining、机器学习等领域。Anyway，即使你没有大规模数据下载分析的需求，对于日常使用来说，API接口用来找结构，查询信息还是很方便的。</p>
-<h3 id="如何使用Materials-Project-API"><a href="#如何使用Materials-Project-API" class="headerlink" title="如何使用Materials Project API"></a>如何使用Materials Project API</h3><p>使用API接口非常简单，只需要几步即可。</p>
-<ul>
-<li>获取API key<br>在MP网页端注册账号，登录后，点击右上角的<code>API</code>，选择<code>API Key</code>，生成API Key即可，该字符串可复制保存，可长期使用。</li>
-</ul>
-<p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/2_MP_api_key.png" alt="MP_API_key"></p>
-<ul>
-<li>安装mp_api包</li>
-</ul>
-<p>获取API key后，我们需要安装<code>mp_api</code>包，该包是Materials Project API的Python封装。后续的操作都需要在Python环境中进行，这个时候回到终端环境，激活<code>my_pymatgen</code>环境，可直接pip命令安装：</p>
-<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">conda activate my_pymatgen</span><br><span class="line">pip install mp_api</span><br><span class="line">pip show mp_api</span><br></pre></td></tr></table></figure></div>
-<p>出现下面类似信息说明安装成功：</p>
-<p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/9_mp_api_install.png" alt="mp_api_install"></p>
-<ul>
-<li>实例1：获取<code>Si</code>单质结构信息<br>python脚本的编写推荐使用IDE工具，如VSCode、PyCharm等，或者Jupyter Notebook。下面的操作均以Jupyter Notebook为例，如果您不熟悉Jupyter Notebook，可以参考<a class="link" target="_blank" rel="noopener" href="https://jupyter.org/documentation">Jupyter Notebook官方文档 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>。</li>
-</ul>
-<p>如果没有安装Jupyter Notebook，可以先安装：</p>
-<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda install -c conda-forge notebook</span><br></pre></td></tr></table></figure></div>
-<p>然后在终端运行：</p>
-<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jupyter notebook</span><br></pre></td></tr></table></figure></div>
-<p>会跳转到外部页面，此时新建一个Jupyter Notebook文件，test.ipynb打开，输入以下代码：</p>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> mp_api.client <span class="keyword">import</span> MPRester</span><br><span class="line"></span><br><span class="line">api_key = <span class="string">&quot;aaaaabbbbb&quot;</span>  <span class="comment"># 请替换成你的API key</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> MPRester(api_key) <span class="keyword">as</span> mpr:</span><br><span class="line">    <span class="comment"># 获取Si单质结构信息</span></span><br><span class="line">    structure = mpr.get_structure_by_material_id(<span class="string">&quot;mp-149&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(structure)          <span class="comment"># 打印结构信息</span></span><br></pre></td></tr></table></figure></div>
-<p>这里我们是通过MP编号<code>mp-149</code>获取了<code>Si</code>单质结构信息，正如前文所说，MP编号相当于材料的身份证，是Materials Project网站上每一个材料的唯一标识符。</p>
-<p>在Jupyter Notebook中运行代码命令为<code>Shift+Enter</code>，运行后会出现输出结果：</p>
-<p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/10_case1.png" alt="MP_API_Si_structure"></p>
-
-  <div class="note p-4 mb-4 rounded-small info">
-    <p>无论是Jupyter Notebook还是VSCode，输出结果都是一样的。</p>
-
-  </div>
-
-<h3 id="检索材料信息"><a href="#检索材料信息" class="headerlink" title="检索材料信息"></a>检索材料信息</h3><h4 id="实例1：根据MP编号获取材料信息"><a href="#实例1：根据MP编号获取材料信息" class="headerlink" title="实例1：根据MP编号获取材料信息"></a>实例1：根据MP编号获取材料信息</h4><p>有人会说了，好像只打印出了一些简单的结构信息，并没有网页端的数据完整。别急，让我们丰富一下输出内容。MP-API提供了查询结构信息的方法<code>MPRester.materials.summary.search()</code>，通过这个函数方法，我们可以批量准确的查询到所需的材料信息，完整代码如下：</p>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">from</span> mp_api.client <span class="keyword">import</span> MPRester</span><br><span class="line"></span><br><span class="line">api_key = <span class="string">&quot;aaaaabbbbb&quot;</span>  <span class="comment"># 请替换成你的API key</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> MPRester(api_key) <span class="keyword">as</span> mpr:</span><br><span class="line">    docs = mpr.materials.summary.search(</span><br><span class="line">        material_ids=<span class="string">&#x27;mp-149&#x27;</span>,</span><br><span class="line">        fields=[<span class="string">&quot;band_gap&quot;</span>, <span class="string">&quot;density&quot;</span>,<span class="string">&quot;formula_pretty&quot;</span>, <span class="string">&quot;symmetry&quot;</span>]</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">data = []               <span class="comment"># 空列表用于储存结果</span></span><br><span class="line"><span class="keyword">for</span> doc <span class="keyword">in</span> docs:</span><br><span class="line">    symmetry_info = doc.symmetry</span><br><span class="line">    data.append(&#123;</span><br><span class="line">        <span class="string">&quot;band_gap&quot;</span>: doc.band_gap,</span><br><span class="line">        <span class="string">&quot;density&quot;</span>: doc.density,</span><br><span class="line">        <span class="string">&quot;formula_pretty&quot;</span>: doc.formula_pretty,</span><br><span class="line">        <span class="string">&quot;symbol&quot;</span>: <span class="built_in">getattr</span>(symmetry_info, <span class="string">&quot;symbol&quot;</span>, <span class="string">&quot;NONE&quot;</span>),</span><br><span class="line">        <span class="string">&quot;crystal_system&quot;</span>: <span class="built_in">getattr</span>(symmetry_info, <span class="string">&quot;crystal_system&quot;</span>, <span class="string">&quot;NONE&quot;</span>),</span><br><span class="line">        <span class="string">&quot;space_group_num&quot;</span>: <span class="built_in">getattr</span>(symmetry_info, <span class="string">&quot;number&quot;</span>, <span class="string">&quot;NONE&quot;</span>)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">df = pd.DataFrame(data)  <span class="comment"># 转换为DataFrame格式</span></span><br><span class="line"><span class="built_in">print</span>(df)</span><br></pre></td></tr></table></figure></div>
-
-<p>初次看到这个代码，可能会有点晕，不过不要着急，慢慢看，我们一步一步来。这个代码的逻辑主要分为两步：</p>
-<ul>
-<li>1、调用api接口采用<code>MPRester.materials.summary.search()</code>查询编号为<code>mp-149</code>的材料具体信息，这里指定的字段有<code>band_gap</code>、<code>density</code>、<code>formula_pretty</code>、<code>symmetry</code>，分别表示带隙、密度、分子式、空间群信息：</li>
-</ul>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> MPRester(api_key) <span class="keyword">as</span> mpr:</span><br><span class="line">    docs = mpr.materials.summary.search(</span><br><span class="line">        material_ids=<span class="string">&#x27;mp-149&#x27;</span>,</span><br><span class="line">        fields=[<span class="string">&quot;band_gap&quot;</span>, <span class="string">&quot;density&quot;</span>,<span class="string">&quot;formula_pretty&quot;</span>, <span class="string">&quot;symmetry&quot;</span>]</span><br><span class="line">    )</span><br></pre></td></tr></table></figure></div>
-
-<p>这里fields参数可以指定需要查询的参数，也可以不指定，默认会返回所有参数。<code>MPRester.materials.summary.search()</code>可以查询的参数详情可参考<a class="link" target="_blank" rel="noopener" href="https://materialsproject.github.io/api/_modules/mp_api/client/routes/materials/summary.html">官方文档 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/11_search_details.png" alt="MP_API_search_fields"></p>
-<p>上述即为部分参数，每个参数表示的意义基本就是英文直译，另有不懂的也可以在文档中找到具体的说明。</p>
-<p>回到代码，<code>docs</code>是一个列表，存储了我们制定的<code>fields</code>参数的信息，但是此时直接<code>print(docs)</code>输出的结果不利于查看，如果我们直接<code>print(docs)</code>，会看到：</p>
-<p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/12_prindocs.png" alt="MP_print_docs"></p>
-<p>可以看到除了指定的参数，为写入<code>fields</code>的参数也会列出来，这样得到的结果老司机看到就头大，所以我们需要对其进行处理。</p>
-<ul>
-<li>2、使用pandas库将查询结果转换为DataFrame格式并输出，也就是第二段代码：</li>
-</ul>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">data = []               <span class="comment"># 空列表用于储存结果</span></span><br><span class="line"><span class="keyword">for</span> doc <span class="keyword">in</span> docs:</span><br><span class="line">    symmetry_info = doc.symmetry</span><br><span class="line">    data.append(&#123;</span><br><span class="line">        <span class="string">&quot;band_gap&quot;</span>: doc.band_gap,</span><br><span class="line">        <span class="string">&quot;density&quot;</span>: doc.density,</span><br><span class="line">        <span class="string">&quot;formula_pretty&quot;</span>: doc.formula_pretty,</span><br><span class="line">        <span class="string">&quot;symbol&quot;</span>: <span class="built_in">getattr</span>(symmetry_info, <span class="string">&quot;symbol&quot;</span>, <span class="string">&quot;NONE&quot;</span>),</span><br><span class="line">        <span class="string">&quot;crystal_system&quot;</span>: <span class="built_in">getattr</span>(symmetry_info, <span class="string">&quot;crystal_system&quot;</span>, <span class="string">&quot;NONE&quot;</span>),</span><br><span class="line">        <span class="string">&quot;space_group_num&quot;</span>: <span class="built_in">getattr</span>(symmetry_info, <span class="string">&quot;number&quot;</span>, <span class="string">&quot;NONE&quot;</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">df = pd.DataFrame(data)  <span class="comment"># 转换为DataFrame格式</span></span><br></pre></td></tr></table></figure></div>
-
-<p>上述代码第2-11行用for循环遍历<code>docs</code>列表，将对应的属性储存在<code>data</code>列表中，具体提取的信息包括：</p>
-<ul>
-<li>band_gap: 材料的带隙</li>
-<li>density: 材料的密度</li>
-<li>formula_pretty: 材料的化学式</li>
-<li>symbol: 材料的空间群信息。使用getattr函数获取属性值，如果属性不存在，则使用默认值”NONE”。</li>
-<li>crystal_system: 材料的晶系（crystal system）。使用getattr函数获取属性值，如果属性不存在，则使用默认值”NONE”。</li>
-<li>space_group_num: 材料的空间群编号（space group number）。使用getattr函数获取属性值，如果属性不存在，则使用默认值”NONE”。</li>
-</ul>
-<p>这里采用了getattr函数来提取<code>doc.symmetry</code>中的属性值，原因是因为<code>doc.symmetry</code>是一个字典，里面包含了多个属性，上述的<code>symbol</code>、<code>crystal_system</code>、<code>space_group_num</code>都是字典的键值。</p>
-<p>第12行将<code>data</code>列表转换为DataFrame格式，运行print(df)后，可以得到如下结果：</p>
-<p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/13_Si.png" alt="MP_API_Si_structure_df"></p>
-<p>此次，我们通过MP-API根据MP编号获取了结构信息，并将其转换为DataFrame格式，方便后续分析，下面我们再试一下更有意思的玩法。</p>
-<h4 id="实例2：根据元素获取材料信息"><a href="#实例2：根据元素获取材料信息" class="headerlink" title="实例2：根据元素获取材料信息"></a>实例2：根据元素获取材料信息</h4><p>在上述代码的基础上，修改检索的条件，将通过MP编号获取改成通过元素获取材料信息，代码如下：</p>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">......</span><br><span class="line">......</span><br><span class="line"><span class="keyword">with</span> MPRester(api_key) <span class="keyword">as</span> mpr:</span><br><span class="line">    docs = mpr.materials.summary.search(</span><br><span class="line">        elements=[<span class="string">&#x27;Si&#x27;</span>,<span class="string">&#x27;O&#x27;</span>],</span><br><span class="line">        fields=[<span class="string">&quot;material_id&quot;</span>,<span class="string">&quot;band_gap&quot;</span>, <span class="string">&quot;density&quot;</span>,<span class="string">&quot;formula_pretty&quot;</span>, <span class="string">&quot;symmetry&quot;</span>]</span><br><span class="line">    )</span><br><span class="line">......</span><br><span class="line">......</span><br></pre></td></tr></table></figure></div>
-<p>其余代码保持不变，运行代码后，可以得到如下结果：</p>
-<p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/14_contain_SiO.png" alt="contain_SiO"></p>
-<p>可以看到，这一次直接返回了所有含有<code>Si</code>和<code>O</code>元素的材料信息，一共有7637个结构。但是，如果我们并不想看到所有材料信息，而是只想看到其中只包含<code>Si</code>和<code>O</code>元素的材料信息，这时候我们需要继续添加筛选条件：</p>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">......</span><br><span class="line">......</span><br><span class="line"><span class="keyword">with</span> MPRester(api_key) <span class="keyword">as</span> mpr:</span><br><span class="line">    docs = mpr.materials.summary.search(</span><br><span class="line">        elements=[<span class="string">&#x27;Si&#x27;</span>,<span class="string">&#x27;O&#x27;</span>],</span><br><span class="line">        fields=[<span class="string">&quot;material_id&quot;</span>,<span class="string">&quot;band_gap&quot;</span>, <span class="string">&quot;density&quot;</span>,<span class="string">&quot;formula_pretty&quot;</span>, <span class="string">&quot;symmetry&quot;</span>],</span><br><span class="line">        num_elements=<span class="number">2</span></span><br><span class="line">    )</span><br><span class="line">......</span><br><span class="line">......</span><br></pre></td></tr></table></figure></div>
-<p><code>num_elements</code>参数限制了返回结果中的元素只有两种，即只包含Si和O的材料。运行代码后，可以得到如下结果：</p>
-<p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/15_contain_SiO_num2.png" alt="contain_SiO_num2"></p>
-<p>可以看到此时筛选得到的结构只有343个结构了。至此，大家应该明白了，MP-API的强大之处在于可以根据各种条件筛选材料信息，并进一步分析。根据不同的需求，只需要调节对应的限制参数，就可以得到所需的材料信息。如上述筛选条件还可以修改成：</p>
-<ul>
-<li>2 ≤ 元素种类 ≤ 4</li>
-<li>至少含有<code>Si</code>和<code>O</code>元素</li>
-<li>带隙大于1.5的材料</li>
-</ul>
-<p>代码如下：</p>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">......</span><br><span class="line">......</span><br><span class="line"><span class="keyword">with</span> MPRester(api_key) <span class="keyword">as</span> mpr:</span><br><span class="line">    docs = mpr.materials.summary.search(</span><br><span class="line">        elements=[<span class="string">&#x27;Si&#x27;</span>,<span class="string">&#x27;O&#x27;</span>],</span><br><span class="line">        fields=[<span class="string">&quot;material_id&quot;</span>,<span class="string">&quot;band_gap&quot;</span>, <span class="string">&quot;density&quot;</span>,<span class="string">&quot;formula_pretty&quot;</span>, <span class="string">&quot;symmetry&quot;</span>],</span><br><span class="line">        num_elements=(<span class="number">2</span>,<span class="number">4</span>),</span><br><span class="line">        band_gap=(<span class="number">1.5</span>,<span class="literal">None</span>)</span><br><span class="line">    )</span><br><span class="line">......</span><br><span class="line">......</span><br></pre></td></tr></table></figure></div>
-
-<p>运行代码后，可以得到如下结果：</p>
-<p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/16_contain_SiO_3.png" alt="contain_SiO_3"></p>
-<h4 id="实例3：小练习"><a href="#实例3：小练习" class="headerlink" title="实例3：小练习"></a>实例3：小练习</h4><p>相信如果全程跟着老司机一起操作的话，应该对如何筛选有了一定了解，可以自行尝试一下下面的筛选条件：</p>
-<ul>
-<li>元素种类 ≥ 3</li>
-<li>含有<code>O</code>元素</li>
-<li>不含有：Fe、Co、Ni元素</li>
-<li>0.5 ≤ 带隙值 ≤ 1</li>
-<li>输出晶格常数abc</li>
-<li>输出空间群信息</li>
-</ul>
-<p>结果如下，可以自行对照检验：<br><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/17_ex1_results.png" alt="ex1_result"></p>
-<details class="yellow" data-header-exclude><summary><i class="fa-solid fa-chevron-right"></i>参考代码 </summary>
-              <div class="content">
-              <div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">from</span> mp_api.client <span class="keyword">import</span> MPRester</span><br><span class="line"></span><br><span class="line">api_key = <span class="string">&quot;aaaaaabbbbbbb&quot;</span>  <span class="comment"># 请替换成你的API key</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> MPRester(api_key) <span class="keyword">as</span> mpr:</span><br><span class="line">    docs = mpr.materials.summary.search(</span><br><span class="line">        elements=[<span class="string">&#x27;O&#x27;</span>],</span><br><span class="line">        exclude_elements=[<span class="string">&#x27;Fe&#x27;</span>,<span class="string">&#x27;Co&#x27;</span>,<span class="string">&#x27;Ni&#x27;</span>],</span><br><span class="line">        fields=[<span class="string">&quot;material_id&quot;</span>,<span class="string">&quot;band_gap&quot;</span>, <span class="string">&quot;structure&quot;</span>,<span class="string">&quot;formula_pretty&quot;</span>, <span class="string">&quot;symmetry&quot;</span>],</span><br><span class="line">        num_elements=(<span class="number">3</span>,<span class="literal">None</span>),</span><br><span class="line">        band_gap=(<span class="number">0.5</span>,<span class="number">1</span>)</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">data = []               <span class="comment"># 空列表用于储存结果</span></span><br><span class="line"><span class="keyword">for</span> doc <span class="keyword">in</span> docs:</span><br><span class="line">    symmetry_info = doc.symmetry</span><br><span class="line">    structure_info = doc.structure</span><br><span class="line">    data.append(&#123;</span><br><span class="line">        <span class="string">&quot;mp-id&quot;</span>: doc.material_id,</span><br><span class="line">        <span class="string">&quot;band_gap&quot;</span>: doc.band_gap,</span><br><span class="line">        <span class="string">&quot;formula_pretty&quot;</span>: doc.formula_pretty,</span><br><span class="line">        <span class="string">&quot;symbol&quot;</span>: <span class="built_in">getattr</span>(symmetry_info, <span class="string">&quot;symbol&quot;</span>, <span class="string">&quot;NONE&quot;</span>),</span><br><span class="line">        <span class="string">&quot;a&quot;</span>: structure_info.lattice.a,</span><br><span class="line">        <span class="string">&quot;b&quot;</span>: structure_info.lattice.b,</span><br><span class="line">        <span class="string">&quot;c&quot;</span>: structure_info.lattice.c,</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">df = pd.DataFrame(data)  <span class="comment"># 转换为DataFrame格式</span></span><br><span class="line"><span class="built_in">print</span>(df)</span><br></pre></td></tr></table></figure></div>
-              </div>
-            </details>
-
-<h3 id="导出检索结果"><a href="#导出检索结果" class="headerlink" title="导出检索结果"></a>导出检索结果</h3><p>DateFrame格式的材料信息，可以方便的进行分析和处理，但是如果需要将结果导出为其他格式，比如csv文件，这时候就需要用到pandas的to_csv()方法，上述代码最后加入如下一行代码即可：</p>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">......</span><br><span class="line">......</span><br><span class="line">df = pd.DataFrame(data)</span><br><span class="line">df.to_csv(<span class="string">&quot;result.csv&quot;</span>, index=<span class="literal">False</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Export result to result.csv&quot;</span>)</span><br></pre></td></tr></table></figure></div>
-
-<p>运行代码后，会在当前目录下生成<code>result.csv</code>文件，打开csv文件后就可以看到检索结果了。</p>
-<p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/18_csv_result.png" alt="export_csv"></p>
-<h3 id="下载结构cif文件"><a href="#下载结构cif文件" class="headerlink" title="下载结构cif文件"></a>下载结构cif文件</h3><p>如果下载上述csv文件的所有结构的cif文件，可以运行如下代码：</p>
-<details class="yellow" data-header-exclude><summary><i class="fa-solid fa-chevron-right"></i>该代码会下载4000+个cif结构，请谨慎运行！！ </summary>
-              <div class="content">
-              <div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">from</span> mp_api.client <span class="keyword">import</span> MPRester</span><br><span class="line"></span><br><span class="line">api_key = <span class="string">&quot;aaaaaabbbbbb&quot;</span>  <span class="comment"># 请替换成你的API key</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> MPRester(api_key) <span class="keyword">as</span> mpr:</span><br><span class="line">    docs = mpr.materials.summary.search(</span><br><span class="line">        elements=[<span class="string">&#x27;O&#x27;</span>],</span><br><span class="line">        exclude_elements=[<span class="string">&#x27;Fe&#x27;</span>,<span class="string">&#x27;Co&#x27;</span>,<span class="string">&#x27;Ni&#x27;</span>],</span><br><span class="line">        fields=[<span class="string">&quot;material_id&quot;</span>,<span class="string">&quot;band_gap&quot;</span>, <span class="string">&quot;structure&quot;</span>,<span class="string">&quot;formula_pretty&quot;</span>, <span class="string">&quot;symmetry&quot;</span>],</span><br><span class="line">        num_elements=(<span class="number">3</span>,<span class="literal">None</span>),</span><br><span class="line">        band_gap=(<span class="number">0.5</span>,<span class="number">1</span>)</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">data = []               <span class="comment"># 空列表用于储存结果</span></span><br><span class="line"><span class="keyword">for</span> doc <span class="keyword">in</span> docs:</span><br><span class="line">    symmetry_info = doc.symmetry</span><br><span class="line">    structure_info = doc.structure</span><br><span class="line">    data.append(&#123;</span><br><span class="line">        <span class="string">&quot;mp-id&quot;</span>: doc.material_id,</span><br><span class="line">        <span class="string">&quot;band_gap&quot;</span>: doc.band_gap,</span><br><span class="line">        <span class="string">&quot;formula_pretty&quot;</span>: doc.formula_pretty,</span><br><span class="line">        <span class="string">&quot;symbol&quot;</span>: <span class="built_in">getattr</span>(symmetry_info, <span class="string">&quot;symbol&quot;</span>, <span class="string">&quot;NONE&quot;</span>),</span><br><span class="line">        <span class="string">&quot;a&quot;</span>: structure_info.lattice.a,</span><br><span class="line">        <span class="string">&quot;b&quot;</span>: structure_info.lattice.b,</span><br><span class="line">        <span class="string">&quot;c&quot;</span>: structure_info.lattice.c,</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">df = pd.DataFrame(data)  <span class="comment"># 转换为DataFrame格式</span></span><br><span class="line">df.to_csv(<span class="string">&quot;result.csv&quot;</span>, index=<span class="literal">False</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Export result to result.csv&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 遍历所有材料并下载其 CIF 文件</span></span><br><span class="line">    <span class="keyword">for</span> doc <span class="keyword">in</span> docs:</span><br><span class="line">        material_id = doc.material_id</span><br><span class="line">        structure = mpr.get_structure_by_material_id(material_id, final=<span class="literal">True</span>)</span><br><span class="line">        structure.to(<span class="string">f&quot;<span class="subst">&#123;material_id&#125;</span>.cif&quot;</span>)</span><br></pre></td></tr></table></figure></div>
-              </div>
-            </details>
-
-<p>如果只需要下载指定MP编号的cif文件，可以调用<code>get_structure_by_material_id</code>方法储存结构信息并写入到本地，这里我们下载<code>mp-149</code>的cif文件，代码如下：</p>
-<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> mp_api.client <span class="keyword">import</span> MPRester</span><br><span class="line"></span><br><span class="line">api_key = <span class="string">&quot;aaaaaabbbbbb&quot;</span>  <span class="comment"># 请替换成你的API key</span></span><br><span class="line"></span><br><span class="line">mpid = <span class="string">&quot;mp-149&quot;</span>  </span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> MPRester(api_key) <span class="keyword">as</span> mpr:</span><br><span class="line">    structure = mpr.get_structure_by_material_id(mpid, final=<span class="literal">True</span>)</span><br><span class="line">    </span><br><span class="line">    structure.to(<span class="string">f&quot;<span class="subst">&#123;mpid&#125;</span>.cif&quot;</span>)</span><br></pre></td></tr></table></figure></div>
-
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>MP-API的介绍就到此为止啦~~~~<br>目前为止，介绍了如何调用API接口；如果根据需求检索材料并汇总成csv文件；以及最后根据需求下载cif文件。当然，MP-API还有很多功能，比如获取结构的电子结构、能量等信息，这里就不一一介绍了。更多功能详解有需求后面再单独补充介绍。</p>
-<p><em><strong>¡Muchas gracias!</strong></em></p>
-
-        </div>
-
-        
-            <div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
-                <div class="article-copyright-info-container">
-    <ul>
-        <li><strong>标题:</strong> Chap.3  计算小白硬学VASP —— 学会使用Materials Project</li>
-        <li><strong>作者:</strong> 炫酷老司机</li>
-        <li><strong>创建于
-                :</strong> 2024-05-30 16:00:00</li>
-        
-            <li>
-                <strong>更新于
-                    :</strong> 2024-06-11 21:23:04
-            </li>
-        
-        <li>
-            <strong>链接:</strong> https://andyhox.github.io/2024/05/30/Learn-VASP-from-pymatgen-3/
-        </li>
-        <li>
-            <strong>
-                版权声明:
-            </strong>
-            
-
-            
-                欢迎个人转载、使用、转贴等，但请获得作者同意且注明出处！
-            
-        </li>
-    </ul>
-</div>
-
-            </div>
-        
-
-        
-            <ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
-                
-                    <li class="tag-item mx-0.5">
-                        <a href="/tags/VASP/">#VASP</a>&nbsp;
-                    </li>
-                
-                    <li class="tag-item mx-0.5">
-                        <a href="/tags/pymatgen/">#pymatgen</a>&nbsp;
-                    </li>
-                
-                    <li class="tag-item mx-0.5">
-                        <a href="/tags/Materials-Project/">#Materials Project</a>&nbsp;
-                    </li>
-                
-            </ul>
-        
-
-        
-
-        
-            <div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
-                
-                    <div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
-                        <a class="prev"
-                        rel="prev"
-                        href="/2024/06/04/Learn-VASP-from-pymatgen-4/"
-                        >
-                            <span class="left arrow-icon flex justify-center items-center">
-                                <i class="fa-solid fa-chevron-left"></i>
-                            </span>
-                            <span class="title flex justify-center items-center">
-                                <span class="post-nav-title-item">Chap.4  计算小白硬学VASP —— MPRelaxSet用法</span>
-                                <span class="post-nav-item">上一篇</span>
-                            </span>
-                        </a>
-                    </div>
-                
-                
-                    <div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
-                        <a class="next"
-                        rel="next"
-                        href="/2024/05/30/Learn-VASP-from-pymatgen-2/"
-                        >
-                            <span class="title flex justify-center items-center">
-                                <span class="post-nav-title-item">Chap.2  计算小白硬学VASP —— 前期准备</span>
-                                <span class="post-nav-item">下一篇</span>
-                            </span>
-                            <span class="right arrow-icon flex justify-center items-center">
-                                <i class="fa-solid fa-chevron-right"></i>
-                            </span>
-                        </a>
-                    </div>
-                
-            </div>
-        
-
-
-        
-    </div>
-
-    
-        <div class="toc-content-container">
-            <div class="post-toc-wrap">
-    <div class="post-toc">
-        <div class="toc-title">此页目录</div>
-        <div class="page-title">Chap.3  计算小白硬学VASP —— 学会使用Materials Project</div>
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Materials-Project%E7%BD%91%E9%A1%B5%E7%AB%AF"><span class="nav-text">Materials Project网页端</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9D%90%E6%96%99%E6%A3%80%E7%B4%A2"><span class="nav-text">材料检索</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A1%B5%E9%9D%A2%E4%BF%A1%E6%81%AF"><span class="nav-text">页面信息</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MP-API%E6%8E%A5%E5%8F%A3"><span class="nav-text">MP-API接口</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8Materials-Project-API"><span class="nav-text">如何使用Materials Project API</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A3%80%E7%B4%A2%E6%9D%90%E6%96%99%E4%BF%A1%E6%81%AF"><span class="nav-text">检索材料信息</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B1%EF%BC%9A%E6%A0%B9%E6%8D%AEMP%E7%BC%96%E5%8F%B7%E8%8E%B7%E5%8F%96%E6%9D%90%E6%96%99%E4%BF%A1%E6%81%AF"><span class="nav-text">实例1：根据MP编号获取材料信息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B2%EF%BC%9A%E6%A0%B9%E6%8D%AE%E5%85%83%E7%B4%A0%E8%8E%B7%E5%8F%96%E6%9D%90%E6%96%99%E4%BF%A1%E6%81%AF"><span class="nav-text">实例2：根据元素获取材料信息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B3%EF%BC%9A%E5%B0%8F%E7%BB%83%E4%B9%A0"><span class="nav-text">实例3：小练习</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%BC%E5%87%BA%E6%A3%80%E7%B4%A2%E7%BB%93%E6%9E%9C"><span class="nav-text">导出检索结果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD%E7%BB%93%E6%9E%84cif%E6%96%87%E4%BB%B6"><span class="nav-text">下载结构cif文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol></li></ol>
-
-    </div>
-</div>
-        </div>
-    
-</div>
-
-
-
-                
-
-            </div>
-
-            
-
-        </div>
-
-        <div class="main-content-footer">
-            <footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
-    <div class="info-container py-3 text-center">
-        
-        <div class="text-center">
-            &copy;
-            
-              <span>2024</span>
-              -
-            
-            2024&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">炫酷老司机</a>
-            
-                
-                <p class="post-count space-x-0.5">
-                    <span>
-                        共 6 篇文章
-                    </span>
-                    
-                        <span>
-                            共 12k 字
-                        </span>
-                    
-                </p>
-            
-        </div>
-        
-            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
-            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
-                
-                    <span id="busuanzi_container_site_uv" class="lg:!block">
-                        <span class="text-sm">访问人数</span>
-                        <span id="busuanzi_value_site_uv"></span>
-                    </span>
-                
-                
-                    <span id="busuanzi_container_site_pv" class="lg:!block">
-                        <span class="text-sm">总访问量</span>
-                        <span id="busuanzi_value_site_pv"></span>
-                    </span>
-                
-            </div>
-        
-        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
-            <span class="lg:block text-sm">由 <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a> 驱动</span>
-            <span class="text-sm lg:block">主题&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.6.2</a></span>
-        </div>
-        
-        
-            <div>
-                博客已运行 <span class="odometer" id="runtime_days" ></span> 天 <span class="odometer" id="runtime_hours"></span> 小时 <span class="odometer" id="runtime_minutes"></span> 分钟 <span class="odometer" id="runtime_seconds"></span> 秒
-            </div>
-        
-        
-            <script data-swup-reload-script>
-                try {
-                    function odometer_init() {
-                    const elements = document.querySelectorAll('.odometer');
-                    elements.forEach(el => {
-                        new Odometer({
-                            el,
-                            format: '( ddd).dd',
-                            duration: 200
-                        });
-                    });
-                    }
-                    odometer_init();
-                } catch (error) {}
-            </script>
-        
-        
-        
-    </div>  
-</footer>
-        </div>
-    </div>
-
-    
-        <div class="post-tools">
-            <div class="post-tools-container">
-    <ul class="article-tools-list">
-        <!-- TOC aside toggle -->
-        
-            <li class="right-bottom-tools page-aside-toggle">
-                <i class="fa-regular fa-outdent"></i>
-            </li>
-        
-
-        <!-- go comment -->
-        
-    </ul>
-</div>
-
-        </div>
-    
-
-    <div class="right-side-tools-container">
-        <div class="side-tools-container">
-    <ul class="hidden-tools-list">
-        <li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
-            <i class="fa-regular fa-magnifying-glass-plus"></i>
-        </li>
-
-        <li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
-            <i class="fa-regular fa-magnifying-glass-minus"></i>
-        </li>
-
-        <li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
-            <i class="fa-regular fa-moon"></i>
-        </li>
-
-        <!-- rss -->
-        
-
-        
-
-        <li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
-            <i class="fa-regular fa-arrow-down"></i>
-        </li>
-    </ul>
-
-    <ul class="visible-tools-list">
-        <li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
-            <i class="fa-regular fa-cog fa-spin"></i>
-        </li>
-        
-            <li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
-                <i class="arrow-up fas fa-arrow-up"></i>
-                <span class="percent"></span>
-            </li>
-        
-        
-    </ul>
-</div>
-
-    </div>
-
-    <div class="image-viewer-container">
-    <img src="">
-</div>
-
-
-    
-        <div class="search-pop-overlay">
-    <div class="popup search-popup">
-        <div class="search-header">
-          <span class="search-input-field-pre">
-            <i class="fa-solid fa-keyboard"></i>
-          </span>
-            <div class="search-input-container">
-                <input autocomplete="off"
-                       autocorrect="off"
-                       autocapitalize="off"
-                       placeholder="搜索..."
-                       spellcheck="false"
-                       type="search"
-                       class="search-input"
-                >
-            </div>
-            <span class="popup-btn-close">
-                <i class="fa-solid fa-times"></i>
-            </span>
-        </div>
-        <div id="search-result">
-            <div id="no-result">
-                <i class="fa-solid fa-spinner fa-spin-pulse fa-5x fa-fw"></i>
-            </div>
-        </div>
-    </div>
-</div>
-
-    
-
-</main>
-
-
-    
-<script src="/js/libs/Swup.min.js"></script>
-
-<script src="/js/libs/SwupSlideTheme.min.js"></script>
-
-<script src="/js/libs/SwupScriptsPlugin.min.js"></script>
-
-<script src="/js/libs/SwupProgressPlugin.min.js"></script>
-
-<script src="/js/libs/SwupScrollPlugin.min.js"></script>
-
-<script src="/js/libs/SwupPreloadPlugin.min.js"></script>
-
-<script>
-    const swup = new Swup({
-        plugins: [
-            new SwupScriptsPlugin({
-                optin: true,
-            }),
-            new SwupProgressPlugin(),
-            new SwupScrollPlugin({
-                offset: 80,
-            }),
-            new SwupSlideTheme({
-                mainElement: ".main-content-body",
-            }),
-            new SwupPreloadPlugin(),
-        ],
-        containers: ["#swup"],
-    });
-</script>
-
-
-
-
-
-
-
-<script src="/js/tools/imageViewer.js" type="module"></script>
-
-<script src="/js/utils.js" type="module"></script>
-
-<script src="/js/main.js" type="module"></script>
-
-<script src="/js/layouts/navbarShrink.js" type="module"></script>
-
-<script src="/js/tools/scrollTopBottom.js" type="module"></script>
-
-<script src="/js/tools/lightDarkSwitch.js" type="module"></script>
-
-<script src="/js/layouts/categoryList.js" type="module"></script>
-
-
-
-    
-<script src="/js/tools/localSearch.js" type="module"></script>
-
-
-
-
-    
-<script src="/js/tools/codeBlock.js" type="module"></script>
-
-
-
-
-
-
-    
-<script src="/js/tools/runtime.js"></script>
-
-    
-<script src="/js/libs/odometer.min.js"></script>
-
-    
-<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
-
-
-
-
   
-<script src="/js/libs/Typed.min.js"></script>
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
 
-  
-<script src="/js/plugins/typed.js" type="module"></script>
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
 
-
-
-
+      const theme = saveToLocal.get('theme')
     
-<script src="/js/libs/mermaid.min.js"></script>
-
-    
-<script src="/js/plugins/mermaid.js"></script>
-
-
-
-
-
-
-
-<div class="post-scripts" data-swup-reload-script>
-    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
         
-<script src="/js/tools/tocToggle.js" type="module"></script>
-
-<script src="/js/layouts/toc.js" type="module"></script>
-
-<script src="/js/plugins/tabs.js" type="module"></script>
-
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
     
-</div>
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":100,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE={title:"Chap.3  计算小白硬学VASP —— 学会使用Materials Project",isHighlightShrink:!1,isToc:!0,pageType:"post"}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image:url(/img/background.png)"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.ico" onerror='this.onerror=null,this.src="/img/friend_404.gif"' alt="avatar"></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">21</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">11</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-graduation-cap"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-heart"></i><span> 爱好</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/game/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></li><li><a class="site-page child" href="/ride/"><i class="fa-fw fas fa-bicycle"></i><span> 骑行</span></a></li><li><a class="site-page child" href="/food/"><i class="fa-fw fas fa-utensils"></i><span> 美食</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">AH</span></a><a class="nav-page-title" href="/"><span class="site-name">Chap.3 计算小白硬学VASP —— 学会使用Materials Project</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fa fa-graduation-cap"></i><span> 文章</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-heart"></i><span> 爱好</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/game/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></li><li><a class="site-page child" href="/ride/"><i class="fa-fw fas fa-bicycle"></i><span> 骑行</span></a></li><li><a class="site-page child" href="/food/"><i class="fa-fw fas fa-utensils"></i><span> 美食</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fas fa-comments"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Chap.3 计算小白硬学VASP —— 学会使用Materials Project</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-05-30T08:00:00.000Z" title="发表于 2024-05-30 16:00:00">2024-05-30</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-02-27T13:19:51.205Z" title="更新于 2025-02-27 21:19:51">2025-02-27</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Learn-VASP-from-pymatgen/">Learn VASP from pymatgen</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">3.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>12分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><p><em><strong>¡Hola a todos!</strong></em></p><p>很遗憾的告诉各位，本章还没有开始涉及到VASP的计算。</p><p><strong>Why????</strong></p><p>根据老司机以往的使用经验，做计算最关键的不是了解各种输入参数的意义，不是高超的编程能力，不是各种计算流程信手拈来，而是一个靠谱的结构。往往一个靠谱的结构，你的计算就已经成功了90%，这么说一点也不为过。一个“垃圾”结构，你往往算了几天、一周、一个月，得到的结果都不见得令人满意。</p><p>如何得到一个靠谱的结构，或者说到哪里去找一个靠谱的结构，这里不得不介绍一下本期嘉宾——<a target="_blank" rel="noopener" href="https://next-gen.materialsproject.org/">Materials Project</a>网站（下面简称MP）。截至到今天，MP提供了超过15万个无机化合物的结构信息以及性质，其中有实验已经发现的材料，也有纯计算预测的新材料。每一种化合物的计算源文件都可以免费下载本地，特别适合小白们自学VASP。</p><p><strong>当然，最重要的一点是，免费！免费！免费！Free~~~~~~~</strong></p><p>你只需要邮箱登录后就可以尽情使用</p><p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/0_MP_login.png" alt="Materials Project_login"></p><p>登录后进入主页，开始今天的MP学习之旅。</p><p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/1_MP_homepage.png" alt="MP_home"></p><h2 id="Materials-Project网页端"><a href="#Materials-Project网页端" class="headerlink" title="Materials Project网页端"></a>Materials Project网页端</h2><h3 id="材料检索"><a href="#材料检索" class="headerlink" title="材料检索"></a>材料检索</h3><p>MP上面材料的检索方式有三种:</p><p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/3_MP_search_type.png" alt="MP_search_type"></p><ul><li><code>Only Elements</code>: 仅包含选定元素，如输入<code>Si</code>检索出来的结构只是单质硅；</li><li><code>At least Elements</code>: 至少包含选定元素，如输入<code>Si</code>检索出来的结构既有单质硅，也有含<code>Si</code>的化合物：<code>SiO</code>、<code>SiO2</code>等；</li><li><code>Formula</code>: 输入完整的分子式，如输入<code>SiO2</code>，检索出来的结构只有<code>SiO2</code>。</li></ul><p>这里我们用<code>Only Elements</code>检索<code>Si</code>，可以得到一系列的<code>Si</code>单质结构。</p><p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/4_MP_Si.png" alt="MP_search_Si"></p><p>这么多<code>Si</code>单质结构，到底哪个是我们想要的呢？我们可以根据<code>Crystal System</code>、<code>Spacegroup</code>等信息筛选，这里我们以第一个<code>Si</code>结构为例，了解一下MP上面提供了哪些信息。</p><h3 id="页面信息"><a href="#页面信息" class="headerlink" title="页面信息"></a>页面信息</h3><p><code>Summary</code>一栏基本提供了晶体结构的常见基本信息：MP编号(mp-149)、空间群信息、能带信息、磁性信息、实验上是否得到等。</p><div class="note info flat"><p>MP编号相当于材料的身份证，是Materials Project网站上每一个材料的唯一标识符，在后续会用到。</p></div><p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/5_MP_Si_info1.png" alt="MP_Si_info1"></p><p>继续往下拉还可以看到具体的晶格常数信息，能带态密度图、模拟光谱信息等。</p><ul><li>晶格常数信息</li></ul><p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/6_MP_Si_info2.png" alt="MP_Si_info2"></p><ul><li>能带态密度图</li></ul><p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/7_MP_Si_info3.png" alt="MP_Si_info3"></p><ul><li>模拟光谱</li></ul><p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/8_MP_Si_info4.png" alt="MP_Si_info4"></p><p>MP上面还有很多其他信息，大家可以自行探索，这里就不一一介绍了。</p><h2 id="MP-API接口"><a href="#MP-API接口" class="headerlink" title="MP-API接口"></a>MP-API接口</h2><p>MP网页端的优势在于可以直观地看到材料的结构，但是从获取信息的角度来说，效率还是太低了。因此，MP还提供了API接口，可以方便地大批量获取到材料的结构、性质等各种信息。尤其适用于data mining、机器学习等领域。Anyway，即使你没有大规模数据下载分析的需求，对于日常使用来说，API接口用来找结构，查询信息还是很方便的。</p><h3 id="如何使用Materials-Project-API"><a href="#如何使用Materials-Project-API" class="headerlink" title="如何使用Materials Project API"></a>如何使用Materials Project API</h3><p>使用API接口非常简单，只需要几步即可。</p><ul><li>获取API key<br>在MP网页端注册账号，登录后，点击右上角的<code>API</code>，选择<code>API Key</code>，生成API Key即可，该字符串可复制保存，可长期使用。</li></ul><p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/2_MP_api_key.png" alt="MP_API_key"></p><ul><li>安装mp_api包</li></ul><p>获取API key后，我们需要安装<code>mp_api</code>包，该包是Materials Project API的Python封装。后续的操作都需要在Python环境中进行，这个时候回到终端环境，激活<code>my_pymatgen</code>环境，可直接pip命令安装：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">conda activate my_pymatgen</span><br><span class="line">pip install mp_api</span><br><span class="line">pip show mp_api</span><br></pre></td></tr></table></figure><p>出现下面类似信息说明安装成功：</p><p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/9_mp_api_install.png" alt="mp_api_install"></p><ul><li>实例1：获取<code>Si</code>单质结构信息<br>python脚本的编写推荐使用IDE工具，如VSCode、PyCharm等，或者Jupyter Notebook。下面的操作均以Jupyter Notebook为例，如果您不熟悉Jupyter Notebook，可以参考<a target="_blank" rel="noopener" href="https://jupyter.org/documentation">Jupyter Notebook官方文档</a>。</li></ul><p>如果没有安装Jupyter Notebook，可以先安装：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda install -c conda-forge notebook</span><br></pre></td></tr></table></figure><p>然后在终端运行：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jupyter notebook</span><br></pre></td></tr></table></figure><p>会跳转到外部页面，此时新建一个Jupyter Notebook文件，test.ipynb打开，输入以下代码：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> mp_api.client <span class="keyword">import</span> MPRester</span><br><span class="line"></span><br><span class="line">api_key = <span class="string">&quot;aaaaabbbbb&quot;</span>  <span class="comment"># 请替换成你的API key</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> MPRester(api_key) <span class="keyword">as</span> mpr:</span><br><span class="line">    <span class="comment"># 获取Si单质结构信息</span></span><br><span class="line">    structure = mpr.get_structure_by_material_id(<span class="string">&quot;mp-149&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(structure)          <span class="comment"># 打印结构信息</span></span><br></pre></td></tr></table></figure><p>这里我们是通过MP编号<code>mp-149</code>获取了<code>Si</code>单质结构信息，正如前文所说，MP编号相当于材料的身份证，是Materials Project网站上每一个材料的唯一标识符。</p><p>在Jupyter Notebook中运行代码命令为<code>Shift+Enter</code>，运行后会出现输出结果：</p><p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/10_case1.png" alt="MP_API_Si_structure"></p><div class="note info flat"><p>无论是Jupyter Notebook还是VSCode，输出结果都是一样的。</p></div><h3 id="检索材料信息"><a href="#检索材料信息" class="headerlink" title="检索材料信息"></a>检索材料信息</h3><h4 id="实例1：根据MP编号获取材料信息"><a href="#实例1：根据MP编号获取材料信息" class="headerlink" title="实例1：根据MP编号获取材料信息"></a>实例1：根据MP编号获取材料信息</h4><p>有人会说了，好像只打印出了一些简单的结构信息，并没有网页端的数据完整。别急，让我们丰富一下输出内容。MP-API提供了查询结构信息的方法<code>MPRester.materials.summary.search()</code>，通过这个函数方法，我们可以批量准确的查询到所需的材料信息，完整代码如下：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">from</span> mp_api.client <span class="keyword">import</span> MPRester</span><br><span class="line"></span><br><span class="line">api_key = <span class="string">&quot;aaaaabbbbb&quot;</span>  <span class="comment"># 请替换成你的API key</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> MPRester(api_key) <span class="keyword">as</span> mpr:</span><br><span class="line">    docs = mpr.materials.summary.search(</span><br><span class="line">        material_ids=<span class="string">&#x27;mp-149&#x27;</span>,</span><br><span class="line">        fields=[<span class="string">&quot;band_gap&quot;</span>, <span class="string">&quot;density&quot;</span>,<span class="string">&quot;formula_pretty&quot;</span>, <span class="string">&quot;symmetry&quot;</span>]</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">data = []               <span class="comment"># 空列表用于储存结果</span></span><br><span class="line"><span class="keyword">for</span> doc <span class="keyword">in</span> docs:</span><br><span class="line">    symmetry_info = doc.symmetry</span><br><span class="line">    data.append(&#123;</span><br><span class="line">        <span class="string">&quot;band_gap&quot;</span>: doc.band_gap,</span><br><span class="line">        <span class="string">&quot;density&quot;</span>: doc.density,</span><br><span class="line">        <span class="string">&quot;formula_pretty&quot;</span>: doc.formula_pretty,</span><br><span class="line">        <span class="string">&quot;symbol&quot;</span>: <span class="built_in">getattr</span>(symmetry_info, <span class="string">&quot;symbol&quot;</span>, <span class="string">&quot;NONE&quot;</span>),</span><br><span class="line">        <span class="string">&quot;crystal_system&quot;</span>: <span class="built_in">getattr</span>(symmetry_info, <span class="string">&quot;crystal_system&quot;</span>, <span class="string">&quot;NONE&quot;</span>),</span><br><span class="line">        <span class="string">&quot;space_group_num&quot;</span>: <span class="built_in">getattr</span>(symmetry_info, <span class="string">&quot;number&quot;</span>, <span class="string">&quot;NONE&quot;</span>)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">df = pd.DataFrame(data)  <span class="comment"># 转换为DataFrame格式</span></span><br><span class="line"><span class="built_in">print</span>(df)</span><br></pre></td></tr></table></figure><p>初次看到这个代码，可能会有点晕，不过不要着急，慢慢看，我们一步一步来。这个代码的逻辑主要分为两步：</p><ul><li>1、调用api接口采用<code>MPRester.materials.summary.search()</code>查询编号为<code>mp-149</code>的材料具体信息，这里指定的字段有<code>band_gap</code>、<code>density</code>、<code>formula_pretty</code>、<code>symmetry</code>，分别表示带隙、密度、分子式、空间群信息：</li></ul><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> MPRester(api_key) <span class="keyword">as</span> mpr:</span><br><span class="line">    docs = mpr.materials.summary.search(</span><br><span class="line">        material_ids=<span class="string">&#x27;mp-149&#x27;</span>,</span><br><span class="line">        fields=[<span class="string">&quot;band_gap&quot;</span>, <span class="string">&quot;density&quot;</span>,<span class="string">&quot;formula_pretty&quot;</span>, <span class="string">&quot;symmetry&quot;</span>]</span><br><span class="line">    )</span><br></pre></td></tr></table></figure><p>这里fields参数可以指定需要查询的参数，也可以不指定，默认会返回所有参数。<code>MPRester.materials.summary.search()</code>可以查询的参数详情可参考<a target="_blank" rel="noopener" href="https://materialsproject.github.io/api/_modules/mp_api/client/routes/materials/summary.html">官方文档</a></p><p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/11_search_details.png" alt="MP_API_search_fields"></p><p>上述即为部分参数，每个参数表示的意义基本就是英文直译，另有不懂的也可以在文档中找到具体的说明。</p><p>回到代码，<code>docs</code>是一个列表，存储了我们制定的<code>fields</code>参数的信息，但是此时直接<code>print(docs)</code>输出的结果不利于查看，如果我们直接<code>print(docs)</code>，会看到：</p><p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/12_prindocs.png" alt="MP_print_docs"></p><p>可以看到除了指定的参数，为写入<code>fields</code>的参数也会列出来，这样得到的结果老司机看到就头大，所以我们需要对其进行处理。</p><ul><li>2、使用pandas库将查询结果转换为DataFrame格式并输出，也就是第二段代码：</li></ul><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">data = []               <span class="comment"># 空列表用于储存结果</span></span><br><span class="line"><span class="keyword">for</span> doc <span class="keyword">in</span> docs:</span><br><span class="line">    symmetry_info = doc.symmetry</span><br><span class="line">    data.append(&#123;</span><br><span class="line">        <span class="string">&quot;band_gap&quot;</span>: doc.band_gap,</span><br><span class="line">        <span class="string">&quot;density&quot;</span>: doc.density,</span><br><span class="line">        <span class="string">&quot;formula_pretty&quot;</span>: doc.formula_pretty,</span><br><span class="line">        <span class="string">&quot;symbol&quot;</span>: <span class="built_in">getattr</span>(symmetry_info, <span class="string">&quot;symbol&quot;</span>, <span class="string">&quot;NONE&quot;</span>),</span><br><span class="line">        <span class="string">&quot;crystal_system&quot;</span>: <span class="built_in">getattr</span>(symmetry_info, <span class="string">&quot;crystal_system&quot;</span>, <span class="string">&quot;NONE&quot;</span>),</span><br><span class="line">        <span class="string">&quot;space_group_num&quot;</span>: <span class="built_in">getattr</span>(symmetry_info, <span class="string">&quot;number&quot;</span>, <span class="string">&quot;NONE&quot;</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">df = pd.DataFrame(data)  <span class="comment"># 转换为DataFrame格式</span></span><br></pre></td></tr></table></figure><p>上述代码第2-11行用for循环遍历<code>docs</code>列表，将对应的属性储存在<code>data</code>列表中，具体提取的信息包括：</p><ul><li>band_gap: 材料的带隙</li><li>density: 材料的密度</li><li>formula_pretty: 材料的化学式</li><li>symbol: 材料的空间群信息。使用getattr函数获取属性值，如果属性不存在，则使用默认值”NONE”。</li><li>crystal_system: 材料的晶系（crystal system）。使用getattr函数获取属性值，如果属性不存在，则使用默认值”NONE”。</li><li>space_group_num: 材料的空间群编号（space group number）。使用getattr函数获取属性值，如果属性不存在，则使用默认值”NONE”。</li></ul><p>这里采用了getattr函数来提取<code>doc.symmetry</code>中的属性值，原因是因为<code>doc.symmetry</code>是一个字典，里面包含了多个属性，上述的<code>symbol</code>、<code>crystal_system</code>、<code>space_group_num</code>都是字典的键值。</p><p>第12行将<code>data</code>列表转换为DataFrame格式，运行print(df)后，可以得到如下结果：</p><p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/13_Si.png" alt="MP_API_Si_structure_df"></p><p>此次，我们通过MP-API根据MP编号获取了结构信息，并将其转换为DataFrame格式，方便后续分析，下面我们再试一下更有意思的玩法。</p><h4 id="实例2：根据元素获取材料信息"><a href="#实例2：根据元素获取材料信息" class="headerlink" title="实例2：根据元素获取材料信息"></a>实例2：根据元素获取材料信息</h4><p>在上述代码的基础上，修改检索的条件，将通过MP编号获取改成通过元素获取材料信息，代码如下：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">......</span><br><span class="line">......</span><br><span class="line"><span class="keyword">with</span> MPRester(api_key) <span class="keyword">as</span> mpr:</span><br><span class="line">    docs = mpr.materials.summary.search(</span><br><span class="line">        elements=[<span class="string">&#x27;Si&#x27;</span>,<span class="string">&#x27;O&#x27;</span>],</span><br><span class="line">        fields=[<span class="string">&quot;material_id&quot;</span>,<span class="string">&quot;band_gap&quot;</span>, <span class="string">&quot;density&quot;</span>,<span class="string">&quot;formula_pretty&quot;</span>, <span class="string">&quot;symmetry&quot;</span>]</span><br><span class="line">    )</span><br><span class="line">......</span><br><span class="line">......</span><br></pre></td></tr></table></figure><p>其余代码保持不变，运行代码后，可以得到如下结果：</p><p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/14_contain_SiO.png" alt="contain_SiO"></p><p>可以看到，这一次直接返回了所有含有<code>Si</code>和<code>O</code>元素的材料信息，一共有7637个结构。但是，如果我们并不想看到所有材料信息，而是只想看到其中只包含<code>Si</code>和<code>O</code>元素的材料信息，这时候我们需要继续添加筛选条件：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">......</span><br><span class="line">......</span><br><span class="line"><span class="keyword">with</span> MPRester(api_key) <span class="keyword">as</span> mpr:</span><br><span class="line">    docs = mpr.materials.summary.search(</span><br><span class="line">        elements=[<span class="string">&#x27;Si&#x27;</span>,<span class="string">&#x27;O&#x27;</span>],</span><br><span class="line">        fields=[<span class="string">&quot;material_id&quot;</span>,<span class="string">&quot;band_gap&quot;</span>, <span class="string">&quot;density&quot;</span>,<span class="string">&quot;formula_pretty&quot;</span>, <span class="string">&quot;symmetry&quot;</span>],</span><br><span class="line">        num_elements=<span class="number">2</span></span><br><span class="line">    )</span><br><span class="line">......</span><br><span class="line">......</span><br></pre></td></tr></table></figure><p><code>num_elements</code>参数限制了返回结果中的元素只有两种，即只包含Si和O的材料。运行代码后，可以得到如下结果：</p><p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/15_contain_SiO_num2.png" alt="contain_SiO_num2"></p><p>可以看到此时筛选得到的结构只有343个结构了。至此，大家应该明白了，MP-API的强大之处在于可以根据各种条件筛选材料信息，并进一步分析。根据不同的需求，只需要调节对应的限制参数，就可以得到所需的材料信息。如上述筛选条件还可以修改成：</p><ul><li>2 ≤ 元素种类 ≤ 4</li><li>至少含有<code>Si</code>和<code>O</code>元素</li><li>带隙大于1.5的材料</li></ul><p>代码如下：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">......</span><br><span class="line">......</span><br><span class="line"><span class="keyword">with</span> MPRester(api_key) <span class="keyword">as</span> mpr:</span><br><span class="line">    docs = mpr.materials.summary.search(</span><br><span class="line">        elements=[<span class="string">&#x27;Si&#x27;</span>,<span class="string">&#x27;O&#x27;</span>],</span><br><span class="line">        fields=[<span class="string">&quot;material_id&quot;</span>,<span class="string">&quot;band_gap&quot;</span>, <span class="string">&quot;density&quot;</span>,<span class="string">&quot;formula_pretty&quot;</span>, <span class="string">&quot;symmetry&quot;</span>],</span><br><span class="line">        num_elements=(<span class="number">2</span>,<span class="number">4</span>),</span><br><span class="line">        band_gap=(<span class="number">1.5</span>,<span class="literal">None</span>)</span><br><span class="line">    )</span><br><span class="line">......</span><br><span class="line">......</span><br></pre></td></tr></table></figure><p>运行代码后，可以得到如下结果：</p><p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/16_contain_SiO_3.png" alt="contain_SiO_3"></p><h4 id="实例3：小练习"><a href="#实例3：小练习" class="headerlink" title="实例3：小练习"></a>实例3：小练习</h4><p>相信如果全程跟着老司机一起操作的话，应该对如何筛选有了一定了解，可以自行尝试一下下面的筛选条件：</p><ul><li>元素种类 ≥ 3</li><li>含有<code>O</code>元素</li><li>不含有：Fe、Co、Ni元素</li><li>0.5 ≤ 带隙值 ≤ 1</li><li>输出晶格常数abc</li><li>输出空间群信息</li></ul><p>结果如下，可以自行对照检验：<br><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/17_ex1_results.png" alt="ex1_result"></p><mark class="hl-label blue">参考代码</mark><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">from</span> mp_api.client <span class="keyword">import</span> MPRester</span><br><span class="line"></span><br><span class="line">api_key = <span class="string">&quot;aaaaaabbbbbbb&quot;</span>  <span class="comment"># 请替换成你的API key</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> MPRester(api_key) <span class="keyword">as</span> mpr:</span><br><span class="line">    docs = mpr.materials.summary.search(</span><br><span class="line">        elements=[<span class="string">&#x27;O&#x27;</span>],</span><br><span class="line">        exclude_elements=[<span class="string">&#x27;Fe&#x27;</span>,<span class="string">&#x27;Co&#x27;</span>,<span class="string">&#x27;Ni&#x27;</span>],</span><br><span class="line">        fields=[<span class="string">&quot;material_id&quot;</span>,<span class="string">&quot;band_gap&quot;</span>, <span class="string">&quot;structure&quot;</span>,<span class="string">&quot;formula_pretty&quot;</span>, <span class="string">&quot;symmetry&quot;</span>],</span><br><span class="line">        num_elements=(<span class="number">3</span>,<span class="literal">None</span>),</span><br><span class="line">        band_gap=(<span class="number">0.5</span>,<span class="number">1</span>)</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">data = []               <span class="comment"># 空列表用于储存结果</span></span><br><span class="line"><span class="keyword">for</span> doc <span class="keyword">in</span> docs:</span><br><span class="line">    symmetry_info = doc.symmetry</span><br><span class="line">    structure_info = doc.structure</span><br><span class="line">    data.append(&#123;</span><br><span class="line">        <span class="string">&quot;mp-id&quot;</span>: doc.material_id,</span><br><span class="line">        <span class="string">&quot;band_gap&quot;</span>: doc.band_gap,</span><br><span class="line">        <span class="string">&quot;formula_pretty&quot;</span>: doc.formula_pretty,</span><br><span class="line">        <span class="string">&quot;symbol&quot;</span>: <span class="built_in">getattr</span>(symmetry_info, <span class="string">&quot;symbol&quot;</span>, <span class="string">&quot;NONE&quot;</span>),</span><br><span class="line">        <span class="string">&quot;a&quot;</span>: structure_info.lattice.a,</span><br><span class="line">        <span class="string">&quot;b&quot;</span>: structure_info.lattice.b,</span><br><span class="line">        <span class="string">&quot;c&quot;</span>: structure_info.lattice.c,</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">df = pd.DataFrame(data)  <span class="comment"># 转换为DataFrame格式</span></span><br><span class="line"><span class="built_in">print</span>(df)</span><br></pre></td></tr></table></figure><h3 id="导出检索结果"><a href="#导出检索结果" class="headerlink" title="导出检索结果"></a>导出检索结果</h3><p>DateFrame格式的材料信息，可以方便的进行分析和处理，但是如果需要将结果导出为其他格式，比如csv文件，这时候就需要用到pandas的to_csv()方法，上述代码最后加入如下一行代码即可：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">......</span><br><span class="line">......</span><br><span class="line">df = pd.DataFrame(data)</span><br><span class="line">df.to_csv(<span class="string">&quot;result.csv&quot;</span>, index=<span class="literal">False</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Export result to result.csv&quot;</span>)</span><br></pre></td></tr></table></figure><p>运行代码后，会在当前目录下生成<code>result.csv</code>文件，打开csv文件后就可以看到检索结果了。</p><p><img src="/2024/05/30/Learn-VASP-from-pymatgen-3/18_csv_result.png" alt="export_csv"></p><h3 id="下载结构cif文件"><a href="#下载结构cif文件" class="headerlink" title="下载结构cif文件"></a>下载结构cif文件</h3><p>如果下载上述csv文件的所有结构的cif文件，可以运行如下代码：</p><mark class="hl-label blue">该代码会下载4000+个cif结构，请谨慎运行！！</mark><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">from</span> mp_api.client <span class="keyword">import</span> MPRester</span><br><span class="line"></span><br><span class="line">api_key = <span class="string">&quot;aaaaaabbbbbb&quot;</span>  <span class="comment"># 请替换成你的API key</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> MPRester(api_key) <span class="keyword">as</span> mpr:</span><br><span class="line">    docs = mpr.materials.summary.search(</span><br><span class="line">        elements=[<span class="string">&#x27;O&#x27;</span>],</span><br><span class="line">        exclude_elements=[<span class="string">&#x27;Fe&#x27;</span>,<span class="string">&#x27;Co&#x27;</span>,<span class="string">&#x27;Ni&#x27;</span>],</span><br><span class="line">        fields=[<span class="string">&quot;material_id&quot;</span>,<span class="string">&quot;band_gap&quot;</span>, <span class="string">&quot;structure&quot;</span>,<span class="string">&quot;formula_pretty&quot;</span>, <span class="string">&quot;symmetry&quot;</span>],</span><br><span class="line">        num_elements=(<span class="number">3</span>,<span class="literal">None</span>),</span><br><span class="line">        band_gap=(<span class="number">0.5</span>,<span class="number">1</span>)</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">data = []               <span class="comment"># 空列表用于储存结果</span></span><br><span class="line"><span class="keyword">for</span> doc <span class="keyword">in</span> docs:</span><br><span class="line">    symmetry_info = doc.symmetry</span><br><span class="line">    structure_info = doc.structure</span><br><span class="line">    data.append(&#123;</span><br><span class="line">        <span class="string">&quot;mp-id&quot;</span>: doc.material_id,</span><br><span class="line">        <span class="string">&quot;band_gap&quot;</span>: doc.band_gap,</span><br><span class="line">        <span class="string">&quot;formula_pretty&quot;</span>: doc.formula_pretty,</span><br><span class="line">        <span class="string">&quot;symbol&quot;</span>: <span class="built_in">getattr</span>(symmetry_info, <span class="string">&quot;symbol&quot;</span>, <span class="string">&quot;NONE&quot;</span>),</span><br><span class="line">        <span class="string">&quot;a&quot;</span>: structure_info.lattice.a,</span><br><span class="line">        <span class="string">&quot;b&quot;</span>: structure_info.lattice.b,</span><br><span class="line">        <span class="string">&quot;c&quot;</span>: structure_info.lattice.c,</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">df = pd.DataFrame(data)  <span class="comment"># 转换为DataFrame格式</span></span><br><span class="line">df.to_csv(<span class="string">&quot;result.csv&quot;</span>, index=<span class="literal">False</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Export result to result.csv&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 遍历所有材料并下载其 CIF 文件</span></span><br><span class="line">    <span class="keyword">for</span> doc <span class="keyword">in</span> docs:</span><br><span class="line">        material_id = doc.material_id</span><br><span class="line">        structure = mpr.get_structure_by_material_id(material_id, final=<span class="literal">True</span>)</span><br><span class="line">        structure.to(<span class="string">f&quot;<span class="subst">&#123;material_id&#125;</span>.cif&quot;</span>)</span><br></pre></td></tr></table></figure><p>如果只需要下载指定MP编号的cif文件，可以调用<code>get_structure_by_material_id</code>方法储存结构信息并写入到本地，这里我们下载<code>mp-149</code>的cif文件，代码如下：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> mp_api.client <span class="keyword">import</span> MPRester</span><br><span class="line"></span><br><span class="line">api_key = <span class="string">&quot;aaaaaabbbbbb&quot;</span>  <span class="comment"># 请替换成你的API key</span></span><br><span class="line"></span><br><span class="line">mpid = <span class="string">&quot;mp-149&quot;</span>  </span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> MPRester(api_key) <span class="keyword">as</span> mpr:</span><br><span class="line">    structure = mpr.get_structure_by_material_id(mpid, final=<span class="literal">True</span>)</span><br><span class="line">    </span><br><span class="line">    structure.to(<span class="string">f&quot;<span class="subst">&#123;mpid&#125;</span>.cif&quot;</span>)</span><br></pre></td></tr></table></figure><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>MP-API的介绍就到此为止啦~~~~<br>目前为止，介绍了如何调用API接口；如果根据需求检索材料并汇总成csv文件；以及最后根据需求下载cif文件。当然，MP-API还有很多功能，比如获取结构的电子结构、能量等信息，这里就不一一介绍了。更多功能详解有需求后面再单独补充介绍。</p><p><em><strong>¡Muchas gracias!</strong></em></p></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://www.withox.cn">炫酷老司机</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://www.withox.cn/2024/05/30/Learn-VASP-from-pymatgen-3/">https://www.withox.cn/2024/05/30/Learn-VASP-from-pymatgen-3/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://www.withox.cn" target="_blank">AH</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/VASP/">VASP</a><a class="post-meta__tags" href="/tags/pymatgen/">pymatgen</a><a class="post-meta__tags" href="/tags/Materials-Project/">Materials Project</a></div><div class="post-share"><div class="social-share" data-image="/images/wallhaven-gpkd77_3840x2160.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload='this.media="all"'><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2024/05/30/Learn-VASP-from-pymatgen-2/" title="Chap.2  计算小白硬学VASP —— 前期准备"><img class="cover" src="/images/wallhaven-gpkd77_3840x2160.png" onerror='onerror=null,src="/img/404.jpg"' alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Chap.2 计算小白硬学VASP —— 前期准备</div></div><div class="info-2"><div class="info-item-1">¡Hola a todos! 今天正式进入本系列内容，首先介绍下如何配置pymatgen相关环境，本章如果能全程跟下来且最后配置成功，那么恭喜你，该系列的核心内容已经完成了50%。 首先你需要一台已经编译好VASP的个人工作站或者使用已经编译了VASP的超算中心；有头铁的大哥想用自己的笔记本电脑也行，也请提前准备好虚拟环境编译好VASP。 然后开始配置pymatgen相关环境，官网的安装教程已经相对详细了。但是考虑到本系列是“计算小白硬学VASP”，主打的就是我奶奶看了都会提交VASP任务，这里我就手把手，step by step...</div></div></div></a><a class="pagination-related" href="/2024/06/04/Learn-VASP-from-pymatgen-4/" title="Chap.4  计算小白硬学VASP —— MPRelaxSet用法"><img class="cover" src="/images/wallhaven-gpkd77_3840x2160.png" onerror='onerror=null,src="/img/404.jpg"' alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Chap.4 计算小白硬学VASP —— MPRelaxSet用法</div></div><div class="info-2"><div class="info-item-1">¡Hola a todos! VASP计算运行流程简单示意图： flowchart LR input vasp(vasp) converged(converged) raw_data(raw_data) subgraph prep_input 1([INCAR])-->input 2([KPOINTS])-->input 3([POSCAR])-->input 4([POTCAR])-->input 5([sub_job.script])-->input end input-->vasp subgraph vasp_black_box vasp---relax([relax])-->converged vasp---scf_calc([scf_calc])-->converged vasp---nonscf_calc([nonscf_calc])-->converged ...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2024/05/29/Learn-VASP-from-pymatgen-1/" title="Chap.1  计算小白硬学VASP —— 前言"><img class="cover" src="/images/wallhaven-gpkd77_3840x2160.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-05-29</div><div class="info-item-2">Chap.1 计算小白硬学VASP —— 前言</div></div><div class="info-2"><div class="info-item-1">¡Hola a todos! 我是炫酷老司机，欢迎来到《计算小白硬学VASP》系列。 本系列不涉及DFT理论！不涉及DFT理论！不涉及DFT理论！主要目的是通过实例学习如何让VASP跑起来，不需要记INCAR, POTCAR, KPOINTS, POSCAR, CONTCAR等各种文件。 配合上好大哥——pymatgen，实现各种计算类型输入文件生成脚本化，计算流程以及计算结果处理自动化，尽可能解放双手，告别vim。 本人非大佬，普通DFT民工一名，不涉及教学，只分享经验，欢迎指正，不喜勿喷，共同进步。 ¡Muchas gracias!</div></div></div></a><a class="pagination-related" href="/2024/06/28/Learn-VASP-from-pymatgen-10/" title="Chap.10  计算小白硬学VASP —— 材料性质计算—&gt;能带态密度图汇总"><img class="cover" src="/images/wallhaven-gpkd77_3840x2160.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-06-28</div><div class="info-item-2">Chap.10 计算小白硬学VASP —— 材料性质计算—&gt;能带态密度图汇总</div></div><div class="info-2"><div class="info-item-1">¡Hola a todos! 本章介绍如何把能带态密度画在一起，也就是常见的能带图在左，态密度图垂直在右分布。这里需要调用的模块为BSDOSPlotter()。 代码如下： 123456789101112131415from pymatgen.electronic_structure.plotter import BSDOSPlotterfrom pymatgen.io.vasp.outputs import Vasprun# 读取dos计算vasprun.xml文件dos_vasprun = Vasprun(&quot;../ZrNiSn_primitive/dos/vasprun.xml&quot;)dos = dos_vasprun.complete_dos# 读取band计算vasprun.xml文件band_vasprun = Vasprun(&quot;../ZrNiSn_primitive/band/vasprun.xml&quot;)band = band_vasprun.get_band_structure(line_mode=True)#...</div></div></div></a><a class="pagination-related" href="/2024/08/07/Learn-VASP-from-pymatgen-13/" title="Chap.13  计算小白硬学VASP —— 自动搜索表面吸附位点并生成吸附结构"><img class="cover" src="/images/wallhaven-gpkd77_3840x2160.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-08-07</div><div class="info-item-2">Chap.13 计算小白硬学VASP —— 自动搜索表面吸附位点并生成吸附结构</div></div><div class="info-2"><div class="info-item-1">¡Hola a todos! 本章介绍如何在slab模型表面自动搜索吸附位点并生成吸附模型。 AdsorbateSiteFinder搜索吸附位点AdsorbateSiteFinder模块主要用于搜索slab模型表面潜在的吸附位点，主要分为三大类：ontop、bridge、hollow。首先导入AdsorbateSiteFinder模块： 1from pymatgen.analysis.adsorption import AdsorbateSiteFinder slab模型以Si(111)面为例，关于如何自动切slab模型可以参考往期内容。 模型： 12345678910from pymatgen.analysis.adsorption import AdsorbateSiteFinderfrom pymatgen.core.structure import Structure# 读取结构Si_111 = Structure.from_file(&quot;./Si_111.cif&quot;)# 实例化asf = AdsorbateSiteFinder(Si_111)#...</div></div></div></a><a class="pagination-related" href="/2024/08/05/Learn-VASP-from-pymatgen-11/" title="Chap.11  计算小白硬学VASP —— 构建slab模型"><img class="cover" src="/images/wallhaven-gpkd77_3840x2160.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-08-05</div><div class="info-item-2">Chap.11 计算小白硬学VASP —— 构建slab模型</div></div><div class="info-2"><div class="info-item-1">¡Hola a todos! 本章介绍如何构建slab模型。 首先切面用到的miller index针对的是bulk模型的惯用胞（conventional cell）而不是原胞（primtive cell），这与之前计算能带是刚好相反的。 所以，在进行切面操作时，要确保你的bulk模型是惯用胞，可以用pymatgen的功能来帮助实现。 直接从Materials project下载结构 如果是从MP上下载结构，我们需要把conventional_cell = True打开： 1234567from mp_api.client import MPResterapi_key = &quot;your key&quot;with MPRester(api_key) as mpr: Si = mpr.get_structure_by_material_id(&quot;mp-149&quot;,conventional_unit_cell=True) ...</div></div></div></a><a class="pagination-related" href="/2024/08/09/Learn-VASP-from-pymatgen-14/" title="Chap.14  计算小白硬学VASP —— 各类结构“Transformation”使用说明（一）"><img class="cover" src="/images/wallhaven-gpkd77_3840x2160.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-08-09</div><div class="info-item-2">Chap.14 计算小白硬学VASP —— 各类结构“Transformation”使用说明（一）</div></div><div class="info-2"><div class="info-item-1">¡Hola a todos! 本章开始，主要介绍pymatgen中standard_transformations中各类Transformation的使用说明。 AutoOxiStateDecorationTransformation该类主要是自动平衡结构中的价态信息，以LiFePO4结构为例，初始结构信息如下： 1234from pymatgen.core.structure import StructureLFP = Structure.from_file(&quot;./LiFePO4.vasp&quot;)print(LFP) 运行代码： 123456789101112131415161718192021222324252627282930313233343536Full Formula (Li4 Fe4 P4 O16)Reduced Formula: LiFePO4abc : 4.654917 5.970755 10.236196angles: 90.000000 90.000000 90.000000pbc : True ...</div></div></div></a><a class="pagination-related" href="/2024/08/06/Learn-VASP-from-pymatgen-12/" title="Chap.12  计算小白硬学VASP —— 构建异质结模型"><img class="cover" src="/images/wallhaven-gpkd77_3840x2160.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-08-06</div><div class="info-item-2">Chap.12 计算小白硬学VASP —— 构建异质结模型</div></div><div class="info-2"><div class="info-item-1">¡Hola a todos! 本章介绍如何自动构建异质结模型。 CoherentInterfaceBuilder &amp; ZSLGeneratorpymatgen中自动构建异质结模型需要调用CoherentInterfaceBuilder和ZSLGenerator。其中前者是用于生成interfaces，而后者主要是用于定义晶面的匹配度。导入方法为： 12from pymatgen.analysis.interfaces.coherent_interfaces import CoherentInterfaceBuilderfrom pymatgen.analysis.interfaces.zsl import ZSLGenerator 首先介绍ZSLGenerator，原理见：Lattice match: An application to...</div></div></div></a></div></div><hr class="custom-hr"><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="disqus_thread"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.ico" onerror='this.onerror=null,this.src="/img/friend_404.gif"' alt="avatar"></div><div class="author-info-name">炫酷老司机</div><div class="author-info-description">因为太懒，所以懒得写</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">21</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">11</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><a id="card-info-btn"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Materials-Project%E7%BD%91%E9%A1%B5%E7%AB%AF"><span class="toc-number">1.</span> <span class="toc-text">Materials Project网页端</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9D%90%E6%96%99%E6%A3%80%E7%B4%A2"><span class="toc-number">1.1.</span> <span class="toc-text">材料检索</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A1%B5%E9%9D%A2%E4%BF%A1%E6%81%AF"><span class="toc-number">1.2.</span> <span class="toc-text">页面信息</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MP-API%E6%8E%A5%E5%8F%A3"><span class="toc-number">2.</span> <span class="toc-text">MP-API接口</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8Materials-Project-API"><span class="toc-number">2.1.</span> <span class="toc-text">如何使用Materials Project API</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A3%80%E7%B4%A2%E6%9D%90%E6%96%99%E4%BF%A1%E6%81%AF"><span class="toc-number">2.2.</span> <span class="toc-text">检索材料信息</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B1%EF%BC%9A%E6%A0%B9%E6%8D%AEMP%E7%BC%96%E5%8F%B7%E8%8E%B7%E5%8F%96%E6%9D%90%E6%96%99%E4%BF%A1%E6%81%AF"><span class="toc-number">2.2.1.</span> <span class="toc-text">实例1：根据MP编号获取材料信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B2%EF%BC%9A%E6%A0%B9%E6%8D%AE%E5%85%83%E7%B4%A0%E8%8E%B7%E5%8F%96%E6%9D%90%E6%96%99%E4%BF%A1%E6%81%AF"><span class="toc-number">2.2.2.</span> <span class="toc-text">实例2：根据元素获取材料信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B3%EF%BC%9A%E5%B0%8F%E7%BB%83%E4%B9%A0"><span class="toc-number">2.2.3.</span> <span class="toc-text">实例3：小练习</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%BC%E5%87%BA%E6%A3%80%E7%B4%A2%E7%BB%93%E6%9E%9C"><span class="toc-number">2.3.</span> <span class="toc-text">导出检索结果</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E7%BB%93%E6%9E%84cif%E6%96%87%E4%BB%B6"><span class="toc-number">2.4.</span> <span class="toc-text">下载结构cif文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">2.5.</span> <span class="toc-text">总结</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/02/28/FireWorks-intro/" title="FireWorks——材料计算工作流的归属？"><img src="/images/imgtop.png" onerror='this.onerror=null,this.src="/img/404.jpg"' alt="FireWorks——材料计算工作流的归属？"></a><div class="content"><a class="title" href="/2025/02/28/FireWorks-intro/" title="FireWorks——材料计算工作流的归属？">FireWorks——材料计算工作流的归属？</a><time datetime="2025-02-28T09:49:13.000Z" title="发表于 2025-02-28 17:49:13">2025-02-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/11/10/Atomate2-3/" title="计算工作流——Atomate2自定义工作流"><img src="/images/toolkit.png" onerror='this.onerror=null,this.src="/img/404.jpg"' alt="计算工作流——Atomate2自定义工作流"></a><div class="content"><a class="title" href="/2024/11/10/Atomate2-3/" title="计算工作流——Atomate2自定义工作流">计算工作流——Atomate2自定义工作流</a><time datetime="2024-11-09T16:00:00.000Z" title="发表于 2024-11-10 00:00:00">2024-11-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/11/09/Atomate2-2/" title="计算工作流——Atomate2基本设置"><img src="/images/toolkit.png" onerror='this.onerror=null,this.src="/img/404.jpg"' alt="计算工作流——Atomate2基本设置"></a><div class="content"><a class="title" href="/2024/11/09/Atomate2-2/" title="计算工作流——Atomate2基本设置">计算工作流——Atomate2基本设置</a><time datetime="2024-11-08T16:00:00.000Z" title="发表于 2024-11-09 00:00:00">2024-11-09</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/11/08/Atomate2-1/" title="计算工作流——初识Atomate2"><img src="/images/toolkit.png" onerror='this.onerror=null,this.src="/img/404.jpg"' alt="计算工作流——初识Atomate2"></a><div class="content"><a class="title" href="/2024/11/08/Atomate2-1/" title="计算工作流——初识Atomate2">计算工作流——初识Atomate2</a><time datetime="2024-11-07T16:00:00.000Z" title="发表于 2024-11-08 00:00:00">2024-11-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/08/19/Learn-VASP-from-pymatgen-16/" title="Chap.16  计算小白硬学VASP —— 各类结构“Transformation”使用说明（三）"><img src="/images/wallhaven-gpkd77_3840x2160.png" onerror='this.onerror=null,this.src="/img/404.jpg"' alt="Chap.16  计算小白硬学VASP —— 各类结构“Transformation”使用说明（三）"></a><div class="content"><a class="title" href="/2024/08/19/Learn-VASP-from-pymatgen-16/" title="Chap.16  计算小白硬学VASP —— 各类结构“Transformation”使用说明（三）">Chap.16 计算小白硬学VASP —— 各类结构“Transformation”使用说明（三）</a><time datetime="2024-08-18T16:00:00.000Z" title="发表于 2024-08-19 00:00:00">2024-08-19</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2024 - 2025 By 炫酷老司机</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.3</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
 
+  const disqusReset = conf => {
+    window.DISQUS && window.DISQUS.reset({
+      reload: true,
+      config: conf
+    })
+  }
 
-</body>
-</html>
+  const loadDisqus = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyDisqus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    window.disqus_identifier = isShuoshuo ? path : '/2024/05/30/Learn-VASP-from-pymatgen-3/'
+    window.disqus_url = isShuoshuo ? location.origin + path : 'https://www.withox.cn/2024/05/30/Learn-VASP-from-pymatgen-3/'
+
+    const disqus_config = function () {
+      this.page.url = disqus_url
+      this.page.identifier = disqus_identifier
+      this.page.title = 'Chap.3  计算小白硬学VASP —— 学会使用Materials Project'
+    }
+
+    if (window.DISQUS) disqusReset(disqus_config)
+    else {
+      const script = document.createElement('script')
+      script.src = 'https://withox.disqus.com/embed.js'
+      script.setAttribute('data-timestamp', +new Date())
+      document.head.appendChild(script)
+    }
+
+    btf.addGlobalFn('themeChange', () => disqusReset(disqus_config), 'disqus')
+  }
+
+  const getCount = async() => {
+    try {
+      const eleGroup = document.querySelector('#post-meta .disqus-comment-count')
+      if (!eleGroup) return
+      const cleanedLinks = eleGroup.href.replace(/#post-comment$/, '')
+
+      const res = await fetch(`https://disqus.com/api/3.0/threads/set.json?forum=withox&api_key=DWyqGL5cMyR3GQM0HJ9geFGLm1fXauiVcqcbmKnV6F73VtpmV4M0m0hiRDS1v82w&thread:link=${cleanedLinks}`,{
+        method: 'GET'
+      })
+      const result = await res.json()
+
+      const count = result.response.length ? result.response[0].posts : 0
+      eleGroup.textContent = count
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Disqus' === 'Disqus'
+      ? window.shuoshuoComment = { loadComment: loadDisqus }
+      : window.loadOtherComment = loadDisqus
+    return
+  }
+
+  if ('Disqus' === 'Disqus' || !false) {
+    if (false) btf.loadComment(document.getElementById('disqus_thread'), loadDisqus)
+    else {
+      loadDisqus()
+      
+    }
+  } else {
+    window.loadOtherComment = loadDisqus
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span> 数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"></div></div><hr><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
